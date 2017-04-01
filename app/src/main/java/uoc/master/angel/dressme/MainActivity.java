@@ -1,6 +1,8 @@
 package uoc.master.angel.dressme;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -10,15 +12,25 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+
+
+import java.util.ArrayList;
+
+import uoc.master.angel.dressme.db.DressMeSQLHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     //Vista de pestañas
     private FragmentTabHost tabHost;
 
+    //Adaptador para la lista de libros
+ //   private BookListAdapter adapter = new BookListAdapter(new ArrayList<BookContent.BookItem>());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +39,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Inicializamos las pestañas
-        initializeTabs();
+        this.initializeTabs();
+
+        //Inicializamos la base de datos
+        this.setDatabase();
     }
 
     @Override
@@ -110,5 +125,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+
+    /**
+     * Metodo para encapsular la configuracion relativa a la inicializacion de la base de datos
+     */
+    private void setDatabase(){
+        DressMeSQLHelper dmdbh = new DressMeSQLHelper(this, "DBDressMe", null, 1);
+        SQLiteDatabase db = dmdbh.getWritableDatabase();
+
+
     }
 }
