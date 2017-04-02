@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
  */
 
 public class DressMeSQLHelper extends SQLiteOpenHelper {
+    public static String dbName = "DBDressMe";
+    public static int dbCurrentVersion = 1;
 
     public DressMeSQLHelper(Context contexto, String nombre,
                                 CursorFactory factory, int version) {
@@ -44,6 +46,9 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         //Se crea la nueva versión de las tablas
         this.crearTablas(db);
         this.insertarDatosBase(db);
+
+        //PARA PRUEBAS: INSERTA DATOS DE PRUEBA
+        this.insertarDatosPrueba(db);
     }
 
 
@@ -177,6 +182,48 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
 
     private void insertarDatosPrueba(SQLiteDatabase db){
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (0,'Zara'," +
+                "'Algodón',1,0)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (1,'Zara'," +
+                "'Algodón',0,1)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (2,'Zara'," +
+                "'Algodón',2,2)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (3,'Zara'," +
+                "'Algodón',0,3)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (4,'Zara'," +
+                "'Algodón',0,3)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (5,'Zara'," +
+                "'Algodón',0,3)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (6,'Zara'," +
+                "'Algodón',0,3)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (7,'Zara'," +
+                "'Algodón',0,3)");
+        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (8,'Zara'," +
+                "'Algodón',0,3)");
+
+        db.execSQL("INSERT INTO prenda_clima VALUES(0,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(0,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(0,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(0,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(1,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(1,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(2,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(2,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(3,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(3,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(3,3)");
+
+
+        db.execSQL("INSERT INTO uso_prenda VALUES(0,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(0,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(0,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(1,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(1,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(2,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(2,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(3,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(3,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(3,3)");
 
     }
 }
