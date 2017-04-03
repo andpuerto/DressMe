@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Prenda {
     private int id;
-    private String foto;
+    private byte[] foto;
     private String marca;
     private String material;
     private ColorPrenda color;
@@ -21,7 +21,7 @@ public class Prenda {
 
     }
 
-    public Prenda(int id, String foto, String marca, String material, ColorPrenda color, List<Clima> climas,
+    public Prenda(int id, byte[] foto, String marca, String material, ColorPrenda color, List<Clima> climas,
                   TipoParteConjunto tipoParteConjunto){
         this.id = id;
         this.foto = foto;
@@ -40,11 +40,11 @@ public class Prenda {
         this.id = id;
     }
 
-    public String getFoto() {
+    public byte[] getFoto() {
         return foto;
     }
 
-    public void setFoto(String foto) {
+    public void setFoto(byte[] foto) {
         this.foto = foto;
     }
 

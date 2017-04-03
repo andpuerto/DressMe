@@ -19,6 +19,7 @@ import java.util.List;
 
 import uoc.master.angel.dressme.db.PrendaDA;
 import uoc.master.angel.dressme.modelo.Prenda;
+import uoc.master.angel.dressme.util.ImageUtil;
 
 /**
  * Created by angel on 29/03/2017.
@@ -145,6 +146,7 @@ public class PrendasList extends Fragment {
 //            //DE MOMENTO, DEJO LA IMAGEN VACIA
 //            holder.mImageView.setText(mValues.get(position).getTitle());
             holder.mTextView.setText("Prenda nº: " + mValues.get(position).getId());
+            holder.mImageView.setImageBitmap(ImageUtil.toBitmap(mValues.get(position).getFoto()));
 
 //            //DE MOMENTO, EL CLICK_LISTENER QUEDA COMENTADO
 //            //Tambien establecemos el clickListener para el holder, para que cada elemento responda

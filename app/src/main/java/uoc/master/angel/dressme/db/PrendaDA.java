@@ -42,7 +42,7 @@ public class PrendaDA {
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                prendas.add(new Prenda(c.getInt(0),null, null, null, null, null, null));
+                prendas.add(new Prenda(c.getInt(0),c.getBlob(1), null, null, null, null, null));
             } while(c.moveToNext());
         }
         db.close();

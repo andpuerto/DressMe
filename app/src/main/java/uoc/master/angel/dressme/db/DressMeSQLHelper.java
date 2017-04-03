@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteStatement;
+
+import java.io.File;
+
+import uoc.master.angel.dressme.util.ImageUtil;
 
 /**
  * Created by angel on 01/04/2017.
@@ -182,24 +187,126 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
 
     private void insertarDatosPrueba(SQLiteDatabase db){
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (0,'Zara'," +
-                "'Algodón',1,0)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (1,'Zara'," +
-                "'Algodón',0,1)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (2,'Zara'," +
-                "'Algodón',2,2)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (3,'Zara'," +
-                "'Algodón',0,3)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (4,'Zara'," +
-                "'Algodón',0,3)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (5,'Zara'," +
-                "'Algodón',0,3)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (6,'Zara'," +
-                "'Algodón',0,3)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (7,'Zara'," +
-                "'Algodón',0,3)");
-        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (8,'Zara'," +
-                "'Algodón',0,3)");
+
+
+        //Metemos unas prendas con una imagen de prueba asociada. Esto solo va a funcionar en nuestro emulador
+        //puesto que hemos insertado previamente las imagenes
+        String dir = "/sdcard/DCIM/ropa/";
+        String[] paths = {dir+"Camiseta_peq.jpg", dir+"Jersey_peq.jpg", dir+"Pantalon_peq.jpg", dir+"Zapatos_peq.jpg"};
+
+        String sql =   "INSERT INTO prenda(id,foto,marca,material,color,tipo_parte_conjunto) VALUES (?,?," +
+                "?,?,?,?)";
+        SQLiteStatement insertStmt = db.compileStatement(sql);
+
+        byte[] prueba = ImageUtil.toByteArray(paths[0]);
+        //Primera prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "0");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "1");
+        insertStmt.bindString(6, "0");
+        insertStmt.executeInsert();
+
+        //Segunda prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "1");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "1");
+        insertStmt.executeInsert();
+
+        //Tercera prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "2");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[2]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "2");
+        insertStmt.bindString(6, "2");
+        insertStmt.executeInsert();
+
+        //Cuarta prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "3");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[3]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+        //Quinta prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "4");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+        //Sexta prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "5");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+        //Septima prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "6");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+        //Octava prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "7");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+        //Novena prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "8");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (0,'Zara'," +
+//                "'Algodón',1,0)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (1,'Zara'," +
+//                "'Algodón',0,1)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (2,'Zara'," +
+//                "'Algodón',2,2)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (3,'Zara'," +
+//                "'Algodón',0,3)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (4,'Zara'," +
+//                "'Algodón',0,3)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (5,'Zara'," +
+//                "'Algodón',0,3)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (6,'Zara'," +
+//                "'Algodón',0,3)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (7,'Zara'," +
+//                "'Algodón',0,3)");
+//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (8,'Zara'," +
+//                "'Algodón',0,3)");
 
         db.execSQL("INSERT INTO prenda_clima VALUES(0,0)");
         db.execSQL("INSERT INTO prenda_clima VALUES(0,1)");
@@ -224,6 +331,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO uso_prenda VALUES(3,0)");
         db.execSQL("INSERT INTO uso_prenda VALUES(3,1)");
         db.execSQL("INSERT INTO uso_prenda VALUES(3,3)");
+
+
 
     }
 }
