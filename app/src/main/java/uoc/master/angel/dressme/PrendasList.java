@@ -145,7 +145,7 @@ public class PrendasList extends Fragment {
 
 //            //DE MOMENTO, DEJO LA IMAGEN VACIA
 //            holder.mImageView.setText(mValues.get(position).getTitle());
-            holder.mTextView.setText("Prenda nº: " + mValues.get(position).getId());
+//            holder.mTextView.setText("Prenda nº: " + mValues.get(position).getId());
             holder.mImageView.setImageBitmap(ImageUtil.toBitmap(mValues.get(position).getFoto()));
 
 //            //DE MOMENTO, EL CLICK_LISTENER QUEDA COMENTADO
@@ -183,7 +183,7 @@ public class PrendasList extends Fragment {
             //atributos como se muestra en el enunciado de la PEC
             final View mView;
             final ImageView mImageView;
-            final TextView mTextView;
+  //          final TextView mTextView;
             Prenda mItem;
 
             //Constructor. Establece la vista que recibe y busca los TextView
@@ -191,12 +191,12 @@ public class PrendasList extends Fragment {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.prenda_list_image);
-                mTextView = (TextView) view.findViewById(R.id.prenda_list_text);
+ //               mTextView = (TextView) view.findViewById(R.id.prenda_list_text);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mTextView.getText() + "'";
+                return super.toString() + " '" + mView.getId() + "'";
             }
         }
 

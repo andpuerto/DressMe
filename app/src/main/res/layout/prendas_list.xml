@@ -11,9 +11,24 @@
         android:text="Lista de prendas"
         android:textAppearance="?android:attr/textAppearanceMedium" /> -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/parte_conjunto1"
+            android:layout_marginLeft="@dimen/nombre_parte_margin"
+            android:layout_marginRight="@dimen/nombre_parte_margin"/>
+        <Button
+            android:layout_width="@dimen/plus_button_size"
+            android:layout_height="@dimen/plus_button_size"
+            android:text="+"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/prendas_recycle_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         />
 

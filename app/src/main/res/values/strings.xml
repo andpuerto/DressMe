@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">DressMe</string>
     <string name="action_settings">Settings</string>
+    <string name="parte_conjunto1">Superior Ligera</string>
+    <string name="parte_conjunto2">Superior Abrigo</string>
+    <string name="parte_conjunto3">Inferior</string>
+    <string name="parte_conjunto4">Calzado</string>
 </resources>
