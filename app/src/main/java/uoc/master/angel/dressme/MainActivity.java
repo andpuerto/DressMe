@@ -3,10 +3,6 @@ package uoc.master.angel.dressme;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,17 +11,18 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-
-
-import java.util.ArrayList;
 
 import uoc.master.angel.dressme.db.DressMeSQLHelper;
+import uoc.master.angel.dressme.fragment.ConjuntosListFragment;
+import uoc.master.angel.dressme.fragment.PlanificacionFragment;
+import uoc.master.angel.dressme.fragment.PrendasListFragment;
+import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
+import uoc.master.angel.dressme.fragment.container.ConjuntoContainerFragment;
+import uoc.master.angel.dressme.fragment.container.PlanificacionContainerFragment;
+import uoc.master.angel.dressme.fragment.container.PrendaContainerFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean externalStoragePermission = false;
     //Constante para identificar el permiso de almacenamiento externo
     private final int EXTERNAL_STORAGE_PERMISSION = 1;
+    //Etiquetas identificadoras para cada pestaña
+    private final String CONJUNTOS_TAB = "conjuntosTab";
+    private final String PRENDAS_TAB = "prendasTab";
+    private final String PLANIFICACION_TAB = "planificacionTab";
 
     //Adaptador para la lista de libros
  //   private BookListAdapter adapter = new BookListAdapter(new ArrayList<BookContent.BookItem>());
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         //Pedimos los permisos necesarios al usuario
         this.askForPermission();
@@ -86,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
 
         tabHost.setup(this,
                 getSupportFragmentManager(),android.R.id.tabcontent);
-        tabHost.addTab(tabHost.newTabSpec("conjuntosTab").setIndicator("Conjuntos"),
-                ConjuntosList.class, null);
-        tabHost.addTab(tabHost.newTabSpec("prendasTab").setIndicator("Prendas"),
-                PrendasList.class, null);
-        tabHost.addTab(tabHost.newTabSpec("planificacionTab").setIndicator("Planificar"),
-                Planificacion.class, null);
+        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
+                ConjuntoContainerFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec(PRENDAS_TAB).setIndicator(getString(R.string.prendas_tab_label)),
+                PrendaContainerFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec(PLANIFICACION_TAB).setIndicator(getString(R.string.planifiacion_tab_label)),
+                PlanificacionContainerFragment.class, null);
 
     }
 
@@ -109,11 +111,11 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch (i) {
                 case 0:
-                    return new ConjuntosList();
+                    return new ConjuntosListFragment();
                 case 1:
-                    return new PrendasList();
+                    return new PrendasListFragment();
                 default:
-                    return new Planificacion();
+                    return new PlanificacionFragment();
 
             }
         }
@@ -183,6 +185,27 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+        }
+    }
+
+
+    /**
+     * Sobrescribimos el metodo onBackPressed para adaptar el uso de la tecla de retroceso
+     * a la carga de fragmentos en cada pestaña
+     */
+    @Override
+    public void onBackPressed() {
+        boolean isPopFragment = false;
+        String currentTabTag = tabHost.getCurrentTabTag();
+        if (currentTabTag.equals(CONJUNTOS_TAB)) {
+            isPopFragment = ((BaseContainerFragment)getSupportFragmentManager().findFragmentByTag(CONJUNTOS_TAB)).popFragment();
+        } else if (currentTabTag.equals(PRENDAS_TAB)) {
+            isPopFragment = ((BaseContainerFragment)getSupportFragmentManager().findFragmentByTag(PRENDAS_TAB)).popFragment();
+        } else if (currentTabTag.equals(PLANIFICACION_TAB)) {
+            isPopFragment = ((BaseContainerFragment)getSupportFragmentManager().findFragmentByTag(PLANIFICACION_TAB)).popFragment();
+        }
+        if (!isPopFragment) {
+            finish();
         }
     }
 }

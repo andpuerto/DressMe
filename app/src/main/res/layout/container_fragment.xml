@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Este layout sirve como base para todos los fragmentos que se muestren en la vista de
+     pestañas. Es necesario como layout sobre los que hacer los cambios de fragmento en cada
+     pestaña ya que fragmenttabhost no proporciona un layout para cada una, sino uno para el
+     contenido en general -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_framelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+</FrameLayout>
+

@@ -1,19 +1,20 @@
 package uoc.master.angel.dressme.modelo;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by angel on 30/03/2017.
  */
 
-public class Prenda {
+public class Prenda implements Serializable{
     private int id;
     private byte[] foto;
     private String marca;
     private String material;
     private ColorPrenda color;
-    private List<Clima> climasAdecuados;
+    private transient List<Clima> climasAdecuados;
     //Indica la parte del conjunto para la que es válida la prenda
     private TipoParteConjunto tipoParteConjunto;
 

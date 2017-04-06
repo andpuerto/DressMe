@@ -1,8 +1,19 @@
 <resources>
     <string name="app_name">DressMe</string>
     <string name="action_settings">Settings</string>
+    <string name="conjuntos_tab_label">Conjuntos</string>
+    <string name="prendas_tab_label">Prendas</string>
+    <string name="planifiacion_tab_label">Planificar</string>
     <string name="parte_conjunto1">Superior Ligera</string>
     <string name="parte_conjunto2">Superior Abrigo</string>
     <string name="parte_conjunto3">Inferior</string>
     <string name="parte_conjunto4">Calzado</string>
+    <string name="color_label">Color: </string>
+    <string name="marca_label">Marca: </string>
+    <string name="material_label">Material: </string>
+    <string name="usos">Usos</string>
+    <string name="climas">Climas</string>
+
+    <!-- claves para los bundle -->
+    <string name="prenda_bundle_key">prenda</string>
 </resources>

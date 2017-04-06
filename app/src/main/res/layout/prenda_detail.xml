@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/view_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="@dimen/prenda_detail_foto_width"
+                android:layout_height="@dimen/prenda_detail_foto_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="30dp"
+                android:id="@+id/prenda_detail_foto"
+                android:padding="1dp"
+                android:background="#000"
+                />
+
+            <ImageButton
+                android:id="@+id/camera_buttion"
+                android:layout_width="@dimen/camera_button_size"
+                android:layout_height="@dimen/camera_button_size"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:src="@drawable/camerabutton" />
+            <!--<Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                                android:text="foto"/> -->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/view_margin">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/color_label"/>
+            <ImageView
+                android:layout_width="@dimen/color_square_size"
+                android:layout_height="@dimen/color_square_size"
+                android:id="@+id/color_square"
+                android:background="#000"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/marca_label"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:inputType="text"
+                android:maxLines="1"
+                android:id="@+id/prenda_marca_edit"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/material_label"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:inputType="text"
+                android:maxLines="1"
+                android:id="@+id/prenda_material_edit"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/prenda_uso_button"
+            android:text="@string/usos"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/prenda_clima_button"
+            android:text="@string/climas"/>
+
+    </LinearLayout>
+</ScrollView>

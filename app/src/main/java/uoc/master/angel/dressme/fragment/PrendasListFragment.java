@@ -1,43 +1,54 @@
-package uoc.master.angel.dressme;
+package uoc.master.angel.dressme.fragment;
 
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import uoc.master.angel.dressme.R;
 import uoc.master.angel.dressme.db.PrendaDA;
+import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
+import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Prenda;
+import uoc.master.angel.dressme.modelo.TipoParteConjunto;
 import uoc.master.angel.dressme.util.ImageUtil;
 
 /**
  * Created by angel on 29/03/2017.
  */
 
-public class PrendasList extends Fragment {
+public class PrendasListFragment extends Fragment {
 
-    //Adaptador para la lista de libros
-    private PrendasListAdapter adapter = new PrendasListAdapter(new ArrayList<Prenda>());
-
+    //Adaptadores para cada una de las listas de prendas, una por cada tipo de parte de conjunto
+    private ArrayList<PrendasListAdapter> adapters = new ArrayList<>();
 
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Context context = this.getContext();
-        adapter.setItems(new PrendaDA(this.getContext()).getAllPrendas());
+        //Obtener la lista de TipoParteConjunto de la base de datos
+        List<TipoParteConjunto> tiposParteConjunto = new TipoParteConjuntoDA(this.getContext()).getAllTipoParteConjunto();
+        //Crear tantos adaptadores como TipoParteConjunto haya
+        for(TipoParteConjunto tpc : tiposParteConjunto){
+            //Creamos un nuevo adapter, con un array vacio
+            PrendasListAdapter adapterTemp = new PrendasListAdapter(new ArrayList<Prenda>());
+            //Establecemos los elementos del adapter con las prendas obtenidas de la consulta
+            //Buscaremos la prendas del TipoParteConjunto actual
+            adapterTemp.setItems(new PrendaDA(this.getContext()).getAllPrendas(tpc));
+            //Agregamos el adapter a la lista de adapters
+            adapters.add(adapterTemp);
+        }
+
       }
 
 
@@ -52,13 +63,28 @@ public class PrendasList extends Fragment {
         //recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         //**********************************
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view);
-        //Establecemos el adaptador para el recyclerView
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
+
+        //Vamos a establecer los adaptadores a cada RecycleView
+        //En esta version, lo hacemos de forma estatica. Para hacerlo generico habria que crea cada
+        //recycleview aquí por programa en lugar de tenerlo en el layout
+
+
+        RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view1);
+        recyclerView.setAdapter(adapters.get(0));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view2);
+        recyclerView.setAdapter(adapters.get(1));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view3);
+        recyclerView.setAdapter(adapters.get(2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view4);
+        recyclerView.setAdapter(adapters.get(3));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         //************************************
         //Establecemos el listener para el refreshLayout
         //final SwipeRefreshLayout swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
@@ -142,22 +168,20 @@ public class PrendasList extends Fragment {
             //lugar a un warning y el compilador no lo recomienda porque la posicion puede cambiar
             final int posicion = holder.getAdapterPosition();
             holder.mItem = mValues.get(position);
-
-//            //DE MOMENTO, DEJO LA IMAGEN VACIA
-//            holder.mImageView.setText(mValues.get(position).getTitle());
-//            holder.mTextView.setText("Prenda nº: " + mValues.get(position).getId());
+            //Establecemos la imagen
             holder.mImageView.setImageBitmap(ImageUtil.toBitmap(mValues.get(position).getFoto()));
 
-//            //DE MOMENTO, EL CLICK_LISTENER QUEDA COMENTADO
-//            //Tambien establecemos el clickListener para el holder, para que cada elemento responda
-//            //a los clicks
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mostrarDetalles(posicion);
-//                }
-//
-//            });
+
+            //Tambien establecemos el clickListener para el holder, para que cada elemento responda
+            //a los clicks
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mostrarDetalles(holder.mItem);
+                }
+
+            });
         }
 
 
@@ -201,5 +225,23 @@ public class PrendasList extends Fragment {
         }
 
     }
+
+    /**
+     * Muestra los detalles de una prenda
+     */
+    public void mostrarDetalles(Prenda prenda){
+        //Creamos el fragmento
+        PrendaDetailFragment pd = new PrendaDetailFragment();
+
+        //Creamos y llenamos el bundle con los datos de la prenda
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getString(R.string.prenda_bundle_key),prenda);
+        //Pasamos el bundle al fragment
+        pd.setArguments(bundle);
+
+        //Utilizamos el metodo de cambio de fragmento del fragmento padre
+        ((BaseContainerFragment)getParentFragment()).replaceFragment(pd, true);
+    }
+
 
 }

@@ -1,35 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
- <!--   <TextView
-        android:id="@+id/text_prueba2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="Lista de prendas"
-        android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+        android:layout_margin="@dimen/view_margin">
+
+      <!-- <TextView
+            android:id="@+id/text_prueba2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lista de prendas"
+            android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+
+        <!-- Layout para prendas para parte superior ligera -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/parte_conjunto1"
+                android:layout_marginLeft="@dimen/nombre_parte_margin"
+                android:layout_marginRight="@dimen/nombre_parte_margin"
+                android:layout_marginTop="@dimen/nombre_parte_margin"
+                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
+            <Button
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:text="+"
+                android:id="@+id/prendas_add_button1"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/prendas_recycle_view1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/parte_conjunto1"
-            android:layout_marginLeft="@dimen/nombre_parte_margin"
-            android:layout_marginRight="@dimen/nombre_parte_margin"/>
-        <Button
-            android:layout_width="@dimen/plus_button_size"
-            android:layout_height="@dimen/plus_button_size"
-            android:text="+"/>
-    </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/prendas_recycle_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        />
+            />
 
-</LinearLayout>
+        <!-- Layout para prendas para parte superior de abrigo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/parte_conjunto2"
+                android:layout_marginLeft="@dimen/nombre_parte_margin"
+                android:layout_marginRight="@dimen/nombre_parte_margin"
+                android:layout_marginTop="@dimen/nombre_parte_margin"
+                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
+            <Button
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:text="+"
+                android:id="@+id/prendas_add_button2"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/prendas_recycle_view2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+
+        <!-- Layout para prendas para parte inferior -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/parte_conjunto3"
+                android:layout_marginLeft="@dimen/nombre_parte_margin"
+                android:layout_marginRight="@dimen/nombre_parte_margin"
+                android:layout_marginTop="@dimen/nombre_parte_margin"
+                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
+            <Button
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:text="+"
+                android:id="@+id/prendas_add_button3"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/prendas_recycle_view3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+
+
+        <!-- Layout para prendas para calzado -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/parte_conjunto4"
+                android:layout_marginLeft="@dimen/nombre_parte_margin"
+                android:layout_marginRight="@dimen/nombre_parte_margin"
+                android:layout_marginTop="@dimen/nombre_parte_margin"
+                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
+            <Button
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:text="+"
+                android:id="@+id/prendas_add_button4"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/prendas_recycle_view4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+
+    </LinearLayout>
+</ScrollView>

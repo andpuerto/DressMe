@@ -1,4 +1,4 @@
-package uoc.master.angel.dressme;
+package uoc.master.angel.dressme.fragment;
 
 
 import android.os.Bundle;
@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import uoc.master.angel.dressme.R;
+
 /**
  * Created by angel on 29/03/2017.
  */
 
-public class Planificacion extends Fragment {
+public class PlanificacionFragment extends Fragment {
 
     @Override
 
