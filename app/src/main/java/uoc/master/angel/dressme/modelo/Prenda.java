@@ -14,7 +14,8 @@ public class Prenda implements Serializable{
     private String marca;
     private String material;
     private ColorPrenda color;
-    private transient List<Clima> climasAdecuados;
+    private List<Clima> climasAdecuados;
+    private List<Uso> usosAdecuados;
     //Indica la parte del conjunto para la que es válida la prenda
     private TipoParteConjunto tipoParteConjunto;
 
@@ -23,13 +24,14 @@ public class Prenda implements Serializable{
     }
 
     public Prenda(int id, byte[] foto, String marca, String material, ColorPrenda color, List<Clima> climas,
-                  TipoParteConjunto tipoParteConjunto){
+                  List<Uso> usos, TipoParteConjunto tipoParteConjunto){
         this.id = id;
         this.foto = foto;
         this.marca = marca;
         this.material = material;
         this.color = color;
         this.climasAdecuados = climas;
+        this.usosAdecuados = usos;
         this.tipoParteConjunto = tipoParteConjunto;
     }
 
@@ -87,5 +89,13 @@ public class Prenda implements Serializable{
 
     public void setTipoParteConjunto(TipoParteConjunto tipoParteConjunto) {
         this.tipoParteConjunto = tipoParteConjunto;
+    }
+
+    public List<Uso> getUsosAdecuados() {
+        return usosAdecuados;
+    }
+
+    public void setUsosAdecuados(List<Uso> usosAdecuados) {
+        this.usosAdecuados = usosAdecuados;
     }
 }

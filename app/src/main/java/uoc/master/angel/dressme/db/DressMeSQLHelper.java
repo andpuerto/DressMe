@@ -83,7 +83,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
         //Tabla prenda
         db.execSQL("CREATE TABLE prenda (id INTEGER PRIMARY KEY, foto BLOB, marca TEXT, material" +
-                " TEXT, color INTEGER REFERENCES color_prenda(id) ON DELETE RESTRICT ON UPDATE CASCADE, " +
+                " TEXT, color INTEGER REFERENCES color(id) ON DELETE RESTRICT ON UPDATE CASCADE, " +
                 "tipo_parte_conjunto INTEGER REFERENCES tipo_parte_conjunto (id) " +
                 "ON DELETE RESTRICT ON UPDATE CASCADE)");
 
