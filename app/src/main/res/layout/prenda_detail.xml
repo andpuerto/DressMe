@@ -47,12 +47,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/color_label"/>
-            <ImageView
+                android:id="@+id/color_spinner_label"
+                android:text="@string/color_label"
+                android:layout_marginRight="@dimen/label_margin"
+                />
+            <Spinner
+                android:id="@+id/color_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true"
+                />
+ <!--           <ImageView
                 android:layout_width="@dimen/color_square_size"
                 android:layout_height="@dimen/color_square_size"
                 android:id="@+id/color_square"
-                android:background="#000"/>
+                android:background="#000"/> -->
         </LinearLayout>
 
 

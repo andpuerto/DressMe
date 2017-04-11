@@ -11,4 +11,6 @@
     <dimen name="prenda_detail_foto_height">200dp</dimen>
     <dimen name="color_square_size">20dp</dimen>
     <dimen name="view_margin">20dp</dimen>
+    <dimen name="spinner_item_height">20dp</dimen>
+    <dimen name="label_margin">20dp</dimen>
 </resources>
