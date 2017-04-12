@@ -49,6 +49,7 @@ public class PrendaDA {
                 prendas.add(new Prenda(c.getInt(0),c.getBlob(1), null, null, null, null, null, null));
             } while(c.moveToNext());
         }
+        c.close();
         db.close();
         return prendas;
     }
@@ -79,6 +80,7 @@ public class PrendaDA {
                         null, null, null, parteConjunto));
             } while(c.moveToNext());
         }
+        c.close();
         db.close();
         return prendas;
     }

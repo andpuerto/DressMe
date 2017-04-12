@@ -44,6 +44,7 @@ public class ColorPrendaDA {
                 colores.add(new ColorPrenda(c.getInt(0),c.getString(1), c.getString(2), null));
             } while(c.moveToNext());
         }
+        c.close();
         db.close();
         return colores;
      }

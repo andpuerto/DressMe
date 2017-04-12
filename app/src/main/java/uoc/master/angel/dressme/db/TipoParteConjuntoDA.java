@@ -43,6 +43,7 @@ public class TipoParteConjuntoDA {
                 tiposParteConjunto.add(new TipoParteConjunto(c.getInt(0),c.getString(1)));
             } while(c.moveToNext());
         }
+        c.close();
         db.close();
         return tiposParteConjunto;
     }

@@ -1,5 +1,6 @@
 package uoc.master.angel.dressme;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.fragment.container.ConjuntoContainerFragment;
 import uoc.master.angel.dressme.fragment.container.PlanificacionContainerFragment;
 import uoc.master.angel.dressme.fragment.container.PrendaContainerFragment;
+import uoc.master.angel.dressme.util.PermissionsUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTabHost tabHost;
     //Permiso de acceso al almacenamiento externo
     private boolean externalStoragePermission = false;
-    //Constante para identificar el permiso de almacenamiento externo
-    private final int EXTERNAL_STORAGE_PERMISSION = 1;
+
+//    //Constante para identificar el permiso de almacenamiento externo
+//    private final int EXTERNAL_STORAGE_PERMISSION = 1;
+//    //Constante para identificar el permiso de utilizar la camara
+//    private final int CAMERA_PERMISSION = 2;
+
+    private final int PERMISSION_ALL = 1;
     //Etiquetas identificadoras para cada pestaña
     private final String CONJUNTOS_TAB = "conjuntosTab";
     private final String PRENDAS_TAB = "prendasTab";
@@ -153,28 +160,51 @@ public class MainActivity extends AppCompatActivity {
 
     private void askForPermission(){
         //Si no tenemos permisos, los pedimos
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
 
+        // The request code used in ActivityCompat.requestPermissions()
+        // and returned in the Activity's onRequestPermissionsResult()
 
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE},EXTERNAL_STORAGE_PERMISSION);
+        String[] permisos = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA};
 
-        }else{
-            //Si los tenemos, establecemos la variable a verdadero
-            externalStoragePermission = true;
+        if(!PermissionsUtil.hasPermissions(this, permisos)){
+            ActivityCompat.requestPermissions(this, permisos, PERMISSION_ALL);
         }
 
+
+//        if (ContextCompat.checkSelfPermission(this,
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                            android.Manifest.permission.READ_EXTERNAL_STORAGE},EXTERNAL_STORAGE_PERMISSION);
+//
+//
+//        }else{
+//            //Si los tenemos, establecemos la variable a verdadero
+//            externalStoragePermission = true;
+//        }
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.CAMERA)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.CAMERA},CAMERA_PERMISSION);
+//        }
+
+
     }
+
+
+
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             //
-            case EXTERNAL_STORAGE_PERMISSION: {
+            case PERMISSION_ALL: {
                 // Comprobamos si se ha concedido el permiso o no. Dejamos el bool con el valor
                 //adecuado en cada caso
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -150,7 +150,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         //Colores
         db.execSQL("INSERT INTO color VALUES(0,'negro','000000')");
         db.execSQL("INSERT INTO color VALUES(1,'gris','999999')");
-        db.execSQL("INSERT INTO color VALUES(2,'beige','323453')");
+        db.execSQL("INSERT INTO color VALUES(2,'beige','D0B99A')");
         db.execSQL("INSERT INTO color VALUES(3,'rojo','770000')");
         db.execSQL("INSERT INTO color VALUES(4,'verde','007700')");
         db.execSQL("INSERT INTO color VALUES(5,'azul','000077')");
@@ -166,7 +166,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
         //Climas
         db.execSQL("INSERT INTO clima VALUES(0,'caluroso')");
-        db.execSQL("INSERT INTO clima VALUES(1,'fío')");
+        db.execSQL("INSERT INTO clima VALUES(1,'frío')");
         db.execSQL("INSERT INTO clima VALUES(2,'templado')");
         db.execSQL("INSERT INTO clima VALUES(3,'lluvia')");
 
