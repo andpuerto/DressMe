@@ -1,5 +1,6 @@
 package uoc.master.angel.dressme.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,7 +23,7 @@ public class PrendaDA {
 
     /**
      * Constructor
-     * @param context
+     * @param context El contexto
      */
     public PrendaDA(Context context) {
         //Obtenemos el helper
@@ -33,7 +34,7 @@ public class PrendaDA {
      * Obtiene una lista con todas las prendas
      * No carga todos los datos de todas las prendas para ahorrar memoria
      * Solo los que se necesitaran para el listado
-     * @return
+     * @return Lista de prendas
      */
     public List<Prenda> getAllPrendas(){
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -59,7 +60,7 @@ public class PrendaDA {
      * Obtiene una lista con las prendas para un TipoParteConjunto
      * No carga todos los datos de todas las prendas para ahorrar memoria
      * Solo los que se necesitaran para el listado
-     * @return
+     * @return Lista de prendas
      */
     public List<Prenda> getAllPrendas(TipoParteConjunto parteConjunto){
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -88,7 +89,7 @@ public class PrendaDA {
 
     /**
      * Llena todos los campos asociados a la prenda que recibe como parametro
-     * @param prenda
+     * @param prenda La prenda a rellenar
      */
     public void fillPrendaDetails(Prenda prenda){
         //Abrimos la base de datos
@@ -130,6 +131,73 @@ public class PrendaDA {
         //Cerramos la base de datos
         db.close();
 
+    }
+
+
+    /**
+     * Almacena la prenda en la base de datos
+     * @param prenda La prenda a almacenar
+     */
+    public void savePrenda(Prenda prenda){
+        //Si la prenda a insertar que recibimos es null, salimos
+        if(prenda == null){
+            return;
+        }
+        //Abrimos la base de datos
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //Comenzamos una transaccion. Vamos a hacer varias operaciones, mejor en una transaccion.
+        db.beginTransaction();
+        //Rellenamos los valores para la base de datos a partir de los de la prenda
+        ContentValues values = new ContentValues();
+        if(prenda.getFoto() != null) {
+            values.put("foto", prenda.getFoto());}
+        if(prenda.getMarca() != null) {
+            values.put("marca", prenda.getMarca());}
+        if(prenda.getMaterial() != null){
+            values.put("material", prenda.getMaterial());}
+        if(prenda.getColor() != null) {
+            values.put("color", prenda.getColor().getId());}
+        if(prenda.getTipoParteConjunto() != null) {
+            values.put("tipo_parte_conjunto", prenda.getTipoParteConjunto().getId());}
+
+        //Si el id es negativo, es una nueva prenda, haremos un insert
+        if(prenda.getId() <0) {
+            int id = (int)db.insert("prenda", null, values);
+            //Insert devuelve el id autoincremental del elemento insertado. Lo establecemos.
+            prenda.setId(id);
+
+        } else {
+            //Si la prenda ya estaba en la base de datos, hay que actualizarla
+            String[] whereArgs = {Integer.toString(prenda.getId())};
+            db.update("prenda", values, "id=?", whereArgs);
+            //Para las tablas relacionadas, vamos a borrar todos los valores e insertar solo los que
+            //tenga la prenda
+            db.delete("prenda_clima","prenda=?", whereArgs);
+            db.delete("uso_prenda","prenda=?", whereArgs);
+        }
+        //Ahora debemos insertar los valores para las tablas de relaciones.
+        //Esto es igual en los dos casos porque si la prenda existe, hemos borrado todos los elementos
+        if(prenda.getClimasAdecuados() != null){
+            for(Clima clima : prenda.getClimasAdecuados()){
+                values.clear();
+                values.put("prenda", prenda.getId());
+                values.put("clima", clima.getId());
+                db.insert("prenda_clima", null, values);
+            }
+        }
+        if(prenda.getUsosAdecuados() != null){
+            for(Uso uso : prenda.getUsosAdecuados()){
+                values.clear();
+                values.put("prenda", prenda.getId());
+                values.put("uso", uso.getId());
+                db.insert("uso_prenda", null, values);
+            }
+        }
+        //Hacemos el commit de la transaccion
+        db.setTransactionSuccessful();
+        //Cerramos la transaccion y la base de datos
+        db.endTransaction();
+        db.close();
     }
 
 

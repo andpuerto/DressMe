@@ -5,10 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -29,11 +33,14 @@ import uoc.master.angel.dressme.db.ClimaDA;
 import uoc.master.angel.dressme.db.ColorPrendaDA;
 import uoc.master.angel.dressme.db.PrendaDA;
 import uoc.master.angel.dressme.db.UsoDA;
+import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Clima;
 import uoc.master.angel.dressme.modelo.ColorPrenda;
 import uoc.master.angel.dressme.modelo.Prenda;
 import uoc.master.angel.dressme.modelo.Uso;
 import uoc.master.angel.dressme.util.ImageUtil;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by angel on 05/04/2017.
@@ -59,6 +66,8 @@ public class PrendaDetailFragment extends Fragment {
     private Button climaButton;
     //Boton de la camara de fotos
     private ImageButton camaraButton;
+    //boton de guardar
+    private FloatingActionButton botonGuardar;
 
     //Lista con los colores de prendas posibles
     private List<ColorPrenda> coloresPrenda;
@@ -69,6 +78,9 @@ public class PrendaDetailFragment extends Fragment {
 
     //Adaptador para el spinner
     private ColorPrendaSpinnerAdapter adapter;
+
+    //Bitmap temporal para la foto que se haya hecho
+    private  Bitmap fotoTemp;
 
     @Override
 
@@ -94,6 +106,8 @@ public class PrendaDetailFragment extends Fragment {
         usoButton = (Button) rootView.findViewById(R.id.prenda_uso_button);
         climaButton = (Button) rootView.findViewById(R.id.prenda_clima_button);
         camaraButton = (ImageButton) rootView.findViewById(R.id.camera_buttion);
+        botonGuardar = (FloatingActionButton) rootView.findViewById(R.id.save_prenda_button);
+
 
         //Inicializamos el spinner con los colores
         this.initializeColores();
@@ -105,15 +119,20 @@ public class PrendaDetailFragment extends Fragment {
             Bundle bundle = this.getArguments();
             prenda = (Prenda)bundle.getSerializable(getString(R.string.prenda_bundle_key));
             showPredaData();
-            initializeSelectButtons();
+
 
         }else{
             //Aqui llegariamos si se esta creando una nueva prenda
             prenda = new Prenda();
         }
 
+        //Inicializamos los botones
+        initializeButtons();
+
         //Inicializamos el boton de la camara
         initializeCameraButton();
+
+
 
         return rootView;
 
@@ -128,13 +147,16 @@ public class PrendaDetailFragment extends Fragment {
             //Realizaremos las inicializaciones para mostrar todos los datos de la prenda
             Log.i("PrendaDetail", "Identificador de la prenda: " + prenda.getId());
             //Establecemos la foto
-            if(fotoView != null){
+            if(prenda.getFoto() !=null && fotoView != null){
                 fotoView.setImageBitmap(ImageUtil.toBitmap(prenda.getFoto()));
             }
             //Seleccionamos el color de la prenda
             if(prenda.getColor()!=null) {
                 colorSpinner.setSelection(prenda.getColor().getId());
             }
+            //Establecemos los valores de los textView
+            materialText.setText(prenda.getMaterial());
+            marcaText.setText(prenda.getMarca());
         }
     }
 
@@ -156,7 +178,7 @@ public class PrendaDetailFragment extends Fragment {
     /**
      * Inicializa los botones de seleccion
      */
-    private void initializeSelectButtons(){
+    private void initializeButtons(){
 
         //Listener para el boton de usos
         usoButton.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +193,31 @@ public class PrendaDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 createClimasSelectionDialog();
+            }
+        });
+
+        //Listener para el boton de guardar
+        botonGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Antes de nada, comprobamos que los datos obligatorios esten rellenos
+                if(prenda.getFoto() == null && fotoTemp == null){
+                    Toast.makeText(getContext(),getString(R.string.no_foto_error),Toast.LENGTH_LONG).show();
+                    return;
+                }
+                //Primero, almacenamos todos los datos modificados en la prenda
+                prenda.setMarca(marcaText.getText().toString());
+                prenda.setMaterial(materialText.getText().toString());
+                prenda.setColor((ColorPrenda)colorSpinner.getSelectedItem());
+                if(fotoTemp != null) {
+                    prenda.setFoto(ImageUtil.toByteArray(fotoTemp));
+                }
+                //Los usos y los climas se cambian al cerrar el cuadro de dialogo
+                //Una vez actualizados los datos, se menten en la BD
+                new PrendaDA(getContext()).savePrenda(prenda);
+                //Volvemos a la vista de la lista
+                PrendasListFragment pl = new PrendasListFragment();
+                ((BaseContainerFragment)getParentFragment()).replaceFragment(pl, true);
             }
         });
     }
@@ -282,11 +329,24 @@ public class PrendaDetailFragment extends Fragment {
     }
 
 
+    /**
+     * Metodo invocado cuando se vuelva de una actividad, principalemnte la de la camara de fotos
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode){
-            case REQUEST_IMAGE_CAPTURE: Log.i("foto", "foto cogida");
-
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //Vamos a recoger la imagen del bundle que obtenemos del Intent
+            //Se trata de una imagen a baja resolucion. En principio para nuestro proposito
+            //nos vale, pero se puede intentar hacer a mas calidad
+            //En este caso, lo suyo sera luego bajarla un poco para evitar consumir mucha memoria
+            //e introducir demasiados datos en la BD
+            Bundle extras = data.getExtras();
+            fotoTemp = (Bitmap) extras.get("data");
+            //Establecemos la imagen en el imageview
+            fotoView.setImageBitmap(fotoTemp);
         }
     }
 

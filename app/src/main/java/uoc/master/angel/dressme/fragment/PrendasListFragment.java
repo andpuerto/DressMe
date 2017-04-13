@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -31,13 +32,16 @@ public class PrendasListFragment extends Fragment {
     //Adaptadores para cada una de las listas de prendas, una por cada tipo de parte de conjunto
     private ArrayList<PrendasListAdapter> adapters = new ArrayList<>();
 
+    //Lista con todos los tipos de partes de conjunto
+    List<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
+
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Context context = this.getContext();
         //Obtener la lista de TipoParteConjunto de la base de datos
-        List<TipoParteConjunto> tiposParteConjunto = new TipoParteConjuntoDA(this.getContext()).getAllTipoParteConjunto();
+        tiposParteConjunto = new TipoParteConjuntoDA(this.getContext()).getAllTipoParteConjunto();
         //Crear tantos adaptadores como TipoParteConjunto haya
         for(TipoParteConjunto tpc : tiposParteConjunto){
             //Creamos un nuevo adapter, con un array vacio
@@ -55,21 +59,10 @@ public class PrendasListFragment extends Fragment {
     //Este metodo establece las vistas iniciales de esta actividad
     private void setViews() {
 
-        //Obtenemos el recyclerView
-        //RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view);
-        //Establecemos el adaptador para el recyclerView
-        //recyclerView.setAdapter(adapter);
-        //Creamos un layoutManager para el recyclerView
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
-        //**********************************
-
 
         //Vamos a establecer los adaptadores a cada RecycleView
         //En esta version, lo hacemos de forma estatica. Para hacerlo generico habria que crea cada
         //recycleview aquí por programa en lugar de tenerlo en el layout
-
-
         RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view1);
         recyclerView.setAdapter(adapters.get(0));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -85,6 +78,21 @@ public class PrendasListFragment extends Fragment {
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view4);
         recyclerView.setAdapter(adapters.get(3));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+
+        //Establecemos el clicklistener para los botones de crear nueva prenda.
+        //Tambien esta hecho de forma estatica en esta version
+        (this.getView().findViewById(R.id.prendas_add_button1)).setOnClickListener(
+                new AddButtonListener(tiposParteConjunto.get(0)));
+        (this.getView().findViewById(R.id.prendas_add_button2)).setOnClickListener(
+                new AddButtonListener(tiposParteConjunto.get(1)));
+        (this.getView().findViewById(R.id.prendas_add_button3)).setOnClickListener(
+                new AddButtonListener(tiposParteConjunto.get(2)));
+        (this.getView().findViewById(R.id.prendas_add_button4)).setOnClickListener(
+                new AddButtonListener(tiposParteConjunto.get(3)));
+
+
+
         //************************************
         //Establecemos el listener para el refreshLayout
         //final SwipeRefreshLayout swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
@@ -241,6 +249,31 @@ public class PrendasListFragment extends Fragment {
 
         //Utilizamos el metodo de cambio de fragmento del fragmento padre
         ((BaseContainerFragment)getParentFragment()).replaceFragment(pd, true);
+    }
+
+
+    /**
+     * Clase listener para los botones de añadir conjunto
+     */
+    public class AddButtonListener implements View.OnClickListener{
+
+        private TipoParteConjunto tpc;
+
+        /**
+         * Crea el listener para un tipoParteConjunto concreto
+         * @param tpc TipoParteConjunto
+         */
+        public AddButtonListener(TipoParteConjunto tpc){
+            this.tpc = tpc;
+        }
+
+        @Override
+        public void onClick(View v) {
+            //Creamos una prenda vacia y le establecemos el tipoParteConjunto
+            Prenda prenda = new Prenda();
+            prenda.setTipoParteConjunto(tpc);
+            mostrarDetalles(prenda);
+        }
     }
 
 

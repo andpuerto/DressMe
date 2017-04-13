@@ -13,6 +13,8 @@
     <string name="material_label">Material: </string>
     <string name="usos">Usos</string>
     <string name="climas">Climas</string>
+    <string name="no_foto_error">La fotografía de la prenda es obligatoria</string>
+
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>

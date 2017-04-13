@@ -23,7 +23,7 @@ public class Prenda implements Serializable{
     private TipoParteConjunto tipoParteConjunto;
 
     public Prenda(){
-
+        this.id = -1;
     }
 
     public Prenda(int id, byte[] foto, String marca, String material, ColorPrenda color, List<Clima> climas,
