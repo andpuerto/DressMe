@@ -14,6 +14,10 @@
     <string name="usos">Usos</string>
     <string name="climas">Climas</string>
     <string name="no_foto_error">La fotografía de la prenda es obligatoria</string>
+    <string name="delete_prenda_confirm">¿Seguro que quieres eliminar la prenda?</string>
+    <string name="delete_prenda_confirm_title">Eliminar prenda</string>
+    <string name="si">Sí</string>
+    <string name="no">No</string>
 
 
     <!-- claves para los bundle -->

@@ -200,5 +200,33 @@ public class PrendaDA {
         db.close();
     }
 
+    /**
+     * Elimina la prenda y todos los elementos seleccionados
+     * @param prenda La prenda a eliminar
+     */
+    public void deletePrenda(Prenda prenda){
+        //Comprobamos que la prenda que recibamos sea valida
+        if(prenda == null || prenda.getId() < 0){
+            return;
+        }
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //Desafortundadamente, aunque en la creacion de las tablas se haya marcado,
+        //sqlite no realiza automaticamente el borrado en cascada. Tendremos que hacer
+        //manualmente el borrado de los elementos relacionados. Por eso lo hacemos en una
+        //transaccion.
+        db.beginTransaction();
+        String[] whereArgs = {Integer.toString(prenda.getId())};
+        //Borramos la prenda
+        db.delete("prenda","id=?", whereArgs);
+        //Borramos las relaciones con los climas
+        db.delete("prenda_clima","prenda=?",whereArgs);
+        //Borramos las relaciones con los usos
+        db.delete("uso_prenda","prenda=?",whereArgs);
+        //Hacemos el commit y cerramos la trasaccion y la base de datos
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
 
 }

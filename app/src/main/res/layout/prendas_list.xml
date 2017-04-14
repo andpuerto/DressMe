@@ -8,7 +8,13 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/view_margin">
+        android:paddingTop="@dimen/view_margin"
+        android:paddingLeft="@dimen/view_margin"
+        android:paddingStart="@dimen/view_margin"
+        android:paddingBottom="@dimen/view_margin" >
+        <!--No establezco paddingBottom para que el scroll desde la derecha
+        de mas sensacion de que la lista "se sale de la pantalla"-->
+
 
       <!-- <TextView
             android:id="@+id/text_prueba2"
@@ -30,11 +36,19 @@
                 android:layout_marginRight="@dimen/nombre_parte_margin"
                 android:layout_marginTop="@dimen/nombre_parte_margin"
                 android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-            <Button
+      <!--      <Button
                 android:layout_width="@dimen/plus_button_size"
                 android:layout_height="@dimen/plus_button_size"
                 android:text="+"
-                android:id="@+id/prendas_add_button1"/>
+                android:id="@+id/prendas_add_button1"/> -->
+            <ImageButton
+                android:id="@+id/prendas_add_button1"
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:src="@drawable/addbutton" />
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/prendas_recycle_view1"
@@ -55,11 +69,20 @@
                 android:layout_marginRight="@dimen/nombre_parte_margin"
                 android:layout_marginTop="@dimen/nombre_parte_margin"
                 android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-            <Button
+           <!-- <Button
                 android:layout_width="@dimen/plus_button_size"
                 android:layout_height="@dimen/plus_button_size"
                 android:text="+"
-                android:id="@+id/prendas_add_button2"/>
+                android:id="@+id/prendas_add_button2"/> -->
+
+            <ImageButton
+                android:id="@+id/prendas_add_button2"
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:src="@drawable/addbutton" />
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/prendas_recycle_view2"
@@ -81,11 +104,20 @@
                 android:layout_marginRight="@dimen/nombre_parte_margin"
                 android:layout_marginTop="@dimen/nombre_parte_margin"
                 android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-            <Button
+          <!--  <Button
                 android:layout_width="@dimen/plus_button_size"
                 android:layout_height="@dimen/plus_button_size"
                 android:text="+"
-                android:id="@+id/prendas_add_button3"/>
+                android:id="@+id/prendas_add_button3"/> -->
+
+            <ImageButton
+                android:id="@+id/prendas_add_button3"
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:src="@drawable/addbutton" />
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/prendas_recycle_view3"
@@ -107,11 +139,19 @@
                 android:layout_marginRight="@dimen/nombre_parte_margin"
                 android:layout_marginTop="@dimen/nombre_parte_margin"
                 android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-            <Button
+            <!--<Button
                 android:layout_width="@dimen/plus_button_size"
                 android:layout_height="@dimen/plus_button_size"
                 android:text="+"
-                android:id="@+id/prendas_add_button4"/>
+                android:id="@+id/prendas_add_button4"/>-->
+            <ImageButton
+                android:id="@+id/prendas_add_button4"
+                android:layout_width="@dimen/plus_button_size"
+                android:layout_height="@dimen/plus_button_size"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:src="@drawable/addbutton" />
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/prendas_recycle_view4"

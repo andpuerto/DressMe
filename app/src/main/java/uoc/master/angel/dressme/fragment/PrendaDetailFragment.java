@@ -1,17 +1,14 @@
 package uoc.master.angel.dressme.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +19,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +63,9 @@ public class PrendaDetailFragment extends Fragment {
     //Boton de la camara de fotos
     private ImageButton camaraButton;
     //boton de guardar
-    private FloatingActionButton botonGuardar;
+    private FloatingActionButton guardarButton;
+    //boton de eliminar
+    private ImageButton eliminarButton;
 
     //Lista con los colores de prendas posibles
     private List<ColorPrenda> coloresPrenda;
@@ -106,8 +104,8 @@ public class PrendaDetailFragment extends Fragment {
         usoButton = (Button) rootView.findViewById(R.id.prenda_uso_button);
         climaButton = (Button) rootView.findViewById(R.id.prenda_clima_button);
         camaraButton = (ImageButton) rootView.findViewById(R.id.camera_buttion);
-        botonGuardar = (FloatingActionButton) rootView.findViewById(R.id.save_prenda_button);
-
+        guardarButton = (FloatingActionButton) rootView.findViewById(R.id.save_prenda_button);
+        eliminarButton = (ImageButton) rootView.findViewById(R.id.delete_prenda_button);
 
         //Inicializamos el spinner con los colores
         this.initializeColores();
@@ -176,7 +174,7 @@ public class PrendaDetailFragment extends Fragment {
 
 
     /**
-     * Inicializa los botones de seleccion
+     * Inicializa los botones
      */
     private void initializeButtons(){
 
@@ -197,7 +195,7 @@ public class PrendaDetailFragment extends Fragment {
         });
 
         //Listener para el boton de guardar
-        botonGuardar.setOnClickListener(new View.OnClickListener() {
+        guardarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Antes de nada, comprobamos que los datos obligatorios esten rellenos
@@ -216,8 +214,16 @@ public class PrendaDetailFragment extends Fragment {
                 //Una vez actualizados los datos, se menten en la BD
                 new PrendaDA(getContext()).savePrenda(prenda);
                 //Volvemos a la vista de la lista
-                PrendasListFragment pl = new PrendasListFragment();
-                ((BaseContainerFragment)getParentFragment()).replaceFragment(pl, true);
+                returnToPrendasList();
+
+            }
+        });
+
+        //Listener para el boton de eliminar
+        eliminarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createDeleteConfirmationDialog();
             }
         });
     }
@@ -310,6 +316,39 @@ public class PrendaDetailFragment extends Fragment {
         dialog.show();
     }
 
+
+    /**
+     * Crea el panel de confirmacion de borrado de prenda
+     */
+    private void createDeleteConfirmationDialog(){
+        AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getActivity());
+        deleteBuilder.setTitle(getString(R.string.delete_prenda_confirm_title));
+        deleteBuilder.setMessage(getString(R.string.delete_prenda_confirm));
+        deleteBuilder.setIcon(android.R.drawable.ic_dialog_alert);
+        deleteBuilder.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Eliminamos la prenda
+                new PrendaDA(getContext()).deletePrenda(prenda);
+                returnToPrendasList();
+            }
+        })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Al pulsar cancel no hacemos nada
+                    }
+                }).show();
+
+    }
+
+    /**
+     * Vuelve a la pantalla del listado de prendas
+     */
+    private void returnToPrendasList(){
+        PrendasListFragment pl = new PrendasListFragment();
+        ((BaseContainerFragment)getParentFragment()).replaceFragment(pl, true);
+    }
 
     /**
      * Inicializa el boton de la camara

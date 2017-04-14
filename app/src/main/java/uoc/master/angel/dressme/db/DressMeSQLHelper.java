@@ -126,7 +126,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
     /**
      * Elimina todas las tablas de la base de datos
-     * @param db
+     * @param db objeto SQLiteDatabase
      */
     private void eliminarTablas(SQLiteDatabase db){
         db.execSQL("DROP TABLE IF EXISTS uso_prenda");
