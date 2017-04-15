@@ -22,6 +22,7 @@ import uoc.master.angel.dressme.fragment.PlanificacionFragment;
 import uoc.master.angel.dressme.fragment.PrendasListFragment;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.fragment.container.ConjuntoContainerFragment;
+import uoc.master.angel.dressme.fragment.container.ConjuntoSugeridoContainerFragment;
 import uoc.master.angel.dressme.fragment.container.PlanificacionContainerFragment;
 import uoc.master.angel.dressme.fragment.container.PrendaContainerFragment;
 import uoc.master.angel.dressme.util.PermissionsUtil;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Inicializamos la base de datos
         this.setDatabase();
+
+
     }
 
     @Override
@@ -95,8 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
         tabHost.setup(this,
                 getSupportFragmentManager(),android.R.id.tabcontent);
-        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
-                ConjuntoContainerFragment.class, null);
+//        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
+//                ConjuntoContainerFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator("Conjunto sugerido"),
+                ConjuntoSugeridoContainerFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec(PRENDAS_TAB).setIndicator(getString(R.string.prendas_tab_label)),
                 PrendaContainerFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec(PLANIFICACION_TAB).setIndicator(getString(R.string.planifiacion_tab_label)),
@@ -164,8 +169,9 @@ public class MainActivity extends AppCompatActivity {
         // The request code used in ActivityCompat.requestPermissions()
         // and returned in the Activity's onRequestPermissionsResult()
 
-        String[] permisos = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA};
+        String[] permisos = {Manifest.permission.INTERNET, Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA};
 
         if(!PermissionsUtil.hasPermissions(this, permisos)){
             ActivityCompat.requestPermissions(this, permisos, PERMISSION_ALL);

@@ -18,6 +18,8 @@
     <string name="delete_prenda_confirm_title">Eliminar prenda</string>
     <string name="si">Sí</string>
     <string name="no">No</string>
+    <string name="error_location_connection">No se ha podido conectar con el servicio de localización</string>
+    <string name="error_location_permission">No se tienen permisos para obtener la localizacion</string>
 
 
     <!-- claves para los bundle -->
