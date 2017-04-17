@@ -72,7 +72,12 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
                 "ON DELETE CASCADE ON UPDATE CASCADE, PRIMARY KEY(color1, color2))");
 
         //Tabla clima
-        db.execSQL("CREATE TABLE clima(id INTEGER PRIMARY KEY, nombre TEXT)");
+        //Lluvia deberia ser un boolean pero SQLite no los admite, asi que hay que utilizar un
+        //integer con 0=false y 1=true. Un valor true (1) representara que el clima es de lluvia
+        //Un valor false (0) no indica ausencia de lluvia, sino que en ese clima el parametro
+        //lluvia es indiferente
+        db.execSQL("CREATE TABLE clima(id INTEGER PRIMARY KEY, nombre TEXT, " +
+                "min_temp REAL, max_temp REAL, lluvia INTEGER)");
 
         //Tabla uso
         //Identifica los diferentes usos sociales posibles para las prendas
@@ -156,6 +161,11 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO color VALUES(5,'azul','000077')");
 
         //Combinaciones de colores
+        //Por comodidad a la hora de consultar, se introduciran los colores combinados tomando
+        //como base el color de la izquierda, sin considerarse una relacion conmutativa
+        //Es decir, si con el color 3 combina el 4, introduciremos (3,4), pero esto solo servirá
+        //para las búsquedas de los colores que combinan con el 3, no para los que combinan con el 4
+        //Si queremos esto último, tendremos que introducir también (4,3)
         db.execSQL("INSERT INTO color_combina VALUES(0,1)");
         db.execSQL("INSERT INTO color_combina VALUES(0,2)");
         db.execSQL("INSERT INTO color_combina VALUES(0,3)");
@@ -165,10 +175,16 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO color_combina VALUES(2,1)");
 
         //Climas
-        db.execSQL("INSERT INTO clima VALUES(0,'caluroso')");
-        db.execSQL("INSERT INTO clima VALUES(1,'frío')");
-        db.execSQL("INSERT INTO clima VALUES(2,'templado')");
-        db.execSQL("INSERT INTO clima VALUES(3,'lluvia')");
+        //Algunos climas pueden representar solo condiciones de lluvia sin importar la temperatura
+        //Así, los valores de temperatura seran tan amplios como para abarcar todos los rangos
+        //En otros casos se recoge temperatura, sin importar la lluvia. Aqui dejamos la lluvia a
+        //falso. Como una prenda puede tener varios climas adecuados, si es valida para lluvia
+        //sera adecuada tambien para los climas de lluvia, con lo que las consultas de prendas
+        //para todos los climas adecuados solo nos de
+        db.execSQL("INSERT INTO clima VALUES(0,'caluroso',22,100,0)");
+        db.execSQL("INSERT INTO clima VALUES(1,'frío',-100,12.50,0)");
+        db.execSQL("INSERT INTO clima VALUES(2,'templado',12.51,21.99,0)");
+        db.execSQL("INSERT INTO clima VALUES(3,'lluvia',-100,100,1)");
 
         //usos
         db.execSQL("INSERT INTO uso VALUES(0,'trabajo')");

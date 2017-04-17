@@ -10,12 +10,18 @@ import java.io.Serializable;
 public class Clima implements Serializable{
     private int id;
     private String nombre;
+    private float minTemp;
+    private float maxTemp;
+    private boolean lluvia;
 
     public Clima(){}
 
-    public Clima(int id, String nombre){
+    public Clima(int id, String nombre, float minTemp, float maxTemp, boolean lluvia){
         this.id = id;
         this.nombre = nombre;
+        this.minTemp = minTemp;
+        this.maxTemp = maxTemp;
+        this.lluvia = lluvia;
     }
 
     public int getId() {

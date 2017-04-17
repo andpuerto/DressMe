@@ -54,4 +54,18 @@ public class ColorPrenda implements Serializable{
     public void setColoresCombinados(List<ColorPrenda> coloresCombinados) {
         this.coloresCombinados = coloresCombinados;
     }
+
+
+    //Sobrescribimos el metodo equals para comparaciones y busquedas en listas
+    @Override
+    public boolean equals(Object v) {
+        boolean retVal = false;
+
+        if (v instanceof ColorPrenda){
+            ColorPrenda ptr = (ColorPrenda) v;
+            retVal = ptr.getId() == this.id;
+        }
+
+        return retVal;
+    }
 }

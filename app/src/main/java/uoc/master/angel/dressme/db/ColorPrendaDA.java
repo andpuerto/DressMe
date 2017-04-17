@@ -3,6 +3,7 @@ package uoc.master.angel.dressme.db;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class ColorPrendaDA {
 
     /**
      * Constructor
-     * @param context
+     * @param context Context
      */
     public ColorPrendaDA(Context context) {
         //Obtenemos el helper
@@ -28,7 +29,7 @@ public class ColorPrendaDA {
 
     /**
      * Devueve una lista con todos los objetos ColorPrenda de la base de datos
-     * @return
+     * @return List con todos los ColorPrenda
      */
     public List<ColorPrenda> getAllColorPrenda(){
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -48,4 +49,30 @@ public class ColorPrendaDA {
         db.close();
         return colores;
      }
+
+
+    /**
+     * Devuelve una lista de los colores que combinan con el color que recibe como parametro
+     * @param color ColorPrenda del que queremos obtener los colores combinados
+     * @return List con los ColorPrenda que combinan
+     */
+    public List<ColorPrenda> getColoresCombinados(ColorPrenda color){
+        ArrayList<ColorPrenda> coloresCombinados = new ArrayList<>();
+        //Abrimos la base de datos
+        SQLiteDatabase db = helper.getReadableDatabase();
+        //Obtenemos el id del color
+        String[] parameters = {Integer.toString(color.getId())};
+        Cursor c = db.rawQuery("SELECT c.id, c.nombre, c.rgb FROM color c INNER JOIN color_combina co " +
+                "ON co.color2 = c.id WHERE co.color1 = ?", parameters);
+        if (c.moveToFirst()) {
+            //Agregamos todos los colores obtenidos a la lista
+            do{
+                coloresCombinados.add(new ColorPrenda(c.getInt(0), c.getString(1), c.getString(2), null));
+            }while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return coloresCombinados;
+    }
+
 }

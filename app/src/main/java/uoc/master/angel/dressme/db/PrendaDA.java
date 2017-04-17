@@ -103,14 +103,15 @@ public class PrendaDA {
         }
         c.close();
         //Obtenemos los climas adecuados de la prenda
-        c = db.rawQuery("SELECT c.id, c.nombre FROM prenda p INNER JOIN prenda_clima pc " +
+        c = db.rawQuery("SELECT c.id, c.nombre, c.min_temp, c.max_temp, c.lluvia FROM prenda p INNER JOIN prenda_clima pc " +
                 "ON p.id = pc.prenda INNER JOIN clima c ON c.id = pc.clima " +
                 "WHERE p.id = ? ORDER BY c.id", parameters);
         if (c.moveToFirst()) {
             List<Clima> climas = new ArrayList<>();
             //Recorremos el cursor hasta que no haya más registros
             do {
-                climas.add(new Clima(c.getInt(0), c.getString(1)));
+                climas.add(new Clima(c.getInt(0), c.getString(1), c.getFloat(3), c.getFloat(4),
+                        c.getInt(5)==1));
             } while(c.moveToNext());
             prenda.setClimasAdecuados(climas);
         }
@@ -226,6 +227,74 @@ public class PrendaDA {
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
+    }
+
+
+    /**
+     * Obtiene la lista de prendas acorde a los parametros recibidos
+     * @param uso Un uso para el que deben ser adecuadas las prendas
+     * @param temperatura Temperatura para la que deben ser adecuadas las prendas
+     * @param lluvia Si las prendas deben ser adecuadas para la lluvia (true) o es indiferente (false)
+     * @return List de prendas que cumplen los requisitos solamente con el id y el color rellenos
+     */
+    public List<Prenda> getPrendas(Uso uso, float temperatura, boolean lluvia){
+        ArrayList<Prenda> prendas = new ArrayList<>();
+
+        //El tratamiento de los climas en cuanto a la lluvia en conjuncion con las temperaturas
+        //es un tanto particular, en cuanto que, tal y como se han establecido, hay climas que
+        //indican temperaturas, sin importar las precipitaciones, y otros que indican lluvias sin
+        //importar la temperatura.
+        //Podrían haberse hecho de forma que se combinaran ambas cosas, como un clima "frío y lluvioso",
+        //pero, de cara al usuario sería mas incomodo porque tendria que seleccionar de una lista
+        //mas grande de climas, a pesar de que ganaramos genericidad.
+
+        //La siguiente consulta seleciona los climas que cumplan con la temperatura que se pasa
+        //como parametro y que, en el caso de que haya lluvia, tambien tengan ese elemento marcado
+        //en otro de sus climas. Si no llueve, no se considerara este parametro, considerando
+        //que las prendas utiles en tiempo lluvioso tambien pueden usarse si no lo es.
+        //Se pierde algo de genericidad, pero sigue siendo bastante neutro al no hacer referencia
+        //a climas concretos
+
+        //Seleccionamos solo los datos que se van a necesitar
+        String query = "select distinct p.id, co.id, co.nombre, co.rgb " +
+                "from prenda p inner join prenda_clima pc1 on pc1.prenda=p.id " +
+                "inner join uso_prenda up on up.prenda=p.id " +
+                "inner join prenda_clima pc2 on pc2.prenda=p.id " +
+                "inner join clima cli1 on cli1.id=pc1.clima";
+        //Si llueve, agregamos el segundo clima al join
+        if(lluvia){
+            query += " inner join clima cli2 on cli2.id=pc2.clima";
+        }
+        //Agregamos el join con el color
+        query += " inner join color co on p.color=co.id";
+        //Agregamos la clausula where general para la temperatura y el uso
+        query += " where cli1.min_temp<=" + temperatura + " and cli1.max_temp>=" + temperatura +
+                " and up.uso=" + uso.getId();
+        if(lluvia){
+            //Si llueve, agregamos la condicion al where
+            query += " and cli2.lluvia=1";
+        }
+
+
+        //Abrimos la base de datos
+        SQLiteDatabase db = helper.getReadableDatabase();
+        //Ejecutamos la consulta
+        Cursor c = db.rawQuery(query, null);
+        //Recorremos el cursor
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                //Creamos una nueva prenda con solo el id y el id del color
+                Prenda prenda = new Prenda(c.getInt(0), null, null, null,
+                        new ColorPrenda(c.getInt(1),c.getString(2),c.getString(3),null),
+                        null, null, null);
+                //Añadimos la prenda a la lista
+                prendas.add(prenda);
+            } while(c.moveToNext());
+
+        }
+
+        return prendas;
     }
 
 

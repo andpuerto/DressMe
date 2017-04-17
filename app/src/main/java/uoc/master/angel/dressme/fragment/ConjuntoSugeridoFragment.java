@@ -4,6 +4,7 @@ package uoc.master.angel.dressme.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
@@ -17,7 +18,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uoc.master.angel.dressme.R;
+import uoc.master.angel.dressme.db.ColorPrendaDA;
+import uoc.master.angel.dressme.db.PrendaDA;
+import uoc.master.angel.dressme.db.UsoDA;
+import uoc.master.angel.dressme.modelo.ColorPrenda;
+import uoc.master.angel.dressme.modelo.Prenda;
+import uoc.master.angel.dressme.modelo.Uso;
 import uoc.master.angel.dressme.util.WeatherUtil;
 
 /**
@@ -39,11 +49,16 @@ public class ConjuntoSugeridoFragment extends Fragment{
     //Informacion meteorologica
     private WeatherUtil.WeatherInfo wi = null;
 
+    private List<Uso> usos = new ArrayList<>();
+
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        //Obtenemos la lista de usos
+        usos = new UsoDA(getContext()).getAllUso();
 
         //Creamos un LocationManager con un listener para obtener la localización actual
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -76,6 +91,8 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
         new GetWeather().execute();
 
+
+
     }
 
 
@@ -94,6 +111,45 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
 
     private void mostrarConjuntoSugerido(){
+        //Obtenemos las prendas del conjunto.
+        //El algoritmo hace lo siguiente:
+        //  - Para cada TipoParteConjunto, obtiene la lista de prendas que cumplen los requisitos
+        //    de uso (seleccionado por el usuario) y clima (obtenido de la prediccion meteorologica)
+        PrendaDA prendaDA = new PrendaDA(getContext());
+        ColorPrendaDA colorPrendaDA = new ColorPrendaDA(getContext());
+
+        //Antes de tratar las prendas, guardamos la lista de colores y sus combinaciones
+        List<ColorPrenda> colores = colorPrendaDA.getAllColorPrenda();
+        for(ColorPrenda color : colores){
+            color.setColoresCombinados(colorPrendaDA.getColoresCombinados(color));
+        }
+
+        List<List<Prenda>> listasPrendas= new ArrayList<>();
+        //Recorremos la lista de usos y para cada uno, hallamos la lista de posibles prendas
+        //para ese uso y el clima actual
+        for(Uso uso : usos){
+            List<Prenda> prendas = prendaDA.getPrendas(uso, wi.temp, wi.lluvia);
+            listasPrendas.add(prendas);
+        }
+
+        //  - Para el primer TipoParteConjunto toma una prenda de las obtenidas aleatoriamente
+        //  - En el resto de TipoParteConjunto, selecciona prendas cuyo color combine con el de la
+        //    primera prenda seleccionada
+        //  - Si se encuentran prendas para todas las partes, el algoritmo termina
+        //  - Si queda alguna parte sin prenda asignada, se guarda el conjunto, junto con el numero
+        //    de prendas que se han conseguido asignar.
+        //  - Se selecciona otra prenda de la parte superior, aleatoria entre las restantes y se
+        //    repite el proceso.
+        //  - Si se asignan todas las prendas, se termina. Si el numero de prendas asignadas es
+        //    mayor que el del conjunto almacenado, se sustituye el conjunto almacenado por este
+        //    y se continua.
+        //  - Si no se consiguen asignar todas las predas menos una tomando elementos del primer
+        //    TipoParteConjunto, empezamos a hacer lo mismo pero tomando como referencia el
+        //    siguiente TipoParteConjunto. A partir de aquí es seguro que no vamos a poder asignar
+        //    todas las partes puesto que no lo hemos conseguido con ninguna prenda del primer
+        //    TipoParteConjunto, como mucho, conseguiriamos n-1.
+
+
 
     }
 
@@ -161,7 +217,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
             if(wi != null){
                 //Si la informacion meteorologica se obtiene correctamente, buscaremos
                 //las prendas para el conjunto apropiadas y estableceremos los valores de la vista
-                Log.i("doInbackground","Obtenido el json");
+                mostrarConjuntoSugerido();
             } else {
                 //error: no se ha podido consultar la informacion meteorologica
                 Toast.makeText(getContext(), getString(R.string.error_weather),
