@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ColorPrendaDA {
         String[] campos = new String[] {"id", "nombre", "rgb"};
         Cursor c = db.query("color", campos, null, null, null, null, null);
 
-        ArrayList<ColorPrenda> colores = new ArrayList<ColorPrenda>();
+        ArrayList<ColorPrenda> colores = new ArrayList<>();
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
@@ -52,12 +53,12 @@ public class ColorPrendaDA {
 
 
     /**
-     * Devuelve una lista de los colores que combinan con el color que recibe como parametro
+     * Devuelve un sparse array de los colores que combinan con el color que recibe como parametro
      * @param color ColorPrenda del que queremos obtener los colores combinados
-     * @return List con los ColorPrenda que combinan
+     * @return SparseArray con los ColorPrenda que combinan, usando el id como clave
      */
-    public List<ColorPrenda> getColoresCombinados(ColorPrenda color){
-        ArrayList<ColorPrenda> coloresCombinados = new ArrayList<>();
+    public SparseArray<ColorPrenda> getColoresCombinados(ColorPrenda color){
+        SparseArray<ColorPrenda> coloresCombinados = new SparseArray<>();
         //Abrimos la base de datos
         SQLiteDatabase db = helper.getReadableDatabase();
         //Obtenemos el id del color
@@ -65,9 +66,10 @@ public class ColorPrendaDA {
         Cursor c = db.rawQuery("SELECT c.id, c.nombre, c.rgb FROM color c INNER JOIN color_combina co " +
                 "ON co.color2 = c.id WHERE co.color1 = ?", parameters);
         if (c.moveToFirst()) {
-            //Agregamos todos los colores obtenidos a la lista
+            //Agregamos todos los colores obtenidos al sparse array
             do{
-                coloresCombinados.add(new ColorPrenda(c.getInt(0), c.getString(1), c.getString(2), null));
+                coloresCombinados.append(c.getInt(0), new ColorPrenda(c.getInt(0),
+                        c.getString(1), c.getString(2), null));
             }while (c.moveToNext());
         }
         c.close();

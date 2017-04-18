@@ -34,7 +34,7 @@ public class ClimaDA {
     public List<Clima> getAllClima(){
         SQLiteDatabase db = helper.getReadableDatabase();
         //Consultaremos el id y el nombre
-        String[] campos = new String[] {"id", "nombre"};
+        String[] campos = new String[] {"id", "nombre", "min_temp", "max_temp", "lluvia"};
         Cursor c = db.query("clima", campos, null, null, null, null, "id");
 
         ArrayList<Clima> climas = new ArrayList<>();
@@ -42,7 +42,8 @@ public class ClimaDA {
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                climas.add(new Clima(c.getInt(0),c.getString(1)));
+                climas.add(new Clima(c.getInt(0),c.getString(1),c.getFloat(2),
+                        c.getFloat(3),c.getInt(4)==1));
             } while(c.moveToNext());
         }
         c.close();
@@ -79,7 +80,7 @@ public class ClimaDA {
 
     public Clima getClima(int idClima){
         SQLiteDatabase db = helper.getReadableDatabase();
-        String[] campos = new String[] {"id", "nombre"};
+        String[] campos = new String[] {"id", "nombre", "min_temp", "max_temp", "lluvia"};
         String where = "id = ?";
         String[] whereArgs = new String[] {
                 Integer.toString(idClima)
@@ -90,7 +91,7 @@ public class ClimaDA {
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
             //Devolvemos el Clima con los valores recogidos
-            clima = new Clima(c.getInt(0),c.getString(1));
+            clima = new Clima(c.getInt(0),c.getString(1),c.getFloat(2),c.getFloat(3),c.getInt(4)==1);
         }
         c.close();
         db.close();

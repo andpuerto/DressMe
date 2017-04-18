@@ -110,8 +110,8 @@ public class PrendaDA {
             List<Clima> climas = new ArrayList<>();
             //Recorremos el cursor hasta que no haya más registros
             do {
-                climas.add(new Clima(c.getInt(0), c.getString(1), c.getFloat(3), c.getFloat(4),
-                        c.getInt(5)==1));
+                climas.add(new Clima(c.getInt(0), c.getString(1), c.getFloat(2), c.getFloat(3),
+                        c.getInt(4)==1));
             } while(c.moveToNext());
             prenda.setClimasAdecuados(climas);
         }
@@ -237,7 +237,7 @@ public class PrendaDA {
      * @param lluvia Si las prendas deben ser adecuadas para la lluvia (true) o es indiferente (false)
      * @return List de prendas que cumplen los requisitos solamente con el id y el color rellenos
      */
-    public List<Prenda> getPrendas(Uso uso, float temperatura, boolean lluvia){
+    public List<Prenda> getPrendas(Uso uso, TipoParteConjunto tpc, float temperatura, boolean lluvia){
         ArrayList<Prenda> prendas = new ArrayList<>();
 
         //El tratamiento de los climas en cuanto a la lluvia en conjuncion con las temperaturas
@@ -258,9 +258,12 @@ public class PrendaDA {
         //Seleccionamos solo los datos que se van a necesitar
         String query = "select distinct p.id, co.id, co.nombre, co.rgb " +
                 "from prenda p inner join prenda_clima pc1 on pc1.prenda=p.id " +
-                "inner join uso_prenda up on up.prenda=p.id " +
                 "inner join prenda_clima pc2 on pc2.prenda=p.id " +
                 "inner join clima cli1 on cli1.id=pc1.clima";
+        //Si hemos recibido un uso, lo agregamos al join
+        if(uso != null) {
+            query += "inner join uso_prenda up on up.prenda=p.id ";
+        }
         //Si llueve, agregamos el segundo clima al join
         if(lluvia){
             query += " inner join clima cli2 on cli2.id=pc2.clima";
@@ -268,8 +271,15 @@ public class PrendaDA {
         //Agregamos el join con el color
         query += " inner join color co on p.color=co.id";
         //Agregamos la clausula where general para la temperatura y el uso
-        query += " where cli1.min_temp<=" + temperatura + " and cli1.max_temp>=" + temperatura +
-                " and up.uso=" + uso.getId();
+        query += " where cli1.min_temp<=" + temperatura + " and cli1.max_temp>=" + temperatura;
+        //Si recibimos un TipoParteConjunto, lo agregamos al where
+        if(tpc != null){
+            query += " and p.tipo_parte_conjunto=" + tpc.getId();
+        }
+        //Si recibimos un uso, lo agregamos al where
+        if(uso != null) {
+            query += " and up.uso=" + uso.getId();
+        }
         if(lluvia){
             //Si llueve, agregamos la condicion al where
             query += " and cli2.lluvia=1";

@@ -1,8 +1,9 @@
 package uoc.master.angel.dressme.modelo;
 
+import android.util.SparseArray;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by angel on 30/03/2017.
@@ -12,11 +13,12 @@ public class ColorPrenda implements Serializable{
     private int id;
     private String nombre;
     private String rgb;
-    private List<ColorPrenda> coloresCombinados;
+    //Los colores combinados los almacenamos en un sparse array por su id para un acceso mas rapido
+    private SparseArray<ColorPrenda> coloresCombinados;
 
     public ColorPrenda(){}
 
-    public ColorPrenda(int id, String nombre, String rgb, List<ColorPrenda> coloresCombinados){
+    public ColorPrenda(int id, String nombre, String rgb, SparseArray<ColorPrenda> coloresCombinados){
         this.id = id;
         this.nombre = nombre;
         this.rgb = rgb;
@@ -47,11 +49,11 @@ public class ColorPrenda implements Serializable{
         this.rgb = rgb;
     }
 
-    public List<ColorPrenda> getColoresCombinados() {
+    public SparseArray<ColorPrenda> getColoresCombinados() {
         return coloresCombinados;
     }
 
-    public void setColoresCombinados(List<ColorPrenda> coloresCombinados) {
+    public void setColoresCombinados(SparseArray<ColorPrenda> coloresCombinados) {
         this.coloresCombinados = coloresCombinados;
     }
 

@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,20 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import uoc.master.angel.dressme.R;
 import uoc.master.angel.dressme.db.ColorPrendaDA;
 import uoc.master.angel.dressme.db.PrendaDA;
+import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
 import uoc.master.angel.dressme.db.UsoDA;
 import uoc.master.angel.dressme.modelo.ColorPrenda;
+import uoc.master.angel.dressme.modelo.Conjunto;
+import uoc.master.angel.dressme.modelo.ParteConjunto;
 import uoc.master.angel.dressme.modelo.Prenda;
+import uoc.master.angel.dressme.modelo.TipoParteConjunto;
 import uoc.master.angel.dressme.modelo.Uso;
 import uoc.master.angel.dressme.util.WeatherUtil;
 
@@ -49,7 +56,14 @@ public class ConjuntoSugeridoFragment extends Fragment{
     //Informacion meteorologica
     private WeatherUtil.WeatherInfo wi = null;
 
+    //Array con los usos para el Spinner
     private List<Uso> usos = new ArrayList<>();
+
+    //Uso seleccionado por el usuario
+    private Uso usoSeleccionado=null;
+
+    //El conjunto sugerido
+    Conjunto conjuntoSugerido = null;
 
     @Override
 
@@ -108,31 +122,17 @@ public class ConjuntoSugeridoFragment extends Fragment{
     }
 
 
+    /**
+     * Obtiene un conjunto sugerido considerando los parametros climaticos, el uso sugerido por
+     * el usuario y las combinaciones esteticamente adecuadas de colores de prendas
+     * @return El conjunto sugerido con id=-1 por no estar registrado en la BD.
+     */
+    private Conjunto getConjuntoSugerido(){
 
-
-    private void mostrarConjuntoSugerido(){
-        //Obtenemos las prendas del conjunto.
         //El algoritmo hace lo siguiente:
+        //  - Para el primer TipoParteConjunto toma una prenda de las obtenidas aleatoriamente
         //  - Para cada TipoParteConjunto, obtiene la lista de prendas que cumplen los requisitos
         //    de uso (seleccionado por el usuario) y clima (obtenido de la prediccion meteorologica)
-        PrendaDA prendaDA = new PrendaDA(getContext());
-        ColorPrendaDA colorPrendaDA = new ColorPrendaDA(getContext());
-
-        //Antes de tratar las prendas, guardamos la lista de colores y sus combinaciones
-        List<ColorPrenda> colores = colorPrendaDA.getAllColorPrenda();
-        for(ColorPrenda color : colores){
-            color.setColoresCombinados(colorPrendaDA.getColoresCombinados(color));
-        }
-
-        List<List<Prenda>> listasPrendas= new ArrayList<>();
-        //Recorremos la lista de usos y para cada uno, hallamos la lista de posibles prendas
-        //para ese uso y el clima actual
-        for(Uso uso : usos){
-            List<Prenda> prendas = prendaDA.getPrendas(uso, wi.temp, wi.lluvia);
-            listasPrendas.add(prendas);
-        }
-
-        //  - Para el primer TipoParteConjunto toma una prenda de las obtenidas aleatoriamente
         //  - En el resto de TipoParteConjunto, selecciona prendas cuyo color combine con el de la
         //    primera prenda seleccionada
         //  - Si se encuentran prendas para todas las partes, el algoritmo termina
@@ -149,7 +149,104 @@ public class ConjuntoSugeridoFragment extends Fragment{
         //    todas las partes puesto que no lo hemos conseguido con ninguna prenda del primer
         //    TipoParteConjunto, como mucho, conseguiriamos n-1.
 
+        //Objetos de acceso a datos que se van a necesitar
+        PrendaDA prendaDA = new PrendaDA(getContext());
+        ColorPrendaDA colorPrendaDA = new ColorPrendaDA(getContext());
+        TipoParteConjuntoDA tpcDA = new TipoParteConjuntoDA(getContext());
 
+        //Antes de tratar las prendas, obtenemos la lista de colores y sus combinaciones
+        //Para poder utilizarla despues comodamente, aprovechamos el bucle en el que
+        //obtenemos los colores combinados para meterlos en un sparse array
+        List<ColorPrenda> colores = colorPrendaDA.getAllColorPrenda();
+        SparseArray<ColorPrenda> coloresSparse = new SparseArray<>();
+        for(ColorPrenda color : colores){
+            color.setColoresCombinados(colorPrendaDA.getColoresCombinados(color));
+            coloresSparse.append(color.getId(), color);
+        }
+
+        List<List<Prenda>> listasPrendas= new ArrayList<>();
+        //Recorremos la lista de TipoParteConjunto y para cada uno, hallamos la lista de posibles prendas
+        //para ese tipo, el uso seleccionado (si hay alguno) y el clima actual
+        List<TipoParteConjunto> tpcs = tpcDA.getAllTipoParteConjunto();
+        for(TipoParteConjunto tpc : tpcs){
+            List<Prenda> prendas = prendaDA.getPrendas(usoSeleccionado, tpc, wi.temp, wi.lluvia);
+            listasPrendas.add(prendas);
+        }
+
+        //Referencia al TipoParteConjunto que se trata en cada momento
+        int tpcActual = 0;
+        //Para generar numeros aleatorios
+        Random random = new Random();
+        //Conjunto que vamos a generar
+        Conjunto conjuntoGenerado = new Conjunto();
+        //Vamos recorriendo todos los TipoParteConjunto en busca de una prenda de inicio
+        //a partir de la que intentaremos empezar a conjuntar. Pararemos cuando lleguemos al
+        //final de la lista de prendas para cada TipoParteConjunto o cuando hayamos encontrado
+        //un con conjunto con todas las prendas posibles
+        while(tpcActual < listasPrendas.size() &&
+                conjuntoGenerado.getNumeroPartesConjunto() < tpcs.size()){
+            //Cogemos la lista correspondiente al uso
+            //La copiamos para poder manipularla sin tocar la original
+            List<Prenda> prendasRef = new ArrayList<>(listasPrendas.get(tpcActual));
+            //Trataremos esta lista mientras queden elementos (los iremos sacando si los
+            //descartamos)
+            while(!prendasRef.isEmpty() &&
+                    conjuntoGenerado.getNumeroPartesConjunto() < tpcs.size()){
+                //Cogemos una prenda de las restantes aleatoriamente
+                Prenda prendaBase = prendasRef.get(random.nextInt(prendasRef.size()));
+                //Creamos un conjunto temporal y le asignamos una parteconjunto del tipo actual
+                //y con la prenda actual asignada
+                Conjunto conjuntoTemp = new Conjunto();
+                //Añadimos a la lista de partes conjunto, usando el id del tipo como clave
+                conjuntoTemp.getPartesConjunto().append(tpcs.get(tpcActual).getId(),
+                        new ParteConjunto(-1,tpcs.get(tpcActual), prendaBase));
+                //Buscamos prendas para otras partes del conjunto
+                for(int i=0; i<listasPrendas.size(); i++){
+                    //Buscaremos solo para los TipoParteConjunto que no sean el que estamos tratando
+                    if(i != tpcActual){
+                        //Para cada elemento de la lista de este TipoParteConjunto, comprobaremos
+                        //si su color combina con el de la prenda base. Si es asi, los añadimos
+                        //al conjunto.
+                        //Hacemos una copia de la lista actual para ir cogiedo aleatoriamente y
+                        //eliminarlos de la lista
+                        List<Prenda> prendasTemp = new ArrayList<>(listasPrendas.get(tpcActual));
+                        while(!prendasTemp.isEmpty()){
+                            //Tomamos la prenda aleatoriamente de la lista actual
+                            Prenda prendaTemp = prendasTemp.get(random.nextInt(prendasTemp.size()));
+                            //Comprobamos si el color de la prenda actual combina con el color
+                            //de la prenda base
+                            if(coloresSparse.get(prendaBase.getColor().getId()).
+                                    getColoresCombinados().get(prendaTemp.getId()) != null){
+                                //En ese caso, incluimos la prenda en el conjunto temporal y
+                                //terminamos este bucle para evitar iteraciones innecesarias
+                                conjuntoTemp.getPartesConjunto().append(tpcs.get(i).getId(),
+                                        new ParteConjunto(-1,tpcs.get(i), prendaTemp));
+                                break;
+                            }
+                            //Eliminamos la prenda de la lista temporal para que no se tenga en
+                            //cuenta en la proxima iteracion
+                            prendasTemp.remove(prendaTemp);
+                        }
+                    }
+                }
+
+                //Si el conjunto temporal tiene mas prendas asignadas que el conjunto definitivo,
+                //el temporal pasa a ser el definitivo
+                if(conjuntoTemp.getNumeroPartesConjunto() >
+                        conjuntoGenerado.getNumeroPartesConjunto()){
+                    conjuntoGenerado = conjuntoTemp;
+                }
+
+                //Eliminamos la prenda de la lista de prendas de referencia para que no se
+                //tenga en cuenta en la proxima iteracion
+                prendasRef.remove(prendaBase);
+            }
+            tpcActual++;
+        }
+
+        //Devolvemos el conjunto generado. Si no se hubiera conseguido ni una prenda,
+        //la lista de partesConjuto estara vacia
+        return conjuntoGenerado;
 
     }
 
@@ -191,6 +288,10 @@ public class ConjuntoSugeridoFragment extends Fragment{
             if(mLastLocation != null) {
                 //Si tenemos la localizacion, obtenemos la informacion meteorologica
                 wi = WeatherUtil.getWeather(mLastLocation);
+                //Una vez obtenida la informacion meteorologica, obtenemos el conjunto sugerido
+                //Dado que el algoritmo puede tardar, aprovechamos que se esta mostrando el
+                //dialogo de progreso para hacerlo aqui
+                conjuntoSugerido = getConjuntoSugerido();
                 //El resto lo haremos en onPostExecute
             }else{
                 //error: no se ha podido obtener la localizacion
@@ -215,9 +316,8 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
             //Utilizamos la informacion obtenida
             if(wi != null){
-                //Si la informacion meteorologica se obtiene correctamente, buscaremos
-                //las prendas para el conjunto apropiadas y estableceremos los valores de la vista
-                mostrarConjuntoSugerido();
+                //Si se ha obtenido el conjunto sugerido, establecemos los valores en la vista
+
             } else {
                 //error: no se ha podido consultar la informacion meteorologica
                 Toast.makeText(getContext(), getString(R.string.error_weather),
