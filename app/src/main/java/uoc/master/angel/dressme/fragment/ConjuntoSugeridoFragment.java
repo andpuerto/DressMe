@@ -164,21 +164,35 @@ public class ConjuntoSugeridoFragment extends Fragment{
             coloresSparse.append(color.getId(), color);
         }
 
+
+        //Obtenemos la lista de TipoParteConjunto
+        List<TipoParteConjunto> tpcsInicial = tpcDA.getAllTipoParteConjunto();
+
+        //Para generar numeros aleatorios
+        Random random = new Random();
+
+        //Para ser equitativo, se va a partir de un tpc aleatorio y en cada iteracion se cogera
+        //otro aleatorio. Esto es especialmente interesante en los casos en los que no se puede
+        //encontrar prendas adecuadas para todos los TPC. Si no lo hacemos aleatorio, los conjuntos
+        //con el mismo numero de prendas siempre darian preferencia a los primeros TPC de la lista
+        //Introducimos los TPCS en una nueva lista en orden aleatorio
+        List<TipoParteConjunto> tpcs = new ArrayList<>();
+        while(!tpcsInicial.isEmpty()){
+            tpcs.add(tpcsInicial.remove(random.nextInt(tpcsInicial.size())));
+        }
+
         List<List<Prenda>> listasPrendas= new ArrayList<>();
         //Recorremos la lista de TipoParteConjunto y para cada uno, hallamos la lista de posibles prendas
         //para ese tipo, el uso seleccionado (si hay alguno) y el clima actual
-        List<TipoParteConjunto> tpcs = tpcDA.getAllTipoParteConjunto();
+        //La lista tpc y la lista prendas deben tener los elementos relacionados en la misma posicion
         for(TipoParteConjunto tpc : tpcs){
             List<Prenda> prendas = prendaDA.getPrendas(usoSeleccionado, tpc, wi.temp, wi.lluvia);
             listasPrendas.add(prendas);
         }
-
-        //Referencia al TipoParteConjunto que se trata en cada momento
-        int tpcActual = 0;
-        //Para generar numeros aleatorios
-        Random random = new Random();
         //Conjunto que vamos a generar
         Conjunto conjuntoGenerado = new Conjunto();
+        //Referencia al TipoParteConjunto que se trata en cada momento
+        int tpcActual=0;
         //Vamos recorriendo todos los TipoParteConjunto en busca de una prenda de inicio
         //a partir de la que intentaremos empezar a conjuntar. Pararemos cuando lleguemos al
         //final de la lista de prendas para cada TipoParteConjunto o cuando hayamos encontrado
@@ -209,18 +223,14 @@ public class ConjuntoSugeridoFragment extends Fragment{
                         //al conjunto.
                         //Hacemos una copia de la lista actual para ir cogiedo aleatoriamente y
                         //eliminarlos de la lista
-                        List<Prenda> prendasTemp = new ArrayList<>(listasPrendas.get(tpcActual));
+                        List<Prenda> prendasTemp = new ArrayList<>(listasPrendas.get(i));
                         while(!prendasTemp.isEmpty()){
                             //Tomamos la prenda aleatoriamente de la lista actual
                             Prenda prendaTemp = prendasTemp.get(random.nextInt(prendasTemp.size()));
-                            //Comprobamos si el color de la prenda actual combina con el color
-                            //de la prenda base
-                            if(coloresSparse.get(prendaBase.getColor().getId()).
-                                    getColoresCombinados().get(prendaTemp.getId()) != null){
-                                //En ese caso, incluimos la prenda en el conjunto temporal y
-                                //terminamos este bucle para evitar iteraciones innecesarias
-                                conjuntoTemp.getPartesConjunto().append(tpcs.get(i).getId(),
-                                        new ParteConjunto(-1,tpcs.get(i), prendaTemp));
+                            //Insertamos la prenda si combina con las ya asignadas
+                            if(conjuntoTemp.insertPrendaSiCombina(prendaTemp, tpcs.get(i),coloresSparse)){
+                                //Si se ha insertado, terminamos este bucle para evitar
+                                //iteraciones innecesarias
                                 break;
                             }
                             //Eliminamos la prenda de la lista temporal para que no se tenga en
@@ -255,7 +265,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
      * Tarea asincrona para obtener la prediccion meteorologica
      * Dado que requiere contectarse a un servicio a traves de Internet, debe ser asincrona
      */
-    private class GetWeather extends AsyncTask<Void, Void, Void> {
+    private class GetWeather extends AsyncTask<Void, Void, Integer> {
 
         //Antes de la ejecucion, mostramos un dialogo indicando que la tarea esta en curso
         @Override
@@ -270,9 +280,10 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
         /**
          * Tarea a ejecutar
+         * @return 0, si se ejecuta correctamente. El id del mensaje a mostrar si hay error
          */
         @Override
-            protected Void doInBackground(Void... arg0) {
+            protected Integer doInBackground(Void... arg0) {
 
             //En caso de que no se disponga de la ultima localizacion, intentamos obtenerla
             //Igual que en el listener, se hace desde los dos proveedores por comodidad durante
@@ -287,19 +298,35 @@ public class ConjuntoSugeridoFragment extends Fragment{
             }
             if(mLastLocation != null) {
                 //Si tenemos la localizacion, obtenemos la informacion meteorologica
+
+
+                //****** DEPURACION DESCOMENTAR LO QUE ESTA COMENTADO Y VICEVERSA *************
                 wi = WeatherUtil.getWeather(mLastLocation);
+                //wi = new WeatherUtil().new WeatherInfo();
+                //wi.temp=15.35f;
+                //wi.lluvia=false;
+                //*******************************************************************************
+
+
                 //Una vez obtenida la informacion meteorologica, obtenemos el conjunto sugerido
                 //Dado que el algoritmo puede tardar, aprovechamos que se esta mostrando el
                 //dialogo de progreso para hacerlo aqui
-                conjuntoSugerido = getConjuntoSugerido();
-                //El resto lo haremos en onPostExecute
+                //Utilizamos la informacion obtenida
+                if(wi != null){
+                    conjuntoSugerido = getConjuntoSugerido();
+                    //El resto lo haremos en onPostExecute
+
+                } else {
+                    //error: no se ha podido consultar la informacion meteorologica
+                    return R.string.error_weather;
+                }
+
             }else{
                 //error: no se ha podido obtener la localizacion
-                Toast.makeText(getContext(), getString(R.string.error_location_connection),
-                        Toast.LENGTH_SHORT).show();
+                 return R.string.error_location_connection;
             }
 
-            return null;
+            return 0;
         }
 
 
@@ -307,21 +334,18 @@ public class ConjuntoSugeridoFragment extends Fragment{
          * Tras la ejecucion de la tarea
          */
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
             //Quitamos el cuadro de dialogo del progreso
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
 
-            //Utilizamos la informacion obtenida
-            if(wi != null){
-                //Si se ha obtenido el conjunto sugerido, establecemos los valores en la vista
-
-            } else {
-                //error: no se ha podido consultar la informacion meteorologica
-                Toast.makeText(getContext(), getString(R.string.error_weather),
+            if(result != 0){
+                Toast.makeText(getContext(), getString(result),
                         Toast.LENGTH_SHORT).show();
+            }else{
+                //Si se ha obtenido el conjunto sugerido, establecemos los valores en la vista
             }
 
 

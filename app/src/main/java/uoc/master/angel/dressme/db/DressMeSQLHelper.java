@@ -166,13 +166,38 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         //Es decir, si con el color 3 combina el 4, introduciremos (3,4), pero esto solo servirá
         //para las búsquedas de los colores que combinan con el 3, no para los que combinan con el 4
         //Si queremos esto último, tendremos que introducir también (4,3)
+        //Tambien debera incluirse una combinacion consigo mismo, considerando que puede que un color
+        //no convenga repetirlo en mas de una prenda del vestuario, por lo que debe estar combinado
+        //explicitamente
+        db.execSQL("INSERT INTO color_combina VALUES(0,0)");
         db.execSQL("INSERT INTO color_combina VALUES(0,1)");
         db.execSQL("INSERT INTO color_combina VALUES(0,2)");
         db.execSQL("INSERT INTO color_combina VALUES(0,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(0,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(0,5)");
         db.execSQL("INSERT INTO color_combina VALUES(1,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,1)");
         db.execSQL("INSERT INTO color_combina VALUES(1,2)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,5)");
         db.execSQL("INSERT INTO color_combina VALUES(2,0)");
         db.execSQL("INSERT INTO color_combina VALUES(2,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(2,2)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(4,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(4,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(4,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(4,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(4,5)");
+        db.execSQL("INSERT INTO color_combina VALUES(5,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(5,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(5,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(5,5)");
+
 
         //Climas
         //Algunos climas pueden representar solo condiciones de lluvia sin importar la temperatura
@@ -198,7 +223,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO tipo_parte_conjunto VALUES(1,'superior abrigo')");
         db.execSQL("INSERT INTO tipo_parte_conjunto VALUES(2,'inferior')");
         db.execSQL("INSERT INTO tipo_parte_conjunto VALUES(3,'calzado')");
-        db.execSQL("INSERT INTO tipo_parte_conjunto VALUES(4,'complemento')");
+        //db.execSQL("INSERT INTO tipo_parte_conjunto VALUES(4,'complemento')");
     }
 
 
@@ -214,14 +239,14 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
                 "?,?,?,?)";
         SQLiteStatement insertStmt = db.compileStatement(sql);
 
-        byte[] prueba = ImageUtil.toByteArray(paths[0]);
+
         //Primera prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "0");
         insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "1");
+        insertStmt.bindString(5, "0");
         insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
@@ -231,7 +256,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
+        insertStmt.bindString(5, "1");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
 
@@ -241,7 +266,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[2]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "2");
+        insertStmt.bindString(5, "3");
         insertStmt.bindString(6, "2");
         insertStmt.executeInsert();
 
@@ -251,7 +276,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[3]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
+        insertStmt.bindString(5, "4");
         insertStmt.bindString(6, "3");
         insertStmt.executeInsert();
 
@@ -261,18 +286,18 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
-        insertStmt.bindString(6, "3");
+        insertStmt.bindString(5, "1");
+        insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Sexta prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "5");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "0");
-        insertStmt.bindString(6, "3");
+        insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
 
         //Septima prenda
@@ -281,28 +306,38 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
-        insertStmt.bindString(6, "3");
+        insertStmt.bindString(5, "2");
+        insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Octava prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "7");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[3]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
+        insertStmt.bindString(5, "5");
         insertStmt.bindString(6, "3");
         insertStmt.executeInsert();
 
         //Novena prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "8");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
-        insertStmt.bindString(6, "3");
+        insertStmt.bindString(5, "2");
+        insertStmt.bindString(6, "1");
+        insertStmt.executeInsert();
+
+        //Decima prenda
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "9");
+        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[2]));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "3");
+        insertStmt.bindString(6, "2");
         insertStmt.executeInsert();
 
 //        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (0,'Zara'," +
@@ -324,30 +359,47 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 //        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (8,'Zara'," +
 //                "'Algodón',0,3)");
 
-        db.execSQL("INSERT INTO prenda_clima VALUES(0,0)");
         db.execSQL("INSERT INTO prenda_clima VALUES(0,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(0,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(0,3)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(1,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(1,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(1,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(1,3)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(2,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(2,2)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(3,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(2,3)");
         db.execSQL("INSERT INTO prenda_clima VALUES(3,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(3,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(4,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(4,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(5,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(5,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(5,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(6,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(6,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(7,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(7,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(8,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(9,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(9,2)");
 
 
         db.execSQL("INSERT INTO uso_prenda VALUES(0,0)");
         db.execSQL("INSERT INTO uso_prenda VALUES(0,1)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(0,4)");
         db.execSQL("INSERT INTO uso_prenda VALUES(1,0)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(1,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(1,3)");
         db.execSQL("INSERT INTO uso_prenda VALUES(2,0)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(2,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(2,3)");
         db.execSQL("INSERT INTO uso_prenda VALUES(3,0)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(3,1)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(3,3)");
-
+        db.execSQL("INSERT INTO uso_prenda VALUES(3,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(4,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(5,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(6,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(7,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(7,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(8,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(8,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(9,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(9,1)");
 
 
     }

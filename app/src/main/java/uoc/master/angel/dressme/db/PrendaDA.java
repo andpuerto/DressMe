@@ -271,7 +271,8 @@ public class PrendaDA {
         //Agregamos el join con el color
         query += " inner join color co on p.color=co.id";
         //Agregamos la clausula where general para la temperatura y el uso
-        query += " where cli1.min_temp<=" + temperatura + " and cli1.max_temp>=" + temperatura;
+        query += " where cli1.min_temp<=" + temperatura + " and cli1.max_temp>=" + temperatura +
+                " and cli1.lluvia=0";
         //Si recibimos un TipoParteConjunto, lo agregamos al where
         if(tpc != null){
             query += " and p.tipo_parte_conjunto=" + tpc.getId();
@@ -303,7 +304,8 @@ public class PrendaDA {
             } while(c.moveToNext());
 
         }
-
+        c.close();
+        db.close();
         return prendas;
     }
 

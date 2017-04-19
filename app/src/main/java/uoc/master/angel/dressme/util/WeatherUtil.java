@@ -68,6 +68,10 @@ public class WeatherUtil {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
         try {
+            if(response == null){
+                //response sera null si no se ha obtenido nada, por error en la conexion
+                return null;
+            }
             //Creamos el json a partir del string
             jsonObject = new JSONObject(response);
         }catch (JSONException e){
