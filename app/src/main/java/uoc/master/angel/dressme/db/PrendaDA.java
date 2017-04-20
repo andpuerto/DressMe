@@ -55,6 +55,33 @@ public class PrendaDA {
         return prendas;
     }
 
+    /**
+     * Obtiene la prenda cuyo id recibe como parametro
+     * @param id El id de la prenda a obtener
+     * @return Prenda con ese id
+     */
+    public Prenda getPrenda(int id){
+        Prenda prenda = null;
+        SQLiteDatabase db = helper.getReadableDatabase();
+        //Metemos solamente el identificador y la foto
+        String[] campos = new String[] {"id", "foto"};
+        String where = "id = ?";
+        String[] whereArgs = new String[] {
+                Integer.toString(id)
+        };
+        Cursor c = db.query("Prenda", campos, where, whereArgs, null, null, null);
+
+        ArrayList<Prenda> prendas = new ArrayList<>();
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+             prenda = new Prenda(c.getInt(0),c.getBlob(1), null, null, null, null, null, null);
+
+        }
+        c.close();
+        db.close();
+        return prenda;
+    }
+
 
     /**
      * Obtiene una lista con las prendas para un TipoParteConjunto
@@ -233,13 +260,12 @@ public class PrendaDA {
     /**
      * Obtiene la lista de prendas acorde a los parametros recibidos
      * @param uso Un uso para el que deben ser adecuadas las prendas
+     * @param tpc El TipoParteConjunto de las prendas a obtener
      * @param temperatura Temperatura para la que deben ser adecuadas las prendas
      * @param lluvia Si las prendas deben ser adecuadas para la lluvia (true) o es indiferente (false)
      * @return List de prendas que cumplen los requisitos solamente con el id y el color rellenos
      */
     public List<Prenda> getPrendas(Uso uso, TipoParteConjunto tpc, float temperatura, boolean lluvia){
-        ArrayList<Prenda> prendas = new ArrayList<>();
-
         //El tratamiento de los climas en cuanto a la lluvia en conjuncion con las temperaturas
         //es un tanto particular, en cuanto que, tal y como se han establecido, hay climas que
         //indican temperaturas, sin importar las precipitaciones, y otros que indican lluvias sin
@@ -259,7 +285,7 @@ public class PrendaDA {
         String query = "select distinct p.id, co.id, co.nombre, co.rgb " +
                 "from prenda p inner join prenda_clima pc1 on pc1.prenda=p.id " +
                 "inner join prenda_clima pc2 on pc2.prenda=p.id " +
-                "inner join clima cli1 on cli1.id=pc1.clima";
+                "inner join clima cli1 on cli1.id=pc1.clima ";
         //Si hemos recibido un uso, lo agregamos al join
         if(uso != null) {
             query += "inner join uso_prenda up on up.prenda=p.id ";
@@ -286,7 +312,50 @@ public class PrendaDA {
             query += " and cli2.lluvia=1";
         }
 
+        return queryListaPrendas(query);
+    }
 
+
+    /**
+     * Obtiene la lista de prendas acorde a los parametros recibidos
+     * @param uso Un uso para el que deben ser adecuadas las prendas
+     * @param tpc El TipoParteConjunto de las prendas a obtener
+     * @return List de prendas que cumplen los requisitos solamente con el id y el color rellenos
+     */
+    public List<Prenda> getPrendas(Uso uso, TipoParteConjunto tpc){
+
+
+
+        //Seleccionamos solo los datos que se van a necesitar
+        String query = "select distinct p.id, co.id, co.nombre, co.rgb " +
+                "from prenda p inner join prenda_clima pc1 on pc1.prenda=p.id ";
+        //Si hemos recibido un uso, lo agregamos al join
+        if(uso != null) {
+            query += "inner join uso_prenda up on up.prenda=p.id ";
+        }
+        //Agregamos el join con el color
+        query += " inner join color co on p.color=co.id";
+        //Si recibimos un TipoParteConjunto, lo agregamos al where
+        if(tpc != null){
+            query += " and p.tipo_parte_conjunto=" + tpc.getId();
+        }
+        //Si recibimos un uso, lo agregamos al where
+        if(uso != null) {
+            query += " and up.uso=" + uso.getId();
+        }
+
+        return queryListaPrendas(query);
+    }
+
+
+
+    /**
+     * Devuelve una lista de prendas a partir de la consulta recibida
+     * @param query Cadena de caracteres con la consulta
+     * @return Lista de prendas
+     */
+    private List<Prenda> queryListaPrendas (String query){
+        ArrayList<Prenda> prendas = new ArrayList<>();
         //Abrimos la base de datos
         SQLiteDatabase db = helper.getReadableDatabase();
         //Ejecutamos la consulta
@@ -307,6 +376,7 @@ public class PrendaDA {
         c.close();
         db.close();
         return prendas;
+
     }
 
 

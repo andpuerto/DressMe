@@ -21,8 +21,9 @@
     <string name="error_location_connection">No se ha podido conectar con el servicio de localización</string>
     <string name="error_location_permission">No se tienen permisos para obtener la localizacion</string>
     <string name="error_weather">No se ha podido obtener la información meteorológica</string>
-    <string name="weather_progress">Obteniendo la informacion meteorológica...</string>
-
+    <string name="weather_progress">Generando conjunto...</string>
+    <string name="regenerar_button">Regenerar</string>
+    <string name="usos_spinner_default">Todos los usos</string>
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>

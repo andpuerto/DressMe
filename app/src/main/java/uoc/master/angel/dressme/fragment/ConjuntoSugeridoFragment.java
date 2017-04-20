@@ -4,6 +4,7 @@ package uoc.master.angel.dressme.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,6 +17,11 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -35,6 +41,7 @@ import uoc.master.angel.dressme.modelo.ParteConjunto;
 import uoc.master.angel.dressme.modelo.Prenda;
 import uoc.master.angel.dressme.modelo.TipoParteConjunto;
 import uoc.master.angel.dressme.modelo.Uso;
+import uoc.master.angel.dressme.util.ImageUtil;
 import uoc.master.angel.dressme.util.WeatherUtil;
 
 /**
@@ -56,14 +63,25 @@ public class ConjuntoSugeridoFragment extends Fragment{
     //Informacion meteorologica
     private WeatherUtil.WeatherInfo wi = null;
 
-    //Array con los usos para el Spinner
+    //Array con los usos y array con los nombres de los usos para el Spinner
     private List<Uso> usos = new ArrayList<>();
+    private String[] usosStrings;
 
     //Uso seleccionado por el usuario
     private Uso usoSeleccionado=null;
 
+    //Spinner para seleccionar los usos adecuados para el conjunto sugerido
+    private Spinner usoSpinner;
+
+    //Boton para volver a generar el conjunto
+    private Button regenerarButton;
+
     //El conjunto sugerido
     Conjunto conjuntoSugerido = null;
+
+
+
+    List<ImageView> imageViews = new ArrayList<>();
 
     @Override
 
@@ -73,6 +91,17 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
         //Obtenemos la lista de usos
         usos = new UsoDA(getContext()).getAllUso();
+        //Añadimos un uso con un valor null para hacer referencia a todos los usos
+        usos.add(0, null);
+        //Creamos la lista de las strings de los usos
+        usosStrings = new String[usos.size()];
+        //Insertamos un primer elemento en el array con la opcion por defectop
+        usosStrings[0] = getString(R.string.usos_spinner_default);
+        //Insertamos el resto de elementos en el array
+        for(int i=1; i<usos.size(); i++){
+            usosStrings[i] = usos.get(i).getNombre();
+        }
+
 
         //Creamos un LocationManager con un listener para obtener la localización actual
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -103,8 +132,6 @@ public class ConjuntoSugeridoFragment extends Fragment{
                     Toast.LENGTH_SHORT).show();
         }
 
-        new GetWeather().execute();
-
 
 
     }
@@ -121,6 +148,59 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
     }
 
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        //Obtenemos las referencias a las ImageView
+        //Aunque usamos una lista de ImageView para que sea mas generico, en esta parte estamos
+        //cogiendolos estaticamente. Seria lo que habria que cambiar para hacerlo totalmente
+        //generico
+        imageViews.clear();
+        imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug1));
+        imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug2));
+        imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug3));
+        imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug4));
+
+        //Establecemos el spinner y el boton
+        usoSpinner = (Spinner)getView().findViewById(R.id.uso_sug_spinner);
+        regenerarButton = (Button)getView().findViewById(R.id.regenerar_sug_button);
+
+        //Adapter y listener para el spinner
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, usosStrings);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        usoSpinner.setAdapter(spinnerAdapter);
+        usoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                usoSeleccionado = usos.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //Listener para el boton de regenerar
+        regenerarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GetWeather().execute();
+            }
+        });
+
+        //Solo obtenemos el conjunto obtenemos un nuevo conjunto al crear la vista si no hay ninguno
+        //Esto evita que al cambiar de pestaña y volver se cree otro conjunto
+        if(conjuntoSugerido == null) {
+            new GetWeather().execute();
+        }else{
+            //Si el conjunto existe, establecemos las imagenes directamente
+            setImages();
+        }
+    }
 
     /**
      * Obtiene un conjunto sugerido considerando los parametros climaticos, el uso sugerido por
@@ -186,7 +266,12 @@ public class ConjuntoSugeridoFragment extends Fragment{
         //para ese tipo, el uso seleccionado (si hay alguno) y el clima actual
         //La lista tpc y la lista prendas deben tener los elementos relacionados en la misma posicion
         for(TipoParteConjunto tpc : tpcs){
-            List<Prenda> prendas = prendaDA.getPrendas(usoSeleccionado, tpc, wi.temp, wi.lluvia);
+            //Dependiendo de si la informacion del tiempo es nula o no, se consulta usandola o no.
+            //En caso de no haber informacion del tiempo, por tanto, se usaran todas las prendas
+            //independientemente de su validez climatologica
+            List<Prenda> prendas = wi!=null ?
+                    prendaDA.getPrendas(usoSeleccionado, tpc, wi.temp, wi.lluvia) :
+                    prendaDA.getPrendas(usoSeleccionado,tpc);
             listasPrendas.add(prendas);
         }
         //Conjunto que vamos a generar
@@ -260,6 +345,27 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
     }
 
+    private void setImages(){
+        if(conjuntoSugerido == null){
+            return;
+        }
+        PrendaDA prendaDA = new PrendaDA(getContext());
+        for(int i=0; i<imageViews.size(); i++){
+            ImageView currentImageView = imageViews.get(i);
+            ParteConjunto pc = conjuntoSugerido.getPartesConjunto().get(i);
+            if(currentImageView!=null){
+                //Obtenemos los datos de la prenda, especialmente la imagen
+                //Se obtienen aqui y no antes para que solo se recupere la imagen de las prendas
+                //que se van a visualizar realmente
+                Bitmap bitmap = pc==null ? null : ImageUtil.toBitmap(prendaDA.getPrenda(
+                        pc.getPrendaAsignada().getId()).getFoto());
+
+                currentImageView.setImageBitmap(bitmap);
+
+            }
+        }
+
+    }
 
     /**
      * Tarea asincrona para obtener la prediccion meteorologica
@@ -284,7 +390,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
          */
         @Override
             protected Integer doInBackground(Void... arg0) {
-
+            Integer returnValue = 0;
             //En caso de que no se disponga de la ultima localizacion, intentamos obtenerla
             //Igual que en el listener, se hace desde los dos proveedores por comodidad durante
             //el desarrollo. Podria dejarse solamente la localizacion por red.
@@ -300,33 +406,31 @@ public class ConjuntoSugeridoFragment extends Fragment{
                 //Si tenemos la localizacion, obtenemos la informacion meteorologica
 
 
-                //****** DEPURACION DESCOMENTAR LO QUE ESTA COMENTADO Y VICEVERSA *************
-                wi = WeatherUtil.getWeather(mLastLocation);
-                //wi = new WeatherUtil().new WeatherInfo();
-                //wi.temp=15.35f;
-                //wi.lluvia=false;
+                //****** DEPURACION: DESCOMENTAR LO QUE ESTA COMENTADO Y VICEVERSA *************
+                //wi = WeatherUtil.getWeather(mLastLocation);
+                wi = new WeatherUtil().new WeatherInfo();
+                wi.temp=12.35f;
+                wi.lluvia=false;
                 //*******************************************************************************
 
+                //Establecemos el valor de retorno segun si se ha podido obtener el tiempo  o no
+                if(wi == null){
+                    returnValue = R.string.error_weather;
+                }
 
                 //Una vez obtenida la informacion meteorologica, obtenemos el conjunto sugerido
                 //Dado que el algoritmo puede tardar, aprovechamos que se esta mostrando el
                 //dialogo de progreso para hacerlo aqui
                 //Utilizamos la informacion obtenida
-                if(wi != null){
-                    conjuntoSugerido = getConjuntoSugerido();
-                    //El resto lo haremos en onPostExecute
-
-                } else {
-                    //error: no se ha podido consultar la informacion meteorologica
-                    return R.string.error_weather;
-                }
+                conjuntoSugerido = getConjuntoSugerido();
+                //El resto lo haremos en onPostExecute
 
             }else{
                 //error: no se ha podido obtener la localizacion
-                 return R.string.error_location_connection;
+                 returnValue = R.string.error_location_connection;
             }
 
-            return 0;
+            return returnValue;
         }
 
 
@@ -346,6 +450,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
                         Toast.LENGTH_SHORT).show();
             }else{
                 //Si se ha obtenido el conjunto sugerido, establecemos los valores en la vista
+                setImages();
             }
 
 

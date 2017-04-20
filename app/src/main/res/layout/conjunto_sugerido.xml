@@ -3,11 +3,90 @@
 android:orientation="vertical" android:layout_width="match_parent"
 android:layout_height="match_parent">
 
-<TextView
-    android:id="@+id/text_prueba1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical|center_horizontal"
-    android:text="Conjunto sugerido"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/view_margin"
+        android:paddingLeft="@dimen/view_margin"
+        android:paddingRight="@dimen/view_margin"
+        >
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/uso_sug_spinner" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/regenerar_sug_button"
+            android:text="@string/regenerar_button"/>
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:fillViewport="true">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/prenda_detail_foto_width"
+                        android:layout_height="@dimen/prenda_detail_foto_height"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:id="@+id/prenda_sug1"
+                        android:padding="1dp"
+                        android:background="#000"
+                        />
+
+                        <ImageView
+                            android:layout_width="@dimen/prenda_detail_foto_width"
+                            android:layout_height="@dimen/prenda_detail_foto_height"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="30dp"
+                            android:id="@+id/prenda_sug2"
+                            android:padding="1dp"
+                            android:background="#000"
+                            />
+
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="@dimen/prenda_detail_foto_width"
+                        android:layout_height="@dimen/prenda_detail_foto_height"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:id="@+id/prenda_sug3"
+                        android:padding="1dp"
+                        android:background="#000"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/prenda_detail_foto_width"
+                        android:layout_height="@dimen/prenda_detail_foto_height"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:id="@+id/prenda_sug4"
+                        android:padding="1dp"
+                        android:background="#000"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>
