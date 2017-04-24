@@ -133,7 +133,7 @@ public class PrendasListFragment extends Fragment {
         //Constantes indicando los valores de par e impar
         private final static int EVEN = 0;
         private final static int ODD = 1;
-        //Lista de libros
+        //Lista de prendas
         private List<Prenda> mValues;
 
         //Constructor. Recibe unicamente la lista de prendas
@@ -210,12 +210,8 @@ public class PrendasListFragment extends Fragment {
 
         //ViewHolder
         class ViewHolder extends RecyclerView.ViewHolder {
-            //Almacenamos La vista, titulo autor y el elemento (libro)
-            //Dejamos la visibilidad por defecto (package) para poder acceder directamente a los
-            //atributos como se muestra en el enunciado de la PEC
             final View mView;
             final ImageView mImageView;
-  //          final TextView mTextView;
             Prenda mItem;
 
             //Constructor. Establece la vista que recibe y busca los TextView

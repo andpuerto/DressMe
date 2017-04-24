@@ -60,6 +60,9 @@ public class ImageUtil {
      * @return
      */
     public static byte[] toByteArray(Bitmap bmp){
+        if(bmp == null){
+            return null;
+        }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
@@ -73,6 +76,9 @@ public class ImageUtil {
      * @return
      */
     public static Bitmap toBitmap(byte[] bytearray){
+        if(bytearray == null){
+            return null;
+        }
         return BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
     }
 

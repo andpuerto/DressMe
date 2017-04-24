@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
         tabHost.setup(this,
                 getSupportFragmentManager(),android.R.id.tabcontent);
-//        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
-//                ConjuntoContainerFragment.class, null);
-        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator("Conjunto sugerido"),
+        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
                 ConjuntoSugeridoContainerFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
+                ConjuntoContainerFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec(PRENDAS_TAB).setIndicator(getString(R.string.prendas_tab_label)),
                 PrendaContainerFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec(PLANIFICACION_TAB).setIndicator(getString(R.string.planifiacion_tab_label)),

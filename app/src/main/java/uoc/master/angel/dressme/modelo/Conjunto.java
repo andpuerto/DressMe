@@ -20,7 +20,11 @@ public class Conjunto {
 
     public Conjunto(int id, SparseArray<ParteConjunto> partesConjunto){
         this.id = id;
-        this.partesConjunto = partesConjunto;
+        if(partesConjunto != null) {
+            this.partesConjunto = partesConjunto;
+        }else{
+            this.partesConjunto = new SparseArray<>();
+        }
     }
 
     public int getId() {
