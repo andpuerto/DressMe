@@ -7,6 +7,7 @@
     <dimen name="camera_button_size">50dp</dimen>
     <dimen name="plus_button_size">30dp</dimen>
     <dimen name="prenda_list_foto_size">100dp</dimen>
+    <dimen name="conjunto_list_foto_size">50dp</dimen>
     <dimen name="prenda_detail_foto_width">150dp</dimen>
     <dimen name="prenda_detail_foto_height">200dp</dimen>
     <dimen name="color_square_size">20dp</dimen>
@@ -14,4 +15,10 @@
     <dimen name="spinner_item_height">20dp</dimen>
     <dimen name="label_margin">20dp</dimen>
     <dimen name="element_vertical_separation">10dp</dimen>
+    <dimen name="conjunto_card_margin_v">5dp</dimen>
+    <dimen name="conjunto_card_margin_h">10dp</dimen>
+    <dimen name="card_padding">10dp</dimen>
+    <dimen name="foto_border">2px</dimen>
+    <dimen name="foto_separation">5dp</dimen>
+    <item name="foto_conjunto_weight" format="float" type="dimen">1.0</item>
 </resources>

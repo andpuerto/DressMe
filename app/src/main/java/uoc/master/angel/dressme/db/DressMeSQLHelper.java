@@ -402,5 +402,42 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO uso_prenda VALUES(9,1)");
 
 
+        db.execSQL("INSERT INTO conjunto VALUES(0)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(0,0,4,0)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(1,1,8,0)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(2,2,9,0)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(3,3,7,0)");
+
+        db.execSQL("INSERT INTO conjunto VALUES(1)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(4,0,0,1)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(5,1,1,1)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(6,2,2,1)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(7,3,3,1)");
+
+        db.execSQL("INSERT INTO conjunto VALUES(2)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(8,1,8,2)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(9,2,2,2)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(10,3,3,2)");
+
+        db.execSQL("INSERT INTO conjunto VALUES(3)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(11,0,0,3)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(12,3,7,3)");
+
+        db.execSQL("INSERT INTO conjunto VALUES(4)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(13,1,8,4)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(14,2,2,4)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(15,3,3,4)");
+
+        db.execSQL("INSERT INTO conjunto VALUES(5)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(16,1,8,5)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(17,2,2,5)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(18,3,3,5)");
+
+        db.execSQL("INSERT INTO conjunto VALUES(6)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(19,1,8,6)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(20,2,2,6)");
+        db.execSQL("INSERT INTO parte_conjunto VALUES(21,3,3,6)");
+
+
     }
 }

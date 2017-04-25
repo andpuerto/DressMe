@@ -58,6 +58,13 @@ public class ConjuntosListFragment extends Fragment {
     }
 
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        this.setViews();
+    }
+
+
     //Este metodo establece las vistas iniciales de esta actividad
     private void setViews() {
 

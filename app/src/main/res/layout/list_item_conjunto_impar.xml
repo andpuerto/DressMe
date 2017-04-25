@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:id="@+id/list_item_impar"
@@ -10,10 +10,12 @@
     <android.support.v7.widget.CardView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/conjunto_card_margin_v"
+        android:layout_marginBottom="@dimen/conjunto_card_margin_v"
+        android:layout_marginLeft="@dimen/conjunto_card_margin_h"
+        android:layout_marginRight="@dimen/conjunto_card_margin_h"
         app:cardElevation="2dp"
         app:cardBackgroundColor="#C3C9EF"
         app:cardCornerRadius="4dp">
@@ -22,13 +24,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="@dimen/card_padding"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_gravity="center">
 
             <ImageView
-                android:layout_width="@dimen/prenda_list_foto_size"
-                android:layout_height="@dimen/prenda_list_foto_size"
+                android:layout_width="@dimen/conjunto_list_foto_size"
+                android:layout_height="@dimen/conjunto_list_foto_size"
 
                 android:layout_marginRight="0dp"
                 android:layout_marginLeft="0dp"
@@ -36,8 +38,8 @@
                 android:id="@+id/conjunto_list_image1" />
 
             <ImageView
-                android:layout_width="@dimen/prenda_list_foto_size"
-                android:layout_height="@dimen/prenda_list_foto_size"
+                android:layout_width="@dimen/conjunto_list_foto_size"
+                android:layout_height="@dimen/conjunto_list_foto_size"
 
                 android:layout_marginRight="0dp"
                 android:layout_marginLeft="0dp"
@@ -45,8 +47,8 @@
                 android:id="@+id/conjunto_list_image2" />
 
             <ImageView
-                android:layout_width="@dimen/prenda_list_foto_size"
-                android:layout_height="@dimen/prenda_list_foto_size"
+                android:layout_width="@dimen/conjunto_list_foto_size"
+                android:layout_height="@dimen/conjunto_list_foto_size"
 
                 android:layout_marginRight="0dp"
                 android:layout_marginLeft="0dp"
@@ -54,8 +56,8 @@
                 android:id="@+id/conjunto_list_image3" />
 
             <ImageView
-                android:layout_width="@dimen/prenda_list_foto_size"
-                android:layout_height="@dimen/prenda_list_foto_size"
+                android:layout_width="@dimen/conjunto_list_foto_size"
+                android:layout_height="@dimen/conjunto_list_foto_size"
 
                 android:layout_marginRight="0dp"
                 android:layout_marginLeft="0dp"

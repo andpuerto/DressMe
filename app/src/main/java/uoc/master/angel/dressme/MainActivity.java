@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final int PERMISSION_ALL = 1;
     //Etiquetas identificadoras para cada pestaña
+    private final String CONJUNTO_SUG_TAB = "conjuntoSugTab";
     private final String CONJUNTOS_TAB = "conjuntosTab";
     private final String PRENDAS_TAB = "prendasTab";
     private final String PLANIFICACION_TAB = "planificacionTab";
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabHost.setup(this,
                 getSupportFragmentManager(),android.R.id.tabcontent);
-        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
+        tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
                 ConjuntoSugeridoContainerFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
                 ConjuntoContainerFragment.class, null);

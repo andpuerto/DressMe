@@ -359,8 +359,14 @@ public class ConjuntoSugeridoFragment extends Fragment{
                 //que se van a visualizar realmente
                 Bitmap bitmap = pc==null ? null : ImageUtil.toBitmap(prendaDA.getPrenda(
                         pc.getPrendaAsignada().getId()).getFoto());
-
-                currentImageView.setImageBitmap(bitmap);
+                //Si obtenemos el bitmap, establecemos la imagen con el.
+                //Si la imagen esta vacia establecemos una imagen de un rectangulo transparente
+                //Es necesario para que el layout de las imagenes quede bien
+                if(bitmap!=null) {
+                    currentImageView.setImageBitmap(bitmap);
+                }else{
+                    currentImageView.setImageResource(R.drawable.smalltransrect);
+                }
 
             }
         }
