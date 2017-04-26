@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -80,7 +80,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
     Conjunto conjuntoSugerido = null;
 
 
-
+    //Lista con las vistas de imagenes
     List<ImageView> imageViews = new ArrayList<>();
 
     @Override
@@ -163,6 +163,15 @@ public class ConjuntoSugeridoFragment extends Fragment{
         imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug3));
         imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug4));
 
+        //Establecemos las etiquetas para los nombres de partes de conjuntos
+        List<TipoParteConjunto> tpcs= new TipoParteConjuntoDA(getContext()).getAllTipoParteConjunto();
+        if(tpcs.size() >= 4){
+            ((TextView)getView().findViewById(R.id.parte_sug_text1)).setText(tpcs.get(0).getNombre());
+            ((TextView)getView().findViewById(R.id.parte_sug_text2)).setText(tpcs.get(1).getNombre());
+            ((TextView)getView().findViewById(R.id.parte_sug_text3)).setText(tpcs.get(2).getNombre());
+            ((TextView)getView().findViewById(R.id.parte_sug_text4)).setText(tpcs.get(3).getNombre());
+        }
+
         //Establecemos el spinner y el boton
         usoSpinner = (Spinner)getView().findViewById(R.id.uso_sug_spinner);
         regenerarButton = (Button)getView().findViewById(R.id.regenerar_sug_button);
@@ -238,10 +247,10 @@ public class ConjuntoSugeridoFragment extends Fragment{
         //Para poder utilizarla despues comodamente, aprovechamos el bucle en el que
         //obtenemos los colores combinados para meterlos en un sparse array
         List<ColorPrenda> colores = colorPrendaDA.getAllColorPrenda();
-        SparseArray<ColorPrenda> coloresSparse = new SparseArray<>();
+        HashMap<Integer,ColorPrenda> coloresHash = new HashMap<>();
         for(ColorPrenda color : colores){
             color.setColoresCombinados(colorPrendaDA.getColoresCombinados(color));
-            coloresSparse.append(color.getId(), color);
+            coloresHash.put(color.getId(), color);
         }
 
 
@@ -297,7 +306,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
                 //y con la prenda actual asignada
                 Conjunto conjuntoTemp = new Conjunto();
                 //Añadimos a la lista de partes conjunto, usando el id del tipo como clave
-                conjuntoTemp.getPartesConjunto().append(tpcs.get(tpcActual).getId(),
+                conjuntoTemp.getPartesConjunto().put(tpcs.get(tpcActual).getId(),
                         new ParteConjunto(-1,tpcs.get(tpcActual), prendaBase));
                 //Buscamos prendas para otras partes del conjunto
                 for(int i=0; i<listasPrendas.size(); i++){
@@ -313,7 +322,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
                             //Tomamos la prenda aleatoriamente de la lista actual
                             Prenda prendaTemp = prendasTemp.get(random.nextInt(prendasTemp.size()));
                             //Insertamos la prenda si combina con las ya asignadas
-                            if(conjuntoTemp.insertPrendaSiCombina(prendaTemp, tpcs.get(i),coloresSparse)){
+                            if(conjuntoTemp.insertPrendaSiCombina(prendaTemp, tpcs.get(i),coloresHash)){
                                 //Si se ha insertado, terminamos este bucle para evitar
                                 //iteraciones innecesarias
                                 break;
@@ -415,7 +424,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
                 //****** DEPURACION: DESCOMENTAR LO QUE ESTA COMENTADO Y VICEVERSA *************
                 //wi = WeatherUtil.getWeather(mLastLocation);
                 wi = new WeatherUtil().new WeatherInfo();
-                wi.temp=12.35f;
+                wi.temp=15.35f;
                 wi.lluvia=false;
                 //*******************************************************************************
 

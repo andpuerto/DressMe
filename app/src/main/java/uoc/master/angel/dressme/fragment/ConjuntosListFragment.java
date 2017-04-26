@@ -13,11 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import uoc.master.angel.dressme.R;
 import uoc.master.angel.dressme.db.ConjuntoDA;
 import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
+import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.ParteConjunto;
 import uoc.master.angel.dressme.modelo.Prenda;
@@ -86,6 +88,25 @@ public class ConjuntosListFragment extends Fragment {
 
 
     /**
+     * Muestra los detalles de un conjunto
+     */
+    public void mostrarDetalles(Conjunto conjunto){
+        //Creamos el fragmento
+        ConjuntoDetailFragment cd = new ConjuntoDetailFragment();
+
+        //Creamos y llenamos el bundle con los datos del conjunto
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getString(R.string.conjunto_bundle_key),conjunto);
+        //Pasamos el bundle al fragment
+        cd.setArguments(bundle);
+
+        //Utilizamos el metodo de cambio de fragmento del fragmento padre
+        ((BaseContainerFragment)getParentFragment()).replaceFragment(cd, true);
+    }
+
+
+
+    /**
      * Clase interna para el adaptador del RecyclerView
      */
     public class ConjuntosListAdapter extends RecyclerView.Adapter<ConjuntosListFragment.ConjuntosListAdapter.ViewHolder> {
@@ -137,7 +158,7 @@ public class ConjuntosListFragment extends Fragment {
             holder.mItem = mValues.get(position);
             //Establecemos las imagenes
             Bitmap[] bms = new Bitmap[tiposParteConjunto.size()];
-            SparseArray<ParteConjunto> pcs = holder.mItem.getPartesConjunto();
+            HashMap<Integer,ParteConjunto> pcs = holder.mItem.getPartesConjunto();
             for(int i=0; i<tiposParteConjunto.size(); i++){
                 bms[i] = pcs.get(i)!=null && pcs.get(i).getPrendaAsignada()!=null ?
                         ImageUtil.toBitmap(pcs.get(i).getPrendaAsignada().getFoto()) :
@@ -156,7 +177,7 @@ public class ConjuntosListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-//                    mostrarDetalles(holder.mItem);
+                    mostrarDetalles(holder.mItem);
                 }
 
             });

@@ -4,28 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Layout para la parte superior, con los controles -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="@dimen/view_margin"
-        android:paddingTop="@dimen/view_margin">
-
-        <!--Spinner de seleccion de uso del conjunto-->
-        <Spinner
-            android:id="@+id/uso_sug_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <!--Boton para volver a generar el conjunto-->
-        <Button
-            android:id="@+id/regenerar_sug_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/regenerar_button" />
-
-    </LinearLayout>
 
     <!--Scroll para la vista de imagenes-->
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,7 +33,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/parte_sug_text1"
+                        android:id="@+id/parte_det_text1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <!-- Layout para establecer un marco negro para la imagen -->
@@ -68,7 +46,7 @@
 
                         <!-- Importante adjustViewBounds para que la imagen se adapte al espacio -->
                         <ImageView
-                            android:id="@+id/prenda_sug1"
+                            android:id="@+id/prenda_det_img1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
@@ -83,7 +61,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/parte_sug_text2"
+                        android:id="@+id/parte_det_text2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -95,7 +73,7 @@
                         android:padding="@dimen/foto_border">
 
                         <ImageView
-                            android:id="@+id/prenda_sug2"
+                            android:id="@+id/prenda_det_img2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
@@ -119,7 +97,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/parte_sug_text3"
+                        android:id="@+id/parte_det_text3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -131,7 +109,7 @@
                         android:padding="@dimen/foto_border">
 
                         <ImageView
-                            android:id="@+id/prenda_sug3"
+                            android:id="@+id/prenda_det_img3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
@@ -146,7 +124,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/parte_sug_text4"
+                        android:id="@+id/parte_det_text4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -158,7 +136,7 @@
                         android:padding="@dimen/foto_border">
 
                         <ImageView
-                            android:id="@+id/prenda_sug4"
+                            android:id="@+id/prenda_det_img4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
@@ -167,6 +145,18 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/delete_conjunto_button"
+                android:layout_width="@dimen/camera_button_size"
+                android:layout_height="@dimen/camera_button_size"
+                android:layout_gravity="start"
+                android:layout_marginTop="@dimen/element_vertical_separation"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/trashbutton" />
         </LinearLayout>
     </ScrollView>
+
+
 </LinearLayout>

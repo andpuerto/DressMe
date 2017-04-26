@@ -1,12 +1,13 @@
 package uoc.master.angel.dressme.modelo;
 
 
+import java.io.Serializable;
 
 /**
  * Created by angel on 30/03/2017.
  */
 
-public class ParteConjunto {
+public class ParteConjunto implements Serializable {
     private int id;
     private TipoParteConjunto tipoParteConjunto;
     private Prenda prendaAsignada;

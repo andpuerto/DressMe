@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import uoc.master.angel.dressme.modelo.ColorPrenda;
@@ -57,8 +58,8 @@ public class ColorPrendaDA {
      * @param color ColorPrenda del que queremos obtener los colores combinados
      * @return SparseArray con los ColorPrenda que combinan, usando el id como clave
      */
-    public SparseArray<ColorPrenda> getColoresCombinados(ColorPrenda color){
-        SparseArray<ColorPrenda> coloresCombinados = new SparseArray<>();
+    public HashMap<Integer,ColorPrenda> getColoresCombinados(ColorPrenda color){
+        HashMap<Integer,ColorPrenda> coloresCombinados = new HashMap<>();
         //Abrimos la base de datos
         SQLiteDatabase db = helper.getReadableDatabase();
         //Obtenemos el id del color
@@ -68,7 +69,7 @@ public class ColorPrendaDA {
         if (c.moveToFirst()) {
             //Agregamos todos los colores obtenidos al sparse array
             do{
-                coloresCombinados.append(c.getInt(0), new ColorPrenda(c.getInt(0),
+                coloresCombinados.put(c.getInt(0), new ColorPrenda(c.getInt(0),
                         c.getString(1), c.getString(2), null));
             }while (c.moveToNext());
         }

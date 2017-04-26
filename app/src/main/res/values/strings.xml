@@ -17,6 +17,8 @@
     <string name="no_foto_error">La fotografía de la prenda es obligatoria</string>
     <string name="delete_prenda_confirm">¿Seguro que quieres eliminar la prenda?</string>
     <string name="delete_prenda_confirm_title">Eliminar prenda</string>
+    <string name="delete_conjunto_confirm">¿Seguro que quieres eliminar el conjunto?</string>
+    <string name="delete_conjunto_confirm_title">Eliminar conjunto</string>
     <string name="si">Sí</string>
     <string name="no">No</string>
     <string name="error_location_connection">No se ha podido conectar con el servicio de localización</string>
@@ -28,4 +30,5 @@
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>
+    <string name="conjunto_bundle_key">conjunto</string>
 </resources>

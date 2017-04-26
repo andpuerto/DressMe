@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -87,13 +88,40 @@ public class ConjuntoDA {
                 TipoParteConjunto tpcPcTemp = new TipoParteConjunto(c.getInt(2), c.getString(3));
                 ParteConjunto pcTemp = new ParteConjunto(c.getInt(1), tpcPcTemp, prendaTemp);
                 //Agregamos la parteConjunto, poniendo como clave el id de su parte
-                currentConjunto.getPartesConjunto().append(c.getInt(2), pcTemp);
+                currentConjunto.getPartesConjunto().put(c.getInt(2), pcTemp);
 
             } while(c.moveToNext());
         }
         c.close();
         db.close();
         return conjuntos;
+    }
+
+    /**
+     * Elimina el conjunto que recibe como parametro y sus datos asociados
+     * @param conjunto El conjunto a eliminar
+     */
+    public void deleteConjunto(Conjunto conjunto){
+        //Comprobamos que el conjunto que recibamos sea valido
+        if(conjunto == null || conjunto.getId() < 0){
+            return;
+        }
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //Desafortundadamente, aunque en la creacion de las tablas se haya marcado,
+        //sqlite no realiza automaticamente el borrado en cascada. Tendremos que hacer
+        //manualmente el borrado de los elementos relacionados. Por eso lo hacemos en una
+        //transaccion.
+        db.beginTransaction();
+        String[] whereArgs = {Integer.toString(conjunto.getId())};
+        //Borramos la prenda
+        db.delete("conjunto","id=?", whereArgs);
+        //Borramos las relaciones con las partes del conjunto
+        db.delete("parte_conjunto","conjunto=?",whereArgs);
+
+        //Hacemos el commit y cerramos la trasaccion y la base de datos
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 
 
