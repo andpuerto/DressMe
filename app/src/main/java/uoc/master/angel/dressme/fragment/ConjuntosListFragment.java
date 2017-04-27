@@ -3,6 +3,7 @@ package uoc.master.angel.dressme.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +35,9 @@ public class ConjuntosListFragment extends Fragment {
 
 
     //Lista con todos los tipos de partes de conjunto
-    List<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
+    private List<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
+
+
 
     @Override
 
@@ -78,6 +81,16 @@ public class ConjuntosListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
 
+
+        //Boton de añadir nuevo conjunto
+        FloatingActionButton newConjuntoButton = (FloatingActionButton) this.getView().
+                findViewById(R.id.new_conjunto_button);
+        newConjuntoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDetalles(new Conjunto(-1, null));
+            }
+        });
         //Establecemos el clicklistener para el boton de crear nuevo conjunto
 //        (this.getView().findViewById(R.id.prendas_add_button1)).setOnClickListener(
 //                new PrendasListFragment.AddButtonListener(tiposParteConjunto.get(0)));

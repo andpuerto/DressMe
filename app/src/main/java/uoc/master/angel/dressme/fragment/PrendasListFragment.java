@@ -48,7 +48,7 @@ public class PrendasListFragment extends Fragment {
             PrendasListAdapter adapterTemp = new PrendasListAdapter(new ArrayList<Prenda>());
             //Establecemos los elementos del adapter con las prendas obtenidas de la consulta
             //Buscaremos la prendas del TipoParteConjunto actual
-            adapterTemp.setItems(new PrendaDA(this.getContext()).getAllPrendas(tpc));
+            adapterTemp.setItems(new PrendaDA(this.getContext()).getAllPrendas(tpc, false));
             //Agregamos el adapter a la lista de adapters
             adapters.add(adapterTemp);
         }

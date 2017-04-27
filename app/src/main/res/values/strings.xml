@@ -12,6 +12,8 @@
     <string name="color_label">Color: </string>
     <string name="marca_label">Marca: </string>
     <string name="material_label">Material: </string>
+    <string name="usos_label">Usos: </string>
+    <string name="climas_label">Climas: </string>
     <string name="usos">Usos</string>
     <string name="climas">Climas</string>
     <string name="no_foto_error">La fotografía de la prenda es obligatoria</string>
@@ -27,8 +29,11 @@
     <string name="weather_progress">Generando conjunto...</string>
     <string name="regenerar_button">Regenerar</string>
     <string name="usos_spinner_default">Todos los usos</string>
+    <string name="no_prenda">Ninguna prenda</string>
+    <string name="no_prenda_error">Debe asignarse al menos una prenda</string>
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>
     <string name="conjunto_bundle_key">conjunto</string>
+    <string name="tipo_parte_conjunto_bundle_key">tipoParteConjunto</string>
 </resources>

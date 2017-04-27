@@ -78,7 +78,7 @@ public class PrendaDetailFragment extends Fragment {
     private ColorPrendaSpinnerAdapter adapter;
 
     //Bitmap temporal para la foto que se haya hecho
-    private  Bitmap fotoTemp;
+    private Bitmap fotoTemp;
 
     @Override
 
@@ -88,14 +88,13 @@ public class PrendaDetailFragment extends Fragment {
     }
 
 
-
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Realizamos las inicializaciones en onCreateView en lugar de onCreate porque
         //si no, no se puede acceder a los elementos de la vista.
-        View rootView =  inflater.inflate(R.layout.prenda_detail, container, false);
+        View rootView = inflater.inflate(R.layout.prenda_detail, container, false);
         //Obtenemos los elementos de la vista que vamos a usar
         fotoView = (ImageView) rootView.findViewById(R.id.prenda_detail_foto);
         colorSpinner = (Spinner) rootView.findViewById(R.id.color_spinner);
@@ -113,13 +112,13 @@ public class PrendaDetailFragment extends Fragment {
 
         //Obtenemos los datos de la prenda, en caso de tenerla
         //Si prenda es null es porque se esta creando una nueva prenda
-        if(getArguments() != null){
+        if (getArguments() != null) {
             Bundle bundle = this.getArguments();
-            prenda = (Prenda)bundle.getSerializable(getString(R.string.prenda_bundle_key));
+            prenda = (Prenda) bundle.getSerializable(getString(R.string.prenda_bundle_key));
             showPredaData();
 
 
-        }else{
+        } else {
             //Aqui llegariamos si se esta creando una nueva prenda
             prenda = new Prenda();
         }
@@ -131,7 +130,6 @@ public class PrendaDetailFragment extends Fragment {
         initializeCameraButton();
 
 
-
         return rootView;
 
     }
@@ -139,17 +137,17 @@ public class PrendaDetailFragment extends Fragment {
     /**
      * Muestra la informacion basica de la prenda
      */
-    private void showPredaData (){
-        if(prenda != null) {
+    private void showPredaData() {
+        if (prenda != null) {
             new PrendaDA(this.getContext()).fillPrendaDetails(prenda);
             //Realizaremos las inicializaciones para mostrar todos los datos de la prenda
             Log.i("PrendaDetail", "Identificador de la prenda: " + prenda.getId());
             //Establecemos la foto
-            if(prenda.getFoto() !=null && fotoView != null){
+            if (prenda.getFoto() != null && fotoView != null) {
                 fotoView.setImageBitmap(ImageUtil.toBitmap(prenda.getFoto()));
             }
             //Seleccionamos el color de la prenda
-            if(prenda.getColor()!=null) {
+            if (prenda.getColor() != null) {
                 colorSpinner.setSelection(prenda.getColor().getId());
             }
             //Establecemos los valores de los textView
@@ -162,21 +160,21 @@ public class PrendaDetailFragment extends Fragment {
     /**
      * Inicializa el spinner de los colores
      */
-    private void initializeColores(){
+    private void initializeColores() {
         //Obtenemos la lista de todos los colores
-        if(this.coloresPrenda == null) {
+        if (this.coloresPrenda == null) {
             this.coloresPrenda = new ColorPrendaDA(getContext()).getAllColorPrenda();
         }
         //Creamos y establecemos el adaptador
         adapter = new ColorPrendaSpinnerAdapter(getContext());
-         this.colorSpinner.setAdapter(adapter);
+        this.colorSpinner.setAdapter(adapter);
     }
 
 
     /**
      * Inicializa los botones
      */
-    private void initializeButtons(){
+    private void initializeButtons() {
 
         //Listener para el boton de usos
         usoButton.setOnClickListener(new View.OnClickListener() {
@@ -199,15 +197,15 @@ public class PrendaDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //Antes de nada, comprobamos que los datos obligatorios esten rellenos
-                if(prenda.getFoto() == null && fotoTemp == null){
-                    Toast.makeText(getContext(),getString(R.string.no_foto_error),Toast.LENGTH_LONG).show();
+                if (prenda.getFoto() == null && fotoTemp == null) {
+                    Toast.makeText(getContext(), getString(R.string.no_foto_error), Toast.LENGTH_LONG).show();
                     return;
                 }
                 //Primero, almacenamos todos los datos modificados en la prenda
                 prenda.setMarca(marcaText.getText().toString());
                 prenda.setMaterial(materialText.getText().toString());
-                prenda.setColor((ColorPrenda)colorSpinner.getSelectedItem());
-                if(fotoTemp != null) {
+                prenda.setColor((ColorPrenda) colorSpinner.getSelectedItem());
+                if (fotoTemp != null) {
                     prenda.setFoto(ImageUtil.toByteArray(fotoTemp));
                 }
                 //Los usos y los climas se cambian al cerrar el cuadro de dialogo
@@ -219,26 +217,30 @@ public class PrendaDetailFragment extends Fragment {
             }
         });
 
-        //Listener para el boton de eliminar
-        eliminarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createDeleteConfirmationDialog();
-            }
-        });
+        if (prenda.getId() < 0) {
+            eliminarButton.setVisibility(View.INVISIBLE);
+        } else {
+            //Listener para el boton de eliminar
+            eliminarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createDeleteConfirmationDialog();
+                }
+            });
+        }
     }
 
 
     /**
      * Crea y muestra el dialogo de seleccion de usos
      */
-    private void createUsosSelectionDialog(){
+    private void createUsosSelectionDialog() {
         //Obtenemos los nombres de los usos
         String nombresUso[] = new UsoDA(getContext()).getAllUsoNombre();
         //Creamos e inicializamos el array indicando si cada elemento debe estar seleccionado o no
         final boolean usosSelected[] = new boolean[nombresUso.length];
-        for(int i=0; i<nombresUso.length; i++){
-            usosSelected[i] = prenda!=null && prenda.hasUso(i);
+        for (int i = 0; i < nombresUso.length; i++) {
+            usosSelected[i] = prenda != null && prenda.hasUso(i);
         }
         //Creamos e inicializamos el panel de seleccion de usos
         AlertDialog.Builder usosBuilder = new AlertDialog.Builder(getActivity());
@@ -258,10 +260,10 @@ public class PrendaDetailFragment extends Fragment {
                 //añadimos a los usos de la prenda, si no, lo eliminamos.
                 //Delegamos en el objeto prenda la responsabilidad de comprobar si ya
                 //existe o no el elemento
-                for (int i = 0; i<usosSelected.length; i++){
+                for (int i = 0; i < usosSelected.length; i++) {
                     if (usosSelected[i]) {
                         prenda.addUso(new UsoDA(getContext()).getUso(i));
-                    } else{
+                    } else {
                         prenda.removeUso(i);
                     }
                 }
@@ -276,13 +278,13 @@ public class PrendaDetailFragment extends Fragment {
     /**
      * Crea y muestra el dialogo de seleccion de climas
      */
-    private void createClimasSelectionDialog(){
+    private void createClimasSelectionDialog() {
         //Obtenemos los nombres de los climas
         String nombresClima[] = new ClimaDA(getContext()).getAllClimaNombre();
         //Creamos e inicializamos el array indicando si cada elemento debe estar seleccionado o no
         final boolean climasSelected[] = new boolean[nombresClima.length];
-        for(int i=0; i<nombresClima.length; i++){
-            climasSelected[i] = prenda!=null && prenda.hasClima(i);
+        for (int i = 0; i < nombresClima.length; i++) {
+            climasSelected[i] = prenda != null && prenda.hasClima(i);
         }
         //Creamos e inicializamos el panel de seleccion de clima
         AlertDialog.Builder climasBuilder = new AlertDialog.Builder(getActivity());
@@ -302,10 +304,10 @@ public class PrendaDetailFragment extends Fragment {
                 //añadimos a los climas de la prenda, si no, lo eliminamos.
                 //Delegamos en el objeto prenda la responsabilidad de comprobar si ya
                 //existe o no el elemento
-                for (int i = 0; i<climasSelected.length; i++){
+                for (int i = 0; i < climasSelected.length; i++) {
                     if (climasSelected[i]) {
                         prenda.addClima(new ClimaDA(getContext()).getClima(i));
-                    } else{
+                    } else {
                         prenda.removeClima(i);
                     }
                 }
@@ -320,7 +322,7 @@ public class PrendaDetailFragment extends Fragment {
     /**
      * Crea el panel de confirmacion de borrado de prenda
      */
-    private void createDeleteConfirmationDialog(){
+    private void createDeleteConfirmationDialog() {
         AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getActivity());
         deleteBuilder.setTitle(getString(R.string.delete_prenda_confirm_title));
         deleteBuilder.setMessage(getString(R.string.delete_prenda_confirm));
@@ -345,9 +347,9 @@ public class PrendaDetailFragment extends Fragment {
     /**
      * Vuelve a la pantalla del listado de prendas
      */
-    private void returnToPrendasList(){
-        PrendasListFragment pl = new PrendasListFragment();
-        ((BaseContainerFragment)getParentFragment()).replaceFragment(pl, true);
+    private void returnToPrendasList() {
+        //PrendasListFragment pl = new PrendasListFragment();
+        ((BaseContainerFragment) getParentFragment()).popFragment();
     }
 
     /**
@@ -370,6 +372,7 @@ public class PrendaDetailFragment extends Fragment {
 
     /**
      * Metodo invocado cuando se vuelva de una actividad, principalemnte la de la camara de fotos
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -403,20 +406,21 @@ public class PrendaDetailFragment extends Fragment {
 
         /**
          * Constructor
+         *
          * @param context
          */
-        public ColorPrendaSpinnerAdapter(Context context){
+        public ColorPrendaSpinnerAdapter(Context context) {
             //Llamamos al constructor de la clase base
-            super(context,R.layout.color_spiner, coloresPrenda);
+            super(context, R.layout.color_spiner, coloresPrenda);
             //Obtenemos el inflater para poder crear las vistas
-            inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         /**
          * Se le llama para la vista de los elementos desplegados
          */
         @Override
-        public View getDropDownView(int position, View convertView,ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
             //Queremos que los elementos desplegados tengan mas altura para que sea mas facil
             //seleccionarlos con el dedo sin tocar un elemento adyacente por error
             return getCustomView(position, convertView, parent, R.layout.color_spiner_item);
@@ -444,12 +448,12 @@ public class PrendaDetailFragment extends Fragment {
             tempValues = coloresPrenda.get(position);
 
             //Obtenemos los elementos de la interfaz para esa fila
-            TextView label = (TextView)row.findViewById(R.id.item_color_label);
-            ImageView colorImage = (ImageView)row.findViewById(R.id.item_color_square);
+            TextView label = (TextView) row.findViewById(R.id.item_color_label);
+            ImageView colorImage = (ImageView) row.findViewById(R.id.item_color_square);
 
             //Establecemos los valores para los elementos de la interfaz
             label.setText(tempValues.getNombre());
-            colorImage.setBackgroundColor(Color.parseColor("#"+tempValues.getRgb()));
+            colorImage.setBackgroundColor(Color.parseColor("#" + tempValues.getRgb()));
 
             //Devolvemos la vista de la fila
             return row;
@@ -457,7 +461,6 @@ public class PrendaDetailFragment extends Fragment {
 
 
     }
-
 
 
 }

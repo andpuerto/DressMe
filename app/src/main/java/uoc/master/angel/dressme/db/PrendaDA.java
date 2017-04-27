@@ -85,17 +85,20 @@ public class PrendaDA {
 
     /**
      * Obtiene una lista con las prendas para un TipoParteConjunto
-     * No carga todos los datos de todas las prendas para ahorrar memoria
+     * Si fillDetails es false, no carga todos los datos de todas las prendas para ahorrar memoria
      * Solo los que se necesitaran para el listado
+     * @param tipoParteConjunto el TipoParteConjunto para e que se buscan prendas
+     * @param fillDetails true para obtener todos los datos de la prenda, false para obtener solo
+     *                    los esenciales
      * @return Lista de prendas
      */
-    public List<Prenda> getAllPrendas(TipoParteConjunto parteConjunto){
+    public List<Prenda> getAllPrendas(TipoParteConjunto tipoParteConjunto, boolean fillDetails){
         SQLiteDatabase db = helper.getReadableDatabase();
         //Metemos solamente el identificador y la foto
         String[] campos = new String[] {"id", "foto", "marca", "material"};
         String where = "tipo_parte_conjunto = ?";
         String[] whereArgs = new String[] {
-                Integer.toString(parteConjunto.getId())
+                Integer.toString(tipoParteConjunto.getId())
         };
         Cursor c = db.query("Prenda", campos, where, whereArgs, null, null, null);
 
@@ -104,8 +107,13 @@ public class PrendaDA {
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                prendas.add(new Prenda(c.getInt(0),c.getBlob(1), c.getString(2), c.getString(3),
-                        null, null, null, parteConjunto));
+                Prenda prendaTemp = new Prenda(c.getInt(0),c.getBlob(1), c.getString(2), c.getString(3),
+                        null, null, null, tipoParteConjunto);
+                //Si fillDetails es true, rellenamos los detalles de la prenda
+                if(fillDetails){
+                    fillPrendaDetails(prendaTemp);
+                }
+                prendas.add(prendaTemp);
             } while(c.moveToNext());
         }
         c.close();

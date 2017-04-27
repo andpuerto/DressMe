@@ -1,5 +1,6 @@
 package uoc.master.angel.dressme.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,10 +11,12 @@ import java.util.Collection;
 import java.util.List;
 
 
+import uoc.master.angel.dressme.modelo.Clima;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.ParteConjunto;
 import uoc.master.angel.dressme.modelo.Prenda;
 import uoc.master.angel.dressme.modelo.TipoParteConjunto;
+import uoc.master.angel.dressme.modelo.Uso;
 
 
 /**
@@ -122,6 +125,55 @@ public class ConjuntoDA {
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
+    }
+
+
+    public void saveConjunto(Conjunto conjunto){
+
+        //Si el conjunto a insertar que recibimos es null, salimos
+        if(conjunto == null){
+            return;
+        }
+        //Abrimos la base de datos
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //Comenzamos una transaccion. Vamos a hacer varias operaciones, mejor en una transaccion.
+        db.beginTransaction();
+
+
+
+        //Si el id es negativo, es un nuevo conjunto, haremos un insert
+        if(conjunto.getId() <0) {
+            int id = (int)db.insert("conjunto", "id", new ContentValues());
+            //Insert devuelve el id autoincremental del elemento insertado. Lo establecemos.
+            conjunto.setId(id);
+
+        }
+
+        //Ahora trataremos las partes del conjunto. Habria que insertar las nuevas, editar las que
+        //se hayan cambiado y eliminar las que se hayan quitado.
+        //Para hacerlo mas sencillo, vamos a borrarlas todas y volver a insertarlas
+        String[] whereArgs = {Integer.toString(conjunto.getId())};
+        db.delete("parte_conjunto","conjunto=?", whereArgs);
+        for(ParteConjunto pc : conjunto.getPartesConjunto().values()){
+            //Asignamos los valores a insertar
+            ContentValues values = new ContentValues();
+            if(pc.getTipoParteConjunto() != null) {
+                values.put("tipo_parte_conjunto", pc.getTipoParteConjunto().getId());}
+            if(pc.getPrendaAsignada() != null) {
+                values.put("prenda_asignada", pc.getPrendaAsignada().getId());}
+            values.put("conjunto", conjunto.getId());
+
+            //Realizamos la insercion
+            db.insert("parte_conjunto", null, values);
+
+        }
+
+        //Hacemos el commit de la transaccion
+        db.setTransactionSuccessful();
+        //Cerramos la transaccion y la base de datos
+        db.endTransaction();
+        db.close();
+
     }
 
 

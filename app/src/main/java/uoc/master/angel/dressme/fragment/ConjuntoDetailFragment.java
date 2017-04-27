@@ -59,6 +59,9 @@ public class ConjuntoDetailFragment extends Fragment {
     //Boton de eliminar la prenda
     private ImageButton eliminarButton;
 
+    //Boton de guardar la prenda
+    private FloatingActionButton guardarButton;
+
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
@@ -95,8 +98,22 @@ public class ConjuntoDetailFragment extends Fragment {
             ((TextView)rootView.findViewById(R.id.parte_det_text4)).setText(tpcs.get(3).getNombre());
         }
 
+        //Agregamos los clickListeners para las imagenes
+        int i = 0;
+        for(ImageView imageView : imageViews){
+            final TipoParteConjunto tpc = tpcs.get(i);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPrenda(tpc);
+                }
+            });
+            i++;
+        }
+
         //Tomamos las referencias a otros elementos de la vista
         eliminarButton = (ImageButton) rootView.findViewById(R.id.delete_conjunto_button);
+        guardarButton = (FloatingActionButton) rootView.findViewById(R.id.save_conjunto_button);
 
         //Obtenemos los datos del conjunto, en caso de tenerlo
         //Si conjunto es null es porque se esta creando un nuevo conjunto
@@ -156,39 +173,37 @@ public class ConjuntoDetailFragment extends Fragment {
      */
     private void initializeButtons(){
 
-//
-//        //Listener para el boton de guardar
-//        guardarButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //Antes de nada, comprobamos que los datos obligatorios esten rellenos
-//                if(prenda.getFoto() == null && fotoTemp == null){
-//                    Toast.makeText(getContext(),getString(R.string.no_foto_error),Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//                //Primero, almacenamos todos los datos modificados en la prenda
-//                prenda.setMarca(marcaText.getText().toString());
-//                prenda.setMaterial(materialText.getText().toString());
-//                prenda.setColor((ColorPrenda)colorSpinner.getSelectedItem());
-//                if(fotoTemp != null) {
-//                    prenda.setFoto(ImageUtil.toByteArray(fotoTemp));
-//                }
-//                //Los usos y los climas se cambian al cerrar el cuadro de dialogo
-//                //Una vez actualizados los datos, se menten en la BD
-//                new PrendaDA(getContext()).savePrenda(prenda);
-//                //Volvemos a la vista de la lista
-//                returnToPrendasList();
-//
-//            }
-//        });
-//
-        //Listener para el boton de eliminar
-        eliminarButton.setOnClickListener(new View.OnClickListener() {
+
+        //Listener para el boton de guardar
+        guardarButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                createDeleteConfirmationDialog();
+            public void onClick(View view) {
+                //Antes de nada, comprobamos que haya al menos una prenda asignada para poder guardar
+                if (conjunto.getPartesConjunto().isEmpty()) {
+                    Toast.makeText(getContext(), getString(R.string.no_prenda_error), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                //Las prendas se han ido guardando en el conjunto segun se seleccionaban
+                //Solo debemos guardarlo
+                new ConjuntoDA(getContext()).saveConjunto(conjunto);
+                //Volvemos a la vista de la lista
+                returnToConjuntosList();
+
             }
         });
+
+        //Si el conjunto es nuevo, no mostramos el boton de eliminar
+        if(conjunto.getId() < 0){
+            eliminarButton.setVisibility(View.INVISIBLE);
+        }else {
+            //Listener para el boton de eliminar
+            eliminarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createDeleteConfirmationDialog();
+                }
+            });
+        }
     }
 
 
@@ -223,8 +238,29 @@ public class ConjuntoDetailFragment extends Fragment {
      * Vuelve a la pantalla del listado de conjuntos
      */
     private void returnToConjuntosList(){
-        ConjuntosListFragment cl = new ConjuntosListFragment();
-        ((BaseContainerFragment)getParentFragment()).replaceFragment(cl, true);
+        ((BaseContainerFragment)getParentFragment()).popFragment();
     }
+
+
+    /**
+     * Abre la vista de seleccion de una prenda para un TipoParteConjunto determinado
+     * @param tpc El TipoParteConjunto para el que vamos a seleccionar esa prenda
+     */
+    private void selectPrenda(TipoParteConjunto tpc){
+        //Creamos el fragmento
+        ConjuntosPrendasListFragment cplf = new ConjuntosPrendasListFragment();
+
+        //Creamos y llenamos el bundle con los datos del TipoParteConjunto
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getString(R.string.tipo_parte_conjunto_bundle_key), tpc);
+        //Tambien vamos a pasar el conjunto para que se puedan hacer cambios sobre el
+        bundle.putSerializable(getString(R.string.conjunto_bundle_key), conjunto);
+        //Pasamos el bundle al fragment
+        cplf.setArguments(bundle);
+
+        //Utilizamos el metodo de cambio de fragmento del fragmento padre
+        ((BaseContainerFragment)getParentFragment()).replaceFragment(cplf, true);
+    }
+
 
 }
