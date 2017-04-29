@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,146 +29,162 @@
 
     </LinearLayout>
 
-    <!--Scroll para la vista de imagenes-->
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <!-- Layout general para la vista de las prendas del conjunto -->
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:context="uoc.master.angel.dressme.MainActivity">
+        <!--Scroll para la vista de imagenes-->
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <!-- Layout general para la vista de las prendas del conjunto -->
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/view_margin">
+
+                <!-- Layout para la fila de imagenes -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/foto_separation"
+                    android:orientation="horizontal">
+                    <!-- Layout para alinear la etiqueta del tipo de parte de conjunto con la imagen -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@dimen/foto_conjunto_weight"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/parte_sug_text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <!-- Layout para establecer un marco negro para la imagen -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/foto_separation"
+                            android:background="#000"
+                            android:padding="@dimen/foto_border">
+
+                            <!-- Importante adjustViewBounds para que la imagen se adapte al espacio -->
+                            <ImageView
+                                android:id="@+id/prenda_sug1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:background="#fff" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@dimen/foto_conjunto_weight"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/parte_sug_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/foto_separation"
+                            android:background="#000"
+                            android:padding="@dimen/foto_border">
+
+                            <ImageView
+                                android:id="@+id/prenda_sug2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:background="#fff" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/foto_separation"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/view_margin">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@dimen/foto_conjunto_weight"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/parte_sug_text3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/foto_separation"
+                            android:background="#000"
+                            android:padding="@dimen/foto_border">
+
+                            <ImageView
+                                android:id="@+id/prenda_sug3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:background="#fff" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@dimen/foto_conjunto_weight"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/parte_sug_text4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/foto_separation"
+                            android:background="#000"
+                            android:padding="@dimen/foto_border">
+
+                            <ImageView
+                                android:id="@+id/prenda_sug4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:background="#fff" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save_conjunto_sug_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-
-            android:padding="@dimen/view_margin">
-
-            <!-- Layout para la fila de imagenes -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/foto_separation"
-                android:orientation="horizontal">
-                <!-- Layout para alinear la etiqueta del tipo de parte de conjunto con la imagen -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/foto_conjunto_weight"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/parte_sug_text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <!-- Layout para establecer un marco negro para la imagen -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/foto_separation"
-                        android:background="#000"
-                        android:padding="@dimen/foto_border">
-
-                        <!-- Importante adjustViewBounds para que la imagen se adapte al espacio -->
-                        <ImageView
-                            android:id="@+id/prenda_sug1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:background="#fff" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/foto_conjunto_weight"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/parte_sug_text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/foto_separation"
-                        android:background="#000"
-                        android:padding="@dimen/foto_border">
-
-                        <ImageView
-                            android:id="@+id/prenda_sug2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:background="#fff" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/foto_separation"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/foto_conjunto_weight"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/parte_sug_text3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/foto_separation"
-                        android:background="#000"
-                        android:padding="@dimen/foto_border">
-
-                        <ImageView
-                            android:id="@+id/prenda_sug3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:background="#fff" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/foto_conjunto_weight"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/parte_sug_text4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/foto_separation"
-                        android:background="#000"
-                        android:padding="@dimen/foto_border">
-
-                        <ImageView
-                            android:id="@+id/prenda_sug4"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:background="#fff" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="#008000"
+            app:srcCompat="@android:drawable/ic_menu_save" />
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

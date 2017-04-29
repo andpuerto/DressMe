@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import java.util.Random;
 
 import uoc.master.angel.dressme.R;
 import uoc.master.angel.dressme.db.ColorPrendaDA;
+import uoc.master.angel.dressme.db.ConjuntoDA;
 import uoc.master.angel.dressme.db.PrendaDA;
 import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
 import uoc.master.angel.dressme.db.UsoDA;
@@ -201,6 +203,27 @@ public class ConjuntoSugeridoFragment extends Fragment{
             }
         });
 
+        //Listener para el boton de guardar el conjunto sugerido
+        FloatingActionButton botonGuardar = (FloatingActionButton)getView().
+                findViewById(R.id.save_conjunto_sug_button);
+        botonGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Antes de nada, comprobamos que haya al menos una prenda asignada para poder guardar
+                if (conjuntoSugerido==null || conjuntoSugerido.getPartesConjunto().isEmpty()) {
+                    Toast.makeText(getContext(), getString(R.string.no_prenda_error), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                //Guardamos el conjunto. Al guardar un conjunto sugerido, siempre queremos que se
+                //inserte. Para ello, ponemos su identificador a -1
+                conjuntoSugerido.setId(-1);
+                new ConjuntoDA(getContext()).saveConjunto(conjuntoSugerido);
+                //Notificamos que se ha guardado correctamente
+                Toast.makeText(getContext(), getString(R.string.conjunto_guardado),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //Solo obtenemos el conjunto obtenemos un nuevo conjunto al crear la vista si no hay ninguno
         //Esto evita que al cambiar de pestaña y volver se cree otro conjunto
         if(conjuntoSugerido == null) {
@@ -284,7 +307,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
             listasPrendas.add(prendas);
         }
         //Conjunto que vamos a generar
-        Conjunto conjuntoGenerado = new Conjunto();
+        Conjunto conjuntoGenerado = new Conjunto(-1, null);
         //Referencia al TipoParteConjunto que se trata en cada momento
         int tpcActual=0;
         //Vamos recorriendo todos los TipoParteConjunto en busca de una prenda de inicio

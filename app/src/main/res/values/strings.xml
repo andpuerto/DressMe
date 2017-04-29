@@ -31,6 +31,7 @@
     <string name="usos_spinner_default">Todos los usos</string>
     <string name="no_prenda">Ninguna prenda</string>
     <string name="no_prenda_error">Debe asignarse al menos una prenda</string>
+    <string name="conjunto_guardado">Conjunto guardado correctamente</string>
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>

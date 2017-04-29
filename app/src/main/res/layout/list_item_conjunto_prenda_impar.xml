@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/list_item_impar"
+    android:id="@+id/list_item_conjunto_prenda_impar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -23,44 +23,38 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
+                  android:orientation="horizontal"
             android:padding="@dimen/card_padding"
             android:id="@+id/prenda_chose_layout">
 
             <ImageView
                 android:id="@+id/conjunto_prenda_image"
-                android:layout_width="@dimen/conjunto_list_foto_size"
-
-                android:layout_height="@dimen/conjunto_list_foto_size"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="0dp" />
+                android:layout_width="@dimen/prenda_select_list_foto_size"
+                android:layout_height="@dimen/prenda_select_list_foto_size"
+                android:layout_margin="0dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/card_padding">
+                android:paddingLeft="@dimen/card_padding"
+                android:paddingStart="@dimen/card_padding">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
                     android:orientation="horizontal"
-                    android:padding="@dimen/card_padding">
+                    android:padding="0dp">
 
-                    <TextView
-                        android:id="@+id/conjunto_prenda_color_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/color_label" />
 
                     <ImageView
                         android:id="@+id/conjunto_prenda_color_square"
                         android:layout_width="@dimen/color_square_size"
                         android:layout_height="@dimen/color_square_size"
-                        android:background="#000" />
+                        android:background="#000"
+                        android:layout_marginRight="@dimen/label_separation"
+                        android:layout_marginEnd="@dimen/label_separation"/>
 
                     <TextView
                         android:id="@+id/conjunto_prenda_color_text"
@@ -71,15 +65,17 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
                     android:orientation="horizontal"
-                    android:padding="@dimen/card_padding">
+                    android:padding="0dp">
 
                     <TextView
                         android:id="@+id/conjunto_prenda_climas_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/climas_label" />
+                        android:text="@string/climas_label"
+                        android:layout_marginRight="@dimen/label_separation"
+                        android:layout_marginEnd="@dimen/label_separation"/>
 
                     <TextView
                         android:id="@+id/conjunto_prenda_climas_text"
@@ -90,15 +86,17 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
                     android:orientation="horizontal"
-                    android:padding="@dimen/card_padding">
+                    android:padding="0dp">
 
                     <TextView
                         android:id="@+id/conjunto_prenda_usos_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/usos_label" />
+                        android:text="@string/usos_label"
+                        android:layout_marginRight="@dimen/label_separation"
+                        android:layout_marginEnd="@dimen/label_separation"/>
 
                     <TextView
                         android:id="@+id/conjunto_prenda_usos_text"
@@ -118,7 +116,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/no_prenda_text"
             android:visibility="gone"
-            android:text="@string/no_prenda"/>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_prenda"
+            android:padding="50dp"
+            android:layout_margin="50dp" />
 
     </android.support.v7.widget.CardView>
 </LinearLayout>
