@@ -100,6 +100,76 @@ public class ConjuntoDA {
         return conjuntos;
     }
 
+
+    /**
+     * Rellena los detalles del conjunto
+     * @param conjunto El conjunto a rellenar
+     */
+    public void fillConjuntoDetails(Conjunto conjunto){
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        //Creamos un builder para la consulta
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //Asignamos las tablas al builder
+        qb.setTables("conjunto c inner join parte_conjunto pc on pc.conjunto=c.id " +
+                "inner join prenda p on pc.prenda_asignada=p.id inner join tipo_parte_conjunto " +
+                "tpc1 on pc.tipo_parte_conjunto=tpc1.id inner join tipo_parte_conjunto tpc2 " +
+                "on p.tipo_parte_conjunto=tpc2.id");
+
+        //Campos que vamos a consultar
+        String[] campos = new String[] {"c.id", "pc.id", "tpc1.id", "tpc1.nombre", "p.id",
+                "p.foto", "tpc2.id", "tpc2.nombre"};
+
+        //Where
+        String where = "c.id=?";
+
+        //Argumentos
+        String[] whereArgs = {Integer.toString(conjunto.getId())};
+
+        //Ejecutamos la consulta
+        Cursor c = qb.query(db, campos, where, whereArgs, null, null, "c.id");
+
+
+        ArrayList<Conjunto> conjuntos = new ArrayList<Conjunto>();
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                Conjunto currentConjunto;
+                //Obtenemos el id del conjunto de la iteracion actual
+                int idConjunto = c.getInt(0);
+                //Obtenemos el ultimo conjunto introducido, en caso de que lo haya
+                Conjunto lastConjunto = conjuntos.isEmpty() ? null :
+                        conjuntos.get(conjuntos.size()-1);
+                //Si la lista de conjuntos esta vacia o si estamos tratando un conjunto diferente
+                //a la ultima fila, creamos un conjunto nuevo con el id obtenido y lo insertamos
+                if(lastConjunto==null || lastConjunto.getId()!=idConjunto){
+                    currentConjunto = new Conjunto(idConjunto, null);
+                    conjuntos.add(currentConjunto);
+
+                }else{
+                    //Si estamos tratando el mismo conjunto que en la iteracion anterior (porque
+                    // son datos de otra parte del mismo conjunto), seguimos trabajando sobre el.
+                    currentConjunto = lastConjunto;
+                }
+                //Agregamos al conjunto los datos de las partes de conjunto y prenda de la iteracion
+                //actual
+                TipoParteConjunto tpcPrendaTemp = new TipoParteConjunto(c.getInt(6), c.getString(7));
+                Prenda prendaTemp = new Prenda(c.getInt(4), c.getBlob(5), null, null,
+                        null, null, null, tpcPrendaTemp);
+                TipoParteConjunto tpcPcTemp = new TipoParteConjunto(c.getInt(2), c.getString(3));
+                ParteConjunto pcTemp = new ParteConjunto(c.getInt(1), tpcPcTemp, prendaTemp);
+                //Agregamos la parteConjunto, poniendo como clave el id de su parte
+                currentConjunto.getPartesConjunto().put(c.getInt(2), pcTemp);
+
+            } while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+    }
+
+
     /**
      * Elimina el conjunto que recibe como parametro y sus datos asociados
      * @param conjunto El conjunto a eliminar

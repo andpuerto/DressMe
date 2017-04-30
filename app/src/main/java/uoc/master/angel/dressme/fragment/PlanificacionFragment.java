@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import uoc.master.angel.dressme.R;
+import uoc.master.angel.dressme.db.DiaDA;
+import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
+import uoc.master.angel.dressme.modelo.Dia;
 
 /**
  * Created by angel on 29/03/2017.
@@ -30,7 +33,14 @@ import uoc.master.angel.dressme.R;
 
 public class PlanificacionFragment extends Fragment {
 
+    //Fragmento del calendario
     private CaldroidFragment caldroidFragment;
+
+    //Hashmap con los días
+    private HashMap<Date,Dia> diasAsignados;
+    //Hashmap para asignar el color al calendario
+    private HashMap<Date,Drawable> diasColoreados;
+
 
 
     @Override
@@ -38,6 +48,15 @@ public class PlanificacionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        //Obtenemos los dias asignados
+        diasAsignados = new DiaDA(getContext()).getAllDia();
+        //Establecemos el mapa para los colores
+        diasColoreados = new HashMap<>(diasAsignados.size());
+        for(Date fecha : diasAsignados.keySet()){
+            diasColoreados.put(fecha,new ColorDrawable(
+                    getResources().getColor(R.color.diaAsignado)));
+        }
 
     }
 
@@ -50,12 +69,10 @@ public class PlanificacionFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
-
         //Creamos el calendario
         caldroidFragment = new CaldroidFragment();
         //Marcamos los dias que esten planificados
-        marcarDiasPlanificados();
+        caldroidFragment.setBackgroundDrawableForDates(diasColoreados);
 
         //Establecemos un listener para cuando se seleccionen los dias
         caldroidFragment.setCaldroidListener(new CaldroidListener() {
@@ -73,19 +90,37 @@ public class PlanificacionFragment extends Fragment {
     }
 
 
-    private void marcarDiasPlanificados(){
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        try {
-
-            caldroidFragment.setBackgroundDrawableForDate(
-                    new ColorDrawable(getResources().getColor(R.color.lightGreen)),
-                    format.parse("01/05/2017"));
-        }catch(ParseException e){}
-    }
 
 
-    private void showConjunto(Date date){
-        Log.i("Dia seleccionado", date.toString());
+
+    private void showConjunto(Date fechaSeleccionada){
+
+        Log.i("Dia seleccionado", fechaSeleccionada.toString());
+
+        //Dependiendo de si el dia seleccionado esta en la lista de los dias con conjunto asignado
+        //iremos a una pantalla u otra
+        Dia diaAsignado = diasAsignados.get(fechaSeleccionada);
+
+        //Fragmento
+        Fragment fragment;
+
+        if(diaAsignado!=null){
+            //Vamos a la pantalla que muestra los detalles del conjunto de ese dia
+            //fragment = new
+            fragment = new PlanificarConjuntosListFragment();
+        }else{
+            //Vamos a la pantalla de seleccion de conjunto para ese dia
+            fragment = new PlanificarConjuntosListFragment();
+        }
+
+        //Creamos y llenamos el bundle con los datos del TipoParteConjunto
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getString(R.string.dia_bundle_key), diaAsignado);
+        //Pasamos el bundle al fragment
+        fragment.setArguments(bundle);
+
+        //Utilizamos el metodo de cambio de fragmento del fragmento padre
+        ((BaseContainerFragment)getParentFragment()).replaceFragment(fragment, true);
     }
 
 }

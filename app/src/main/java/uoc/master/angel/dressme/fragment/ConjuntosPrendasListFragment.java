@@ -138,14 +138,14 @@ public class ConjuntosPrendasListFragment extends Fragment {
             }
         }
 
-        //Creamos el fragmento
-        ConjuntoDetailFragment cd = new ConjuntoDetailFragment();
-
-        //Creamos y llenamos el bundle con los datos del conjunto
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(getString(R.string.conjunto_bundle_key),conjunto);
-        //Pasamos el bundle al fragment
-        cd.setArguments(bundle);
+//        //Creamos el fragmento
+//        ConjuntoDetailFragment cd = new ConjuntoDetailFragment();
+//
+//        //Creamos y llenamos el bundle con los datos del conjunto
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable(getString(R.string.conjunto_bundle_key),conjunto);
+//        //Pasamos el bundle al fragment
+//        cd.setArguments(bundle);
 
         //Utilizamos el metodo de cambio de fragmento del fragmento padre
        // ((BaseContainerFragment)getParentFragment()).replaceFragment(cd, true);
