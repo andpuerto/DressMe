@@ -107,7 +107,7 @@ public class PlanificacionFragment extends Fragment {
         if(diaAsignado!=null){
             //Vamos a la pantalla que muestra los detalles del conjunto de ese dia
             //fragment = new
-            fragment = new PlanificarConjuntosListFragment();
+            fragment = new PlanificarConjuntoDetailFragment();
         }else{
             //Vamos a la pantalla de seleccion de conjunto para ese dia
             fragment = new PlanificarConjuntosListFragment();

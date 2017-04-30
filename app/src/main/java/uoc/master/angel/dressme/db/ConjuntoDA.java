@@ -131,29 +131,11 @@ public class ConjuntoDA {
         Cursor c = qb.query(db, campos, where, whereArgs, null, null, "c.id");
 
 
-        ArrayList<Conjunto> conjuntos = new ArrayList<Conjunto>();
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                Conjunto currentConjunto;
-                //Obtenemos el id del conjunto de la iteracion actual
-                int idConjunto = c.getInt(0);
-                //Obtenemos el ultimo conjunto introducido, en caso de que lo haya
-                Conjunto lastConjunto = conjuntos.isEmpty() ? null :
-                        conjuntos.get(conjuntos.size()-1);
-                //Si la lista de conjuntos esta vacia o si estamos tratando un conjunto diferente
-                //a la ultima fila, creamos un conjunto nuevo con el id obtenido y lo insertamos
-                if(lastConjunto==null || lastConjunto.getId()!=idConjunto){
-                    currentConjunto = new Conjunto(idConjunto, null);
-                    conjuntos.add(currentConjunto);
-
-                }else{
-                    //Si estamos tratando el mismo conjunto que en la iteracion anterior (porque
-                    // son datos de otra parte del mismo conjunto), seguimos trabajando sobre el.
-                    currentConjunto = lastConjunto;
-                }
-                //Agregamos al conjunto los datos de las partes de conjunto y prenda de la iteracion
+                //Agregamos al conjunto los datos de la parte de conjunto y prenda de la iteracion
                 //actual
                 TipoParteConjunto tpcPrendaTemp = new TipoParteConjunto(c.getInt(6), c.getString(7));
                 Prenda prendaTemp = new Prenda(c.getInt(4), c.getBlob(5), null, null,
@@ -161,13 +143,14 @@ public class ConjuntoDA {
                 TipoParteConjunto tpcPcTemp = new TipoParteConjunto(c.getInt(2), c.getString(3));
                 ParteConjunto pcTemp = new ParteConjunto(c.getInt(1), tpcPcTemp, prendaTemp);
                 //Agregamos la parteConjunto, poniendo como clave el id de su parte
-                currentConjunto.getPartesConjunto().put(c.getInt(2), pcTemp);
+                conjunto.getPartesConjunto().put(c.getInt(2), pcTemp);
 
             } while(c.moveToNext());
         }
         c.close();
         db.close();
     }
+
 
 
     /**
