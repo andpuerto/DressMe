@@ -43,7 +43,7 @@ public class DiaDA {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         //Asignamos las tablas al builder
-        qb.setTables("conjunto d inner join conjunto c on d.conjunto_asignado=c.id");
+        qb.setTables("dia d inner join conjunto c on d.conjunto_asignado=c.id");
 
         //Campos que vamos a consultar
         String[] campos = new String[] {"d.id", "d.fecha", "c.id"};
@@ -88,7 +88,7 @@ public class DiaDA {
         //Si el id es negativo, es un nuevo dia, haremos un insert
         if(dia.getId() <0) {
             values.put("fecha", DateUtil.dateToString(dia.getFecha()));
-            int id = (int)db.insert("dia", null, new ContentValues());
+            int id = (int)db.insert("dia", null, values);
             dia.setId(id);
         }else{
             String where = "id=?";

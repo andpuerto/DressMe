@@ -224,7 +224,7 @@ public class ConjuntoSugeridoFragment extends Fragment{
             }
         });
 
-        //Solo obtenemos el conjunto obtenemos un nuevo conjunto al crear la vista si no hay ninguno
+        //Solo obtenemos obtenemos un nuevo conjunto al crear la vista si no hay ninguno
         //Esto evita que al cambiar de pestaña y volver se cree otro conjunto
         if(conjuntoSugerido == null) {
             new GetWeather().execute();
@@ -378,19 +378,18 @@ public class ConjuntoSugeridoFragment extends Fragment{
     }
 
     private void setImages(){
-        if(conjuntoSugerido == null){
-            return;
-        }
+        //Si el conjunto sugerido es null, usamos uno nuevo vacio
+        Conjunto conjunto = conjuntoSugerido==null ? new Conjunto(-1, null) : conjuntoSugerido;
         PrendaDA prendaDA = new PrendaDA(getContext());
         for(int i=0; i<imageViews.size(); i++){
             ImageView currentImageView = imageViews.get(i);
-            ParteConjunto pc = conjuntoSugerido.getPartesConjunto().get(i);
+            ParteConjunto pc = conjunto.getPartesConjunto().get(i);
             if(currentImageView!=null){
                 //Obtenemos los datos de la prenda, especialmente la imagen
                 //Se obtienen aqui y no antes para que solo se recupere la imagen de las prendas
                 //que se van a visualizar realmente
-                Bitmap bitmap = pc==null ? null : ImageUtil.toBitmap(prendaDA.getPrenda(
-                        pc.getPrendaAsignada().getId()).getFoto());
+                Prenda prendaTemp = pc==null ? null : prendaDA.getPrenda(pc.getPrendaAsignada().getId());
+                Bitmap bitmap = prendaTemp==null ? null : ImageUtil.toBitmap(prendaTemp.getFoto());
                 //Si obtenemos el bitmap, establecemos la imagen con el.
                 //Si la imagen esta vacia establecemos una imagen de un rectangulo transparente
                 //Es necesario para que el layout de las imagenes quede bien
@@ -445,10 +444,10 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
 
                 //****** DEPURACION: DESCOMENTAR LO QUE ESTA COMENTADO Y VICEVERSA *************
-                //wi = WeatherUtil.getWeather(mLastLocation);
-                wi = new WeatherUtil().new WeatherInfo();
-                wi.temp=15.35f;
-                wi.lluvia=false;
+                wi = WeatherUtil.getWeather(mLastLocation);
+                //wi = new WeatherUtil().new WeatherInfo();
+                //wi.temp=15.35f;
+                //wi.lluvia=false;
                 //*******************************************************************************
 
                 //Establecemos el valor de retorno segun si se ha podido obtener el tiempo  o no
@@ -482,15 +481,13 @@ public class ConjuntoSugeridoFragment extends Fragment{
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-
-            if(result != 0){
+            //Si ha habido algun error, lo mostramos en un toast
+            if(result != 0) {
                 Toast.makeText(getContext(), getString(result),
                         Toast.LENGTH_SHORT).show();
-            }else{
-                //Si se ha obtenido el conjunto sugerido, establecemos los valores en la vista
-                setImages();
             }
-
+            //Establecemos los valores de la vista
+            setImages();
 
         }
 

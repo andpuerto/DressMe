@@ -1,164 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/view_margin"
+    android:paddingLeft="@dimen/view_margin"
+    android:paddingStart="@dimen/view_margin"
+    android:paddingTop="@dimen/view_margin">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/view_margin"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingStart="@dimen/view_margin"
-        android:paddingBottom="@dimen/view_margin" >
-        <!--No establezco paddingBottom para que el scroll desde la derecha
-        de mas sensacion de que la lista "se sale de la pantalla"-->
+    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-
-      <!-- <TextView
-            android:id="@+id/text_prueba2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lista de prendas"
-            android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-
-        <!-- Layout para prendas para parte superior ligera -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/parte_conjunto1"
-                android:layout_marginLeft="@dimen/nombre_parte_margin"
-                android:layout_marginRight="@dimen/nombre_parte_margin"
-                android:layout_marginTop="@dimen/nombre_parte_margin"
-                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-      <!--      <Button
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:text="+"
-                android:id="@+id/prendas_add_button1"/> -->
-            <ImageButton
-                android:id="@+id/prendas_add_button1"
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:scaleType="fitCenter"
-                android:background="@null"
-                android:layout_gravity="center"
-                android:src="@drawable/addbutton" />
-        </LinearLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/prendas_recycle_view1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
-
-        <!-- Layout para prendas para parte superior de abrigo -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/parte_conjunto2"
-                android:layout_marginLeft="@dimen/nombre_parte_margin"
-                android:layout_marginRight="@dimen/nombre_parte_margin"
-                android:layout_marginTop="@dimen/nombre_parte_margin"
-                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-           <!-- <Button
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:text="+"
-                android:id="@+id/prendas_add_button2"/> -->
+                android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/prendas_add_button2"
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:scaleType="fitCenter"
-                android:background="@null"
-                android:layout_gravity="center"
-                android:src="@drawable/addbutton" />
-        </LinearLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/prendas_recycle_view2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/climas_label" />
 
+                <Spinner
+                    android:id="@+id/prendas_climas_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
 
-        <!-- Layout para prendas para parte inferior -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/parte_conjunto3"
-                android:layout_marginLeft="@dimen/nombre_parte_margin"
-                android:layout_marginRight="@dimen/nombre_parte_margin"
-                android:layout_marginTop="@dimen/nombre_parte_margin"
-                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-          <!--  <Button
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:text="+"
-                android:id="@+id/prendas_add_button3"/> -->
+                android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/prendas_add_button3"
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:scaleType="fitCenter"
-                android:background="@null"
-                android:layout_gravity="center"
-                android:src="@drawable/addbutton" />
-        </LinearLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/prendas_recycle_view3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/usos_label" />
 
+                <Spinner
+                    android:id="@+id/prendas_usos_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    />
 
-        <!-- Layout para prendas para calzado -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/parte_conjunto4"
-                android:layout_marginLeft="@dimen/nombre_parte_margin"
-                android:layout_marginRight="@dimen/nombre_parte_margin"
-                android:layout_marginTop="@dimen/nombre_parte_margin"
-                android:layout_marginBottom="@dimen/nombre_parte_margin"/>
-            <!--<Button
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:text="+"
-                android:id="@+id/prendas_add_button4"/>-->
-            <ImageButton
-                android:id="@+id/prendas_add_button4"
-                android:layout_width="@dimen/plus_button_size"
-                android:layout_height="@dimen/plus_button_size"
-                android:scaleType="fitCenter"
-                android:background="@null"
-                android:layout_gravity="center"
-                android:src="@drawable/addbutton" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/color_label" />
+
+                <Spinner
+                    android:id="@+id/prendas_colores_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
         </LinearLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/prendas_recycle_view4"
-            android:layout_width="wrap_content"
+    </HorizontalScrollView>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/view_margin"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingStart="@dimen/view_margin"
+            android:paddingTop="@dimen/view_margin">
+            <!--No establezco paddingBottom para que el scroll desde la derecha
+            de mas sensacion de que la lista "se sale de la pantalla"-->
+
+            <!-- Layout para prendas para parte superior ligera -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/nombre_parte_margin"
+                    android:layout_marginLeft="@dimen/nombre_parte_margin"
+                    android:layout_marginRight="@dimen/nombre_parte_margin"
+                    android:layout_marginTop="@dimen/nombre_parte_margin"
+                    android:text="@string/parte_conjunto1" />
+                <!--      <Button
+                          android:layout_width="@dimen/plus_button_size"
+                          android:layout_height="@dimen/plus_button_size"
+                          android:text="+"
+                          android:id="@+id/prendas_add_button1"/> -->
+                <ImageButton
+                    android:id="@+id/prendas_add_button1"
+                    android:layout_width="@dimen/plus_button_size"
+                    android:layout_height="@dimen/plus_button_size"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/addbutton" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/prendas_recycle_view1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!-- Layout para prendas para parte superior de abrigo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/nombre_parte_margin"
+                    android:layout_marginLeft="@dimen/nombre_parte_margin"
+                    android:layout_marginRight="@dimen/nombre_parte_margin"
+                    android:layout_marginTop="@dimen/nombre_parte_margin"
+                    android:text="@string/parte_conjunto2" />
+                <!-- <Button
+                     android:layout_width="@dimen/plus_button_size"
+                     android:layout_height="@dimen/plus_button_size"
+                     android:text="+"
+                     android:id="@+id/prendas_add_button2"/> -->
+
+                <ImageButton
+                    android:id="@+id/prendas_add_button2"
+                    android:layout_width="@dimen/plus_button_size"
+                    android:layout_height="@dimen/plus_button_size"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/addbutton" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/prendas_recycle_view2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
-    </LinearLayout>
-</ScrollView>
+            <!-- Layout para prendas para parte inferior -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/nombre_parte_margin"
+                    android:layout_marginLeft="@dimen/nombre_parte_margin"
+                    android:layout_marginRight="@dimen/nombre_parte_margin"
+                    android:layout_marginTop="@dimen/nombre_parte_margin"
+                    android:text="@string/parte_conjunto3" />
+                <!--  <Button
+                      android:layout_width="@dimen/plus_button_size"
+                      android:layout_height="@dimen/plus_button_size"
+                      android:text="+"
+                      android:id="@+id/prendas_add_button3"/> -->
+
+                <ImageButton
+                    android:id="@+id/prendas_add_button3"
+                    android:layout_width="@dimen/plus_button_size"
+                    android:layout_height="@dimen/plus_button_size"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/addbutton" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/prendas_recycle_view3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+
+            <!-- Layout para prendas para calzado -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/nombre_parte_margin"
+                    android:layout_marginLeft="@dimen/nombre_parte_margin"
+                    android:layout_marginRight="@dimen/nombre_parte_margin"
+                    android:layout_marginTop="@dimen/nombre_parte_margin"
+                    android:text="@string/parte_conjunto4" />
+                <!--<Button
+                    android:layout_width="@dimen/plus_button_size"
+                    android:layout_height="@dimen/plus_button_size"
+                    android:text="+"
+                    android:id="@+id/prendas_add_button4"/>-->
+                <ImageButton
+                    android:id="@+id/prendas_add_button4"
+                    android:layout_width="@dimen/plus_button_size"
+                    android:layout_height="@dimen/plus_button_size"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/addbutton" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/prendas_recycle_view4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -4,7 +4,7 @@
     <string name="conjuntos_tab_label">Conjuntos</string>
     <string name="prendas_tab_label">Prendas</string>
     <string name="planifiacion_tab_label">Planificar</string>
-    <string name="conjunto_sugerido_tab_label">Conjunto Sugerido</string>
+    <string name="conjunto_sugerido_tab_label">Generador</string>
     <string name="parte_conjunto1">Superior Ligera</string>
     <string name="parte_conjunto2">Superior Abrigo</string>
     <string name="parte_conjunto3">Inferior</string>
@@ -34,10 +34,11 @@
     <string name="no_prenda">Ninguna prenda</string>
     <string name="no_prenda_error">Debe asignarse al menos una prenda</string>
     <string name="conjunto_guardado">Conjunto guardado correctamente</string>
+    <string name="todos">Todos</string>
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>
     <string name="conjunto_bundle_key">conjunto</string>
     <string name="tipo_parte_conjunto_bundle_key">tipoParteConjunto</string>
-    <string name="dia_bundle_key">tipoParteConjunto</string>
+    <string name="dia_bundle_key">dia</string>
 </resources>

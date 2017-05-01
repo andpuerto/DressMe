@@ -9,18 +9,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uoc.master.angel.dressme.R;
+import uoc.master.angel.dressme.db.ClimaDA;
+import uoc.master.angel.dressme.db.ColorPrendaDA;
 import uoc.master.angel.dressme.db.PrendaDA;
 import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
+import uoc.master.angel.dressme.db.UsoDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
+import uoc.master.angel.dressme.modelo.Clima;
+import uoc.master.angel.dressme.modelo.ColorPrenda;
 import uoc.master.angel.dressme.modelo.Prenda;
 import uoc.master.angel.dressme.modelo.TipoParteConjunto;
+import uoc.master.angel.dressme.modelo.Uso;
 import uoc.master.angel.dressme.util.ImageUtil;
 
 /**
@@ -29,28 +38,58 @@ import uoc.master.angel.dressme.util.ImageUtil;
 
 public class PrendasListFragment extends Fragment {
 
-    //Adaptadores para cada una de las listas de prendas, una por cada tipo de parte de conjunto
-    private ArrayList<PrendasListAdapter> adapters = new ArrayList<>();
 
     //Lista con todos los tipos de partes de conjunto
     List<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
+
+    //Arrays con los elementos de filtro y arrays con los nombres para los Spinner
+    private List<Uso> usos = new ArrayList<>();
+    private String[] usosStrings;
+    private List<Clima> climas = new ArrayList<>();
+    private String[] climasStrings;
+    private List<ColorPrenda> colores = new ArrayList<>();
+    private String[] coloresStrings;
+
+    //Spinners
+    Spinner usoSpinner;
+    Spinner climaSpinner;
+    Spinner colorSpinner;
 
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context context = this.getContext();
         //Obtener la lista de TipoParteConjunto de la base de datos
         tiposParteConjunto = new TipoParteConjuntoDA(this.getContext()).getAllTipoParteConjunto();
-        //Crear tantos adaptadores como TipoParteConjunto haya
-        for(TipoParteConjunto tpc : tiposParteConjunto){
-            //Creamos un nuevo adapter, con un array vacio
-            PrendasListAdapter adapterTemp = new PrendasListAdapter(new ArrayList<Prenda>());
-            //Establecemos los elementos del adapter con las prendas obtenidas de la consulta
-            //Buscaremos la prendas del TipoParteConjunto actual
-            adapterTemp.setItems(new PrendaDA(this.getContext()).getAllPrendas(tpc, false));
-            //Agregamos el adapter a la lista de adapters
-            adapters.add(adapterTemp);
+
+        //Obtenemos la lista de usos
+        usos = new UsoDA(getContext()).getAllUso();
+        //Añadimos un uso con un valor null para hacer referencia a todos los usos
+        usos.add(0, null);
+        //Creamos la lista de las strings de los usos
+        usosStrings = new String[usos.size()];
+        //Insertamos un primer elemento en el array con la opcion por defectop
+        usosStrings[0] = getString(R.string.todos);
+        //Insertamos el resto de elementos en el array
+        for(int i=1; i<usos.size(); i++){
+            usosStrings[i] = usos.get(i).getNombre();
+        }
+
+        //Hacemos lo mismo con las otras dos listas
+        climas = new ClimaDA(getContext()).getAllClima();
+        climas.add(0, null);
+        climasStrings = new String[climas.size()];
+        climasStrings[0] = getString(R.string.todos);
+        for(int i=1; i<climas.size(); i++){
+            climasStrings[i] = climas.get(i).getNombre();
+        }
+
+        colores = new ColorPrendaDA(getContext()).getAllColorPrenda();
+        colores.add(0, null);
+        coloresStrings = new String[colores.size()];
+        coloresStrings[0] = getString(R.string.todos);
+        for(int i=1; i<colores.size(); i++){
+            coloresStrings[i] = colores.get(i).getNombre();
         }
 
       }
@@ -59,24 +98,32 @@ public class PrendasListFragment extends Fragment {
     //Este metodo establece las vistas iniciales de esta actividad
     private void setViews() {
 
+        //Nos cercioramos de que haya cuatro tipoParteConjunto
+        if(tiposParteConjunto.size() < 4){
+            return;
+        }
 
         //Vamos a establecer los adaptadores a cada RecycleView
         //En esta version, lo hacemos de forma estatica. Para hacerlo generico habria que crea cada
         //recycleview aquí por programa en lugar de tenerlo en el layout
         RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view1);
-        recyclerView.setAdapter(adapters.get(0));
+        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
+                this.getContext()).getAllPrendas(tiposParteConjunto.get(0), false)));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view2);
-        recyclerView.setAdapter(adapters.get(1));
+        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
+                this.getContext()).getAllPrendas(tiposParteConjunto.get(1), false)));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view3);
-        recyclerView.setAdapter(adapters.get(2));
+        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
+                this.getContext()).getAllPrendas(tiposParteConjunto.get(2), false)));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view4);
-        recyclerView.setAdapter(adapters.get(3));
+        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
+                this.getContext()).getAllPrendas(tiposParteConjunto.get(3), false)));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
@@ -91,20 +138,63 @@ public class PrendasListFragment extends Fragment {
         (this.getView().findViewById(R.id.prendas_add_button4)).setOnClickListener(
                 new AddButtonListener(tiposParteConjunto.get(3)));
 
+        //Establecemos los spinners
+        usoSpinner = (Spinner)getView().findViewById(R.id.prendas_usos_spinner);
+        climaSpinner = (Spinner)getView().findViewById(R.id.prendas_climas_spinner);
+        colorSpinner = (Spinner)getView().findViewById(R.id.prendas_colores_spinner);
+
+        //Adapter y listener para los spinner
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, usosStrings);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        usoSpinner.setAdapter(spinnerAdapter);
+        usoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Filtramos los elementos
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, climasStrings);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        climaSpinner.setAdapter(spinnerAdapter);
+        climaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Filtramos los elementos
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, coloresStrings);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        colorSpinner.setAdapter(spinnerAdapter);
+        colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Filtramos los elementos
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
-        //************************************
-        //Establecemos el listener para el refreshLayout
-        //final SwipeRefreshLayout swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
-//        swipeContainer.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                //Al refrescar, agregamos el valueEventListener de nuevo
-//                //El propio listener quitara el estado de actualizando del swipe, ya que se
-//                //debe hacer una vez esten realmente actualizados los datos
-//                database.getReference().addValueEventListener(new BookListListener());
-//            }
-//        });
+
+
     }
 
 
@@ -123,6 +213,9 @@ public class PrendasListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+
+
+
         this.setViews();
     }
 

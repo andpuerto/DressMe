@@ -49,14 +49,6 @@ public class PlanificacionFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        //Obtenemos los dias asignados
-        diasAsignados = new DiaDA(getContext()).getAllDia();
-        //Establecemos el mapa para los colores
-        diasColoreados = new HashMap<>(diasAsignados.size());
-        for(Date fecha : diasAsignados.keySet()){
-            diasColoreados.put(fecha,new ColorDrawable(
-                    getResources().getColor(R.color.diaAsignado)));
-        }
 
     }
 
@@ -68,6 +60,14 @@ public class PlanificacionFragment extends Fragment {
 
                              Bundle savedInstanceState) {
 
+        //Obtenemos los dias asignados
+        diasAsignados = new DiaDA(getContext()).getAllDia();
+        //Establecemos el mapa para los colores
+        diasColoreados = new HashMap<>(diasAsignados.size());
+        for(Date fecha : diasAsignados.keySet()){
+            diasColoreados.put(fecha,new ColorDrawable(
+                    getResources().getColor(R.color.diaAsignado)));
+        }
 
         //Creamos el calendario
         caldroidFragment = new CaldroidFragment();
@@ -106,11 +106,12 @@ public class PlanificacionFragment extends Fragment {
 
         if(diaAsignado!=null){
             //Vamos a la pantalla que muestra los detalles del conjunto de ese dia
-            //fragment = new
             fragment = new PlanificarConjuntoDetailFragment();
         }else{
             //Vamos a la pantalla de seleccion de conjunto para ese dia
             fragment = new PlanificarConjuntosListFragment();
+            //Creamos un nuevo dia para la fecha seleccionada
+            diaAsignado = new Dia(-1,fechaSeleccionada,null);
         }
 
         //Creamos y llenamos el bundle con los datos del TipoParteConjunto
