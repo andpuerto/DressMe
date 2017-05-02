@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,25 +84,94 @@ public class PrendaDA {
         return prenda;
     }
 
+//
+//    /**
+//     * Obtiene una lista con las prendas para un TipoParteConjunto
+//     * Si fillDetails es false, no carga todos los datos de todas las prendas para ahorrar memoria
+//     * Solo los que se necesitaran para el listado
+//     * @param tipoParteConjunto el TipoParteConjunto para e que se buscan prendas
+//     * @param fillDetails true para obtener todos los datos de la prenda, false para obtener solo
+//     *                    los esenciales
+//     * @return Lista de prendas
+//     */
+//    public List<Prenda> getAllPrendas(TipoParteConjunto tipoParteConjunto, boolean fillDetails){
+//        SQLiteDatabase db = helper.getReadableDatabase();
+//        //Metemos solamente el identificador y la foto
+//        String[] campos = new String[] {"id", "foto", "marca", "material"};
+//        String where = "tipo_parte_conjunto = ?";
+//        String[] whereArgs = new String[] {
+//                Integer.toString(tipoParteConjunto.getId())
+//        };
+//        Cursor c = db.query("Prenda", campos, where, whereArgs, null, null, null);
+//
+//        ArrayList<Prenda> prendas = new ArrayList<Prenda>();
+//        //Nos aseguramos de que existe al menos un registro
+//        if (c.moveToFirst()) {
+//            //Recorremos el cursor hasta que no haya más registros
+//            do {
+//                Prenda prendaTemp = new Prenda(c.getInt(0),c.getBlob(1), c.getString(2), c.getString(3),
+//                        null, null, null, tipoParteConjunto);
+//                //Si fillDetails es true, rellenamos los detalles de la prenda
+//                if(fillDetails){
+//                    fillPrendaDetails(prendaTemp);
+//                }
+//                prendas.add(prendaTemp);
+//            } while(c.moveToNext());
+//        }
+//        c.close();
+//        db.close();
+//        return prendas;
+//    }
 
     /**
-     * Obtiene una lista con las prendas para un TipoParteConjunto
-     * Si fillDetails es false, no carga todos los datos de todas las prendas para ahorrar memoria
-     * Solo los que se necesitaran para el listado
-     * @param tipoParteConjunto el TipoParteConjunto para e que se buscan prendas
-     * @param fillDetails true para obtener todos los datos de la prenda, false para obtener solo
-     *                    los esenciales
-     * @return Lista de prendas
+     * Obtiene la lista de prendas acorde a los parametros recibidos.
+     * @param uso Un uso para el que deben ser adecuadas las prendas. Puede ser null para no considerarlo
+     * @param clima Un clima para el que deben ser adecuadas las prendas. Puede ser null para no considerarlo
+     * @param color El color de las prendas.Puede ser null para no considerarlo
+     * @param tpc El TipoParteConjunto de las prendas a obtener. No puede ser null.
+     * @return List de prendas que cumplen los requisitos solamente con el id y el color rellenos
      */
-    public List<Prenda> getAllPrendas(TipoParteConjunto tipoParteConjunto, boolean fillDetails){
+    public List<Prenda> getAllPrendas(Uso uso, Clima clima, ColorPrenda color, TipoParteConjunto tpc, boolean fillDetails){
+
         SQLiteDatabase db = helper.getReadableDatabase();
-        //Metemos solamente el identificador y la foto
-        String[] campos = new String[] {"id", "foto", "marca", "material"};
-        String where = "tipo_parte_conjunto = ?";
-        String[] whereArgs = new String[] {
-                Integer.toString(tipoParteConjunto.getId())
-        };
-        Cursor c = db.query("Prenda", campos, where, whereArgs, null, null, null);
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+
+
+        //Metemos el identificador, la foto, marca y material, pero no datos de tablas relacionadas
+        //a no ser que se establezca el fillDetails
+        String[] campos = new String[] {"p.id", "p.foto", "p.marca", "p.material"};
+        //Vamos a formar la cadena de caracteres de las tablas, cosiderando los datos que nos pasen
+        String tables = "prenda p";
+        //Cadena para el where
+        String where = "p.tipo_parte_conjunto = ?";
+        //Argumentos para el where
+        ArrayList<String> whereArgs = new ArrayList<>();
+        whereArgs.add(Integer.toString(tpc.getId()));
+
+        //Vamos añadiendo a cada elemento lo que corresponda segun que objetos no nulos recibamos
+        if(uso != null) {
+            tables += " inner join uso_prenda up on p.id=up.prenda";
+            where += " and up.uso=?";
+            whereArgs.add(Integer.toString(uso.getId()));
+        }
+
+        //Vamos añadiendo a cada elemento lo que corresponda segun que objetos no nulos recibamos
+        if(clima != null) {
+            tables += " inner join prenda_clima pc on p.id=pc.prenda";
+            where += " and pc.clima=?";
+            whereArgs.add(Integer.toString(clima.getId()));
+        }
+
+        if(color != null){
+            where += " and p.color=?";
+            whereArgs.add(Integer.toString(color.getId()));
+        }
+
+        queryBuilder.setTables(tables);
+        queryBuilder.setDistinct(true);
+        Cursor c = queryBuilder.query(db, campos, where, whereArgs.toArray(new String[0]), null, null, "p.id");
+        //Cursor c = db.query("Prenda", campos, where, whereArgs.toArray(new String[0]), null, null, null);
 
         ArrayList<Prenda> prendas = new ArrayList<Prenda>();
         //Nos aseguramos de que existe al menos un registro
@@ -108,7 +179,7 @@ public class PrendaDA {
             //Recorremos el cursor hasta que no haya más registros
             do {
                 Prenda prendaTemp = new Prenda(c.getInt(0),c.getBlob(1), c.getString(2), c.getString(3),
-                        null, null, null, tipoParteConjunto);
+                        null, null, null, tpc);
                 //Si fillDetails es true, rellenamos los detalles de la prenda
                 if(fillDetails){
                     fillPrendaDetails(prendaTemp);
@@ -120,6 +191,7 @@ public class PrendaDA {
         db.close();
         return prendas;
     }
+
 
 
     /**
@@ -258,10 +330,19 @@ public class PrendaDA {
         db.delete("prenda_clima","prenda=?",whereArgs);
         //Borramos las relaciones con los usos
         db.delete("uso_prenda","prenda=?",whereArgs);
+        //Borramos las PartesConjunto que tuvieran esa prenda asignada
+        db.delete("parte_conjunto", "prenda_asignada=?", whereArgs);
+        //Por ultimo, vamos a eliminar los conjuntos que puedan haberse quedado vacios tras
+        //el borrado de las partesConjunto. Lo hago con execSQL porque tiene un subselect
+        db.execSQL("delete from conjunto where id not in (" +
+                "select conjunto from parte_conjunto)");
         //Hacemos el commit y cerramos la trasaccion y la base de datos
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
+
+
+
     }
 
 

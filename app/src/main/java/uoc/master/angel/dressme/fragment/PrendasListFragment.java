@@ -50,10 +50,19 @@ public class PrendasListFragment extends Fragment {
     private List<ColorPrenda> colores = new ArrayList<>();
     private String[] coloresStrings;
 
+    //Elementos seleccionados para los spinners
+    private int usoSeleccionado;
+    private int climaSeleccionado;
+    private int colorSeleccionado;
+
     //Spinners
-    Spinner usoSpinner;
-    Spinner climaSpinner;
-    Spinner colorSpinner;
+    private Spinner usoSpinner;
+    private Spinner climaSpinner;
+    private Spinner colorSpinner;
+
+    //RecyclerViews
+    private List<RecyclerView> recyclerViews;
+
 
     @Override
 
@@ -106,26 +115,29 @@ public class PrendasListFragment extends Fragment {
         //Vamos a establecer los adaptadores a cada RecycleView
         //En esta version, lo hacemos de forma estatica. Para hacerlo generico habria que crea cada
         //recycleview aquí por programa en lugar de tenerlo en el layout
+        recyclerViews = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view1);
-        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
-                this.getContext()).getAllPrendas(tiposParteConjunto.get(0), false)));
+        recyclerView.setAdapter(new PrendasListAdapter(new ArrayList<Prenda>()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViews.add(recyclerView);
 
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view2);
-        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
-                this.getContext()).getAllPrendas(tiposParteConjunto.get(1), false)));
+        recyclerView.setAdapter(new PrendasListAdapter(new ArrayList<Prenda>()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViews.add(recyclerView);
 
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view3);
-        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
-                this.getContext()).getAllPrendas(tiposParteConjunto.get(2), false)));
+        recyclerView.setAdapter(new PrendasListAdapter(new ArrayList<Prenda>()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViews.add(recyclerView);
 
         recyclerView = (RecyclerView) this.getView().findViewById(R.id.prendas_recycle_view4);
-        recyclerView.setAdapter(new PrendasListAdapter(new PrendaDA(
-                this.getContext()).getAllPrendas(tiposParteConjunto.get(3), false)));
+        recyclerView.setAdapter(new PrendasListAdapter(new ArrayList<Prenda>()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViews.add(recyclerView);
 
+        //Actualizamos las listViews con los datos
+        updateListViews();
 
         //Establecemos el clicklistener para los botones de crear nueva prenda.
         //Tambien esta hecho de forma estatica en esta version
@@ -152,6 +164,8 @@ public class PrendasListFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
+                usoSeleccionado = position;
+                updateListViews();
             }
 
             @Override
@@ -168,6 +182,8 @@ public class PrendasListFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
+                climaSeleccionado = position;
+                updateListViews();
             }
 
             @Override
@@ -184,6 +200,8 @@ public class PrendasListFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
+                colorSeleccionado = position;
+                updateListViews();
             }
 
             @Override
@@ -193,8 +211,24 @@ public class PrendasListFragment extends Fragment {
         });
 
 
+    }
 
 
+
+    private void updateListViews(){
+        PrendaDA prendaDA = new PrendaDA(getContext());
+        int i=0;
+        for(RecyclerView recyclerView : recyclerViews){
+            //Obtenemos la lista de prendas para la parteConjunto correspondiente, considerando
+            //los parametros seleccionados en lso filtros
+            PrendasListAdapter adapter = (PrendasListAdapter)recyclerView.getAdapter();
+            adapter.setItems(prendaDA.getAllPrendas(
+                    usos.get(usoSeleccionado), climas.get(climaSeleccionado),
+                    colores.get(colorSeleccionado), tiposParteConjunto.get(i), false));
+            //Notificamos los cambios para que cambie la lista
+            adapter.notifyDataSetChanged();
+            i++;
+        }
     }
 
 
