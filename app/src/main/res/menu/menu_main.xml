@@ -2,9 +2,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="uoc.master.angel.dressme.MainActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+
+    <group android:id="@+id/grp1">
+        <item
+            android:id="@+id/conjunto_sug_menu"
+            android:orderInCategory="100"
+            android:title="@string/conjunto_sugerido_tab_label"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/prendas_menu"
+            android:orderInCategory="100"
+            android:title="@string/prendas_tab_label"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/conjuntos_menu"
+            android:orderInCategory="100"
+            android:title="@string/conjuntos_tab_label"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/planificacion_menu"
+            android:orderInCategory="100"
+            android:title="@string/planifiacion_tab_label"
+            app:showAsAction="never" />
+    </group>
+    <group android:id="@+id/grp2">
+
+        <item
+            android:id="@+id/sug_enable_menu"
+            android:checkable="true"
+            android:orderInCategory="100"
+            android:title="@string/mostrar_sugerir"
+            app:showAsAction="never" />
+    </group>
+
 </menu>

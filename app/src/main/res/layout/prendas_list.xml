@@ -89,8 +89,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="@dimen/view_margin"
-            android:paddingLeft="@dimen/view_margin"
-            android:paddingStart="@dimen/view_margin"
             android:paddingTop="@dimen/view_margin">
             <!--No establezco paddingBottom para que el scroll desde la derecha
             de mas sensacion de que la lista "se sale de la pantalla"-->

@@ -1,6 +1,8 @@
 package uoc.master.angel.dressme;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,7 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TabHost;
 
+
+import java.util.HashMap;
+import java.util.Map;
 
 import uoc.master.angel.dressme.db.DressMeSQLHelper;
 import uoc.master.angel.dressme.fragment.ConjuntosListFragment;
@@ -46,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private final String PRENDAS_TAB = "prendasTab";
     private final String PLANIFICACION_TAB = "planificacionTab";
 
-    //Adaptador para la lista de libros
- //   private BookListAdapter adapter = new BookListAdapter(new ArrayList<BookContent.BookItem>());
+    //Hashmap para guardar las pestañas. y volver a ponerlas. Al guardarlas evitamos
+    //tener que volver a crearlas
+    private Map<String, TabHost.TabSpec> tabMap = new HashMap<>();
+
+    private boolean showGenerador;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,19 +70,23 @@ public class MainActivity extends AppCompatActivity {
         //Pedimos los permisos necesarios al usuario
         this.askForPermission();
 
+
         //Inicializamos las pestañas
         this.initializeTabs();
 
         //Inicializamos la base de datos
         this.setDatabase();
 
-
-    }
+     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        //Establecemos el valor para la opcion de mostrar el generador de conjuntos
+        menu.findItem(R.id.sug_enable_menu).setChecked(showGenerador);
+        //Ocultamos la opcion de navegacion al generador de conjuntos si esta desactivada
+        menu.findItem(R.id.conjunto_sug_menu).setVisible(showGenerador);
         return true;
     }
 
@@ -82,9 +97,33 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.conjunto_sug_menu:
+                tabHost.setCurrentTabByTag(CONJUNTO_SUG_TAB);
+                return true;
+            case R.id.prendas_menu:
+                tabHost.setCurrentTabByTag(PRENDAS_TAB);
+                return true;
+            case R.id.conjuntos_menu:
+                tabHost.setCurrentTabByTag(CONJUNTOS_TAB);
+                return true;
+            case R.id.planificacion_menu:
+                tabHost.setCurrentTabByTag(PLANIFICACION_TAB);
+                return true;
+            //Caso de la activacion/desactivacion de la pestaña del generador de conjuntos
+            case R.id.sug_enable_menu:
+                //Cambiamos el valor del check
+                item.setChecked(!item.isChecked());
+                //Establecemos el valor del boolean
+                showGenerador = item.isChecked();
+                //Lo guardamos en las preferencias
+                SharedPreferences sp = getSharedPreferences(getString(R.string.preferences_file), Activity.MODE_PRIVATE);
+                sp.edit().putBoolean(getString(R.string.show_gen_pref), showGenerador).apply();
+                //invalidamos el menu para que vuelva a crearse, sin la opcion del menu del generador
+                invalidateOptionsMenu();
+                //Cambiamos las pestañas
+                toggleGeneradorTab();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,18 +134,36 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initializeTabs(){
 
-        tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
+        //Obtenemos el valor guardado de las preferencias
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preferences_file), Activity.MODE_PRIVATE);
+        showGenerador = sp.getBoolean(getString(R.string.show_gen_pref), true);
 
+        tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this,
                 getSupportFragmentManager(),android.R.id.tabcontent);
-        tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
-                ConjuntoSugeridoContainerFragment.class, null);
-        tabHost.addTab(tabHost.newTabSpec(CONJUNTOS_TAB).setIndicator(getString(R.string.conjuntos_tab_label)),
-                ConjuntoContainerFragment.class, null);
-        tabHost.addTab(tabHost.newTabSpec(PRENDAS_TAB).setIndicator(getString(R.string.prendas_tab_label)),
-                PrendaContainerFragment.class, null);
-        tabHost.addTab(tabHost.newTabSpec(PLANIFICACION_TAB).setIndicator(getString(R.string.planifiacion_tab_label)),
-                PlanificacionContainerFragment.class, null);
+        //Mostramos el generador de conjuntos solo si esta establecido en las preferencias
+        if(showGenerador) {
+            tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
+                    ConjuntoSugeridoContainerFragment.class, null);
+        }
+        //Añadimos las pestañas al map.  Al agregar y quitar la vista del generador de conjuntos,
+        //no queda mas remedio que quitar todas y volver a poner las que necesitemos
+        //La del generador no la guardamos porque, en caso de no ponerla no queremos que consuma
+        //recursos
+        TabHost.TabSpec tabSpec = tabHost.newTabSpec(PRENDAS_TAB).
+                setIndicator(getString(R.string.prendas_tab_label));
+        tabMap.put(PRENDAS_TAB, tabSpec);
+        tabHost.addTab(tabSpec,PrendaContainerFragment.class, null);
+
+        tabSpec =tabHost.newTabSpec(CONJUNTOS_TAB).
+                setIndicator(getString(R.string.conjuntos_tab_label));
+        tabMap.put(CONJUNTOS_TAB, tabSpec);
+        tabHost.addTab(tabSpec, ConjuntoContainerFragment.class, null);
+
+        tabSpec = tabHost.newTabSpec(PLANIFICACION_TAB).
+                setIndicator(getString(R.string.planifiacion_tab_label));
+        tabMap.put(PLANIFICACION_TAB, tabSpec);
+        tabHost.addTab(tabSpec, PlanificacionContainerFragment.class, null);
 
     }
 
@@ -245,4 +302,18 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private void toggleGeneradorTab(){
+        tabHost.clearAllTabs();
+        if(showGenerador){
+            tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
+                    ConjuntoSugeridoContainerFragment.class, null);
+        }
+
+        tabHost.addTab(tabMap.get(PRENDAS_TAB),PrendaContainerFragment.class, null);
+        tabHost.addTab(tabMap.get(CONJUNTOS_TAB), ConjuntoContainerFragment.class, null);
+        tabHost.addTab(tabMap.get(PLANIFICACION_TAB), PlanificacionContainerFragment.class, null);
+    }
+
+
 }

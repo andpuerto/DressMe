@@ -6,11 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,6 +32,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import uoc.master.angel.dressme.R;
@@ -377,6 +381,9 @@ public class ConjuntoSugeridoFragment extends Fragment{
 
     }
 
+    /**
+     * Establece las imagenes de las prendas del conjunto sugerido
+     */
     private void setImages(){
         //Si el conjunto sugerido es null, usamos uno nuevo vacio
         Conjunto conjunto = conjuntoSugerido==null ? new Conjunto(-1, null) : conjuntoSugerido;
@@ -400,6 +407,39 @@ public class ConjuntoSugeridoFragment extends Fragment{
                 }
 
             }
+        }
+
+    }
+
+
+    /**
+     * Establece los valores de la vista de la informacion del tiempo, si esta disponible
+     */
+    private void setWeatherInfo(){
+        try {
+            View panelOK = getView().findViewById(R.id.weather_info);
+            View panelKO = getView().findViewById(R.id.no_weather_text);
+            if(panelKO==null | panelOK==null){return;}
+            if (wi == null) {
+                panelKO.setVisibility(View.VISIBLE);
+                panelOK.setVisibility(View.GONE);
+            } else{
+                //Obtenemos el nombre de la ciudad a partir de las coordenadas
+                if(mLastLocation != null){
+                    Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(),
+                            mLastLocation.getLongitude(), 1);
+                    String cityName = addresses.get(0).getLocality();
+                    ((TextView)getView().findViewById(R.id.no_weather_text)).setText(cityName+",");
+                }
+                ((TextView)getView().findViewById(R.id.temp_text)).setText(wi.temp+"ºC");
+                ((ImageView)getView().findViewById(R.id.weather_icon)).setImageBitmap(
+                        ImageUtil.urlToBitmap(wi.icon));
+                panelKO.setVisibility(View.GONE);
+                panelOK.setVisibility(View.VISIBLE);
+            }
+        }catch(Exception e){
+            Log.e("setWeatherInfo", e.getMessage());
         }
 
     }
@@ -487,11 +527,63 @@ public class ConjuntoSugeridoFragment extends Fragment{
                         Toast.LENGTH_SHORT).show();
             }
             //Establecemos los valores de la vista
+            setWeatherInfo();
             setImages();
 
         }
 
     }
+
+
+
+//    /**
+//     * Tarea asincrona para establecer el icono de la info meteorologica
+//     * Dado que requiere contectarse a un servicio a traves de Internet, debe ser asincrona
+//     */
+//    private class SetIcon extends AsyncTask<Void, Void, Void> {
+//        protected Bitmap bitmap;
+//
+//        //Antes de la ejecucion, mostramos un dialogo indicando que la tarea esta en curso
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        /**
+//         * Tarea a ejecutar
+//         * @return 0, si se ejecuta correctamente. El id del mensaje a mostrar si hay error
+//         */
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//            bitmap = WeatherUtil.
+//            return null;
+//        }
+//
+//
+//        /**
+//         * Tras la ejecucion de la tarea
+//         */
+//        @Override
+//        protected void onPostExecute(Integer result) {
+//            super.onPostExecute(result);
+//            //Quitamos el cuadro de dialogo del progreso
+//            if (pDialog.isShowing()) {
+//                pDialog.dismiss();
+//            }
+//            //Si ha habido algun error, lo mostramos en un toast
+//            if(result != 0) {
+//                Toast.makeText(getContext(), getString(result),
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//            //Establecemos los valores de la vista
+//            setWeatherInfo();
+//            setImages();
+//
+//        }
+//
+//    }
+//
+
 }
 
 

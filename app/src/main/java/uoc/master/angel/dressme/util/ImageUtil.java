@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 /**
@@ -80,6 +83,26 @@ public class ImageUtil {
             return null;
         }
         return BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
+    }
+
+    /**
+     * Obtiene un bitmap de la imagen cuya url se recibe (como string)
+     * @param src La URL de la imagen
+     * @return Bitmap con la imagen
+     */
+    public static Bitmap urlToBitmap(String src){
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
     }
 
 }

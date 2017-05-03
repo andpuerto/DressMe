@@ -13,7 +13,7 @@
 
 
     <!--Scroll para la vista de imagenes-->
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+   <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -29,7 +29,7 @@
             <!-- Layout para la fila de imagenes -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/foto_separation"
                 android:orientation="horizontal">
                 <!-- Layout para alinear la etiqueta del tipo de parte de conjunto con la imagen -->
@@ -93,7 +93,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/foto_separation"
                 android:orientation="horizontal">
 
@@ -163,7 +163,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/trashbutton" />
         </LinearLayout>
-    </ScrollView>
+   </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_conjunto_button"

@@ -32,6 +32,10 @@ public class WeatherUtil {
     private final static int[] rainCodes = {200,201,202,230,231,232,300,301,302,310,311,312,313,314,
     321,500,501,502,503,504,511,520,521,522,531,600,601,602,611,612,615,616,620,621,622,901,906};
 
+    //Cademas con la URL y la extension para los iconos
+    private final static String iconURL = "http://openweathermap.org/img/w/";
+    private final static String iconExt = ".png";
+
     /**
      * Obtiene el tiempo para la localizacion que recibe como parametro
      * @param location La localizacion de la que deseamos saber el tiempo
@@ -150,6 +154,10 @@ public class WeatherUtil {
             }
             //Ahora tomamos la temperatura, en la misma unidad en la que se haya obtenido
             wi.temp = Float.parseFloat(jWeatherInfo.getJSONObject("main").getString("temp"));
+            if(weatherArray.length() > 0) {
+                //Guardamos la URL entera del icono
+                wi.icon = iconURL + weatherArray.getJSONObject(0).getString("icon") + iconExt;
+            }
 
         }catch(JSONException e){
             Log.e(TAG, "JSONException: " + e.getMessage());
@@ -168,10 +176,12 @@ public class WeatherUtil {
             //Establecemos la temperatura a un valor no valido para
             //despues poder saber si se el objeto se ha configurado correctamente
             temp = -101;
+            icon = "";
         }
 
         public boolean lluvia;
         public float temp;
+        public String icon;
     }
 
 }

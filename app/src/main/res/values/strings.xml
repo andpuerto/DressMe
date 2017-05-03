@@ -35,10 +35,17 @@
     <string name="no_prenda_error">Debe asignarse al menos una prenda</string>
     <string name="conjunto_guardado">Conjunto guardado correctamente</string>
     <string name="todos">Todos</string>
+    <string name="mostrar_sugerir">Mostrar generador de conjuntos</string>
+    <string name="no_weather">Tiempo no disponible</string>
+
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>
     <string name="conjunto_bundle_key">conjunto</string>
     <string name="tipo_parte_conjunto_bundle_key">tipoParteConjunto</string>
     <string name="dia_bundle_key">dia</string>
+
+    <!-- claves para las preferencias -->
+    <string name="preferences_file">dresapp_prefs</string>
+    <string name="show_gen_pref">show_gen_key</string>
 </resources>
