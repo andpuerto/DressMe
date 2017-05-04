@@ -1,6 +1,7 @@
 package uoc.master.angel.dressme.util;
 
 
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -59,6 +61,8 @@ public class WeatherUtil {
             //Abrimos la conexion, con el metodo get
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
+            //Establecemos un timeout de 5 segundos
+            conn.setConnectTimeout(5000);
             //Leemos la respuesta y la pasamos al string
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = convertStreamToString(in);
@@ -66,6 +70,8 @@ public class WeatherUtil {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
         } catch (ProtocolException e) {
             Log.e(TAG, "ProtocolException: " + e.getMessage());
+        }catch (SocketTimeoutException e) {
+                Log.e(TAG, "TimeOut: " + e.getMessage());
         } catch (IOException e) {
             Log.e(TAG, "IOException: " + e.getMessage());
         } catch (Exception e) {
@@ -157,6 +163,8 @@ public class WeatherUtil {
             if(weatherArray.length() > 0) {
                 //Guardamos la URL entera del icono
                 wi.icon = iconURL + weatherArray.getJSONObject(0).getString("icon") + iconExt;
+                //Obtenemos el bitmap del icono
+                wi.iconBitmap = ImageUtil.urlToBitmap(wi.icon);
             }
 
         }catch(JSONException e){
@@ -177,11 +185,15 @@ public class WeatherUtil {
             //despues poder saber si se el objeto se ha configurado correctamente
             temp = -101;
             icon = "";
+            iconBitmap = null;
+            nombreCiudad = "";
         }
 
         public boolean lluvia;
         public float temp;
         public String icon;
+        public Bitmap iconBitmap;
+        public String nombreCiudad;
     }
 
 }

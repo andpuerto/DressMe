@@ -23,6 +23,8 @@
     <dimen name="foto_border">2px</dimen>
     <dimen name="foto_separation">5dp</dimen>
     <dimen name="label_separation">5dp</dimen>
-    <dimen name="weather_icon_size">20dp</dimen>
+    <dimen name="weather_icon_size">40dp</dimen>
+    <dimen name="tab_icon_size">30dp</dimen>
+    <dimen name="weather_text_padding">8dp</dimen>
     <item name="foto_conjunto_weight" format="float" type="dimen">1.0</item>
 </resources>

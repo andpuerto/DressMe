@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 
 public class PermissionsUtil {
 
+    public final int PERMISSION_ALL = 1;
+
     /**
      * Devuelve verdadero si todos los permisos que recibe en el array están concedidos
      * @param context

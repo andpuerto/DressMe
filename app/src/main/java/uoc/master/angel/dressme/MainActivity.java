@@ -2,6 +2,8 @@ package uoc.master.angel.dressme;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,13 +13,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 
 
 import java.util.HashMap;
@@ -70,14 +78,15 @@ public class MainActivity extends AppCompatActivity {
         //Pedimos los permisos necesarios al usuario
         this.askForPermission();
 
+//
+//        //Inicializamos las pestañas
+       this.initializeTabs();
+//
+//        //Inicializamos la base de datos
+       this.setDatabase();
 
-        //Inicializamos las pestañas
-        this.initializeTabs();
+    }
 
-        //Inicializamos la base de datos
-        this.setDatabase();
-
-     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             case R.id.conjunto_sug_menu:
                 tabHost.setCurrentTabByTag(CONJUNTO_SUG_TAB);
                 return true;
@@ -132,41 +141,73 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Realiza las funciones de configuracion inicial de las pestañas
      */
-    private void initializeTabs(){
+    private void initializeTabs() {
 
         //Obtenemos el valor guardado de las preferencias
         SharedPreferences sp = getSharedPreferences(getString(R.string.preferences_file), Activity.MODE_PRIVATE);
         showGenerador = sp.getBoolean(getString(R.string.show_gen_pref), true);
 
-        tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
+        tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this,
-                getSupportFragmentManager(),android.R.id.tabcontent);
+                getSupportFragmentManager(), android.R.id.tabcontent);
         //Mostramos el generador de conjuntos solo si esta establecido en las preferencias
-        if(showGenerador) {
-            tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
+        if (showGenerador) {
+
+            tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator("", getResources().getDrawable(R.drawable.magic_m)),
                     ConjuntoSugeridoContainerFragment.class, null);
         }
         //Añadimos las pestañas al map.  Al agregar y quitar la vista del generador de conjuntos,
         //no queda mas remedio que quitar todas y volver a poner las que necesitemos
         //La del generador no la guardamos porque, en caso de no ponerla no queremos que consuma
         //recursos
+//        TabHost.TabSpec tabSpec = tabHost.newTabSpec(PRENDAS_TAB).
+//                setIndicator(getString(R.string.prendas_tab_label));
         TabHost.TabSpec tabSpec = tabHost.newTabSpec(PRENDAS_TAB).
-                setIndicator(getString(R.string.prendas_tab_label));
+                setIndicator("", getResources().getDrawable(R.drawable.tshirtonhang_m));
         tabMap.put(PRENDAS_TAB, tabSpec);
-        tabHost.addTab(tabSpec,PrendaContainerFragment.class, null);
+        tabHost.addTab(tabSpec, PrendaContainerFragment.class, null);
 
-        tabSpec =tabHost.newTabSpec(CONJUNTOS_TAB).
-                setIndicator(getString(R.string.conjuntos_tab_label));
+        tabSpec = tabHost.newTabSpec(CONJUNTOS_TAB).
+                setIndicator("", getResources().getDrawable(R.drawable.outfit_m));
         tabMap.put(CONJUNTOS_TAB, tabSpec);
         tabHost.addTab(tabSpec, ConjuntoContainerFragment.class, null);
 
         tabSpec = tabHost.newTabSpec(PLANIFICACION_TAB).
-                setIndicator(getString(R.string.planifiacion_tab_label));
+                setIndicator("", getResources().getDrawable(R.drawable.calendar_m));
         tabMap.put(PLANIFICACION_TAB, tabSpec);
         tabHost.addTab(tabSpec, PlanificacionContainerFragment.class, null);
 
+
+
+        resizeTabIcons();
+
     }
 
+    private void resizeTabIcons(){
+        float density = getResources().getDisplayMetrics().density;
+        int padding = (int) (5f * density);
+        int imageSize = (int) (36 * density);
+
+        TabWidget tabs = tabHost.getTabWidget();
+        for (int i = 0; i < tabs.getChildCount(); i++) {
+            LinearLayout tab = (LinearLayout) tabs.getChildAt(i);
+
+            AppCompatTextView tv = (AppCompatTextView) tab.getChildAt(1);
+            AppCompatImageView iv = (AppCompatImageView) tab.getChildAt(0);
+
+            android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(imageSize, imageSize);
+            iv.setLayoutParams(lp);
+            iv.setPadding(padding, padding, padding, padding);
+        }
+    }
+
+
+    public TabHost.TabSpec setIndicator(TabHost.TabSpec spec, int resId) {
+        View v = LayoutInflater.from(this).inflate(R.layout.tabhost_row, null);
+        ImageView imgTab = (ImageView) v.findViewById(R.id.imgTab);
+        imgTab.setImageDrawable(getResources().getDrawable(resId));
+        return spec.setIndicator(v);
+    }
 
     /**
      * Adapter para la vista de pestañas
@@ -213,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Metodo para encapsular la configuracion relativa a la inicializacion de la base de datos
      */
-    private void setDatabase(){
+    private void setDatabase() {
         DressMeSQLHelper dmdbh = new DressMeSQLHelper(this, "DBDressMe", null, 1);
         SQLiteDatabase db = dmdbh.getWritableDatabase();
 
@@ -221,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void askForPermission(){
+    private void askForPermission() {
         //Si no tenemos permisos, los pedimos
 
         // The request code used in ActivityCompat.requestPermissions()
@@ -231,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA};
 
-        if(!PermissionsUtil.hasPermissions(this, permisos)){
+        if (!PermissionsUtil.hasPermissions(this, permisos)) {
             ActivityCompat.requestPermissions(this, permisos, PERMISSION_ALL);
         }
 
@@ -261,25 +302,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             //
             case PERMISSION_ALL: {
-                // Comprobamos si se ha concedido el permiso o no. Dejamos el bool con el valor
-                //adecuado en cada caso
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    externalStoragePermission = true;
-                } else {
-                    externalStoragePermission = false;
+                // Comprobamos si se ha concedido el permiso o no. En este caso tienen que estar
+                //todos concedidos
+                boolean todosConcedidos = true;
+                for(int i=0; i<grantResults.length && todosConcedidos; i++){
+                    if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                        todosConcedidos = false;
+                    }
                 }
-                return;
+                if (grantResults.length > 0 && todosConcedidos) {
+                    externalStoragePermission = true;
+                    //Inicializamos las pestañas
+                    this.toggleGeneradorTab();
+
+                    //Inicializamos la base de datos
+                    //this.setDatabase();
+                } else {
+                    //Si no tenemos permisos, avisamos y cerramos la aplicacion
+                    externalStoragePermission = false;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(getString(R.string.no_permission_critical_error))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //Cerramos la aplicacion
+                                    finish();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
             }
 
         }
+
     }
 
 
@@ -292,27 +353,28 @@ public class MainActivity extends AppCompatActivity {
         boolean isPopFragment = false;
         String currentTabTag = tabHost.getCurrentTabTag();
         if (currentTabTag.equals(CONJUNTOS_TAB)) {
-            isPopFragment = ((BaseContainerFragment)getSupportFragmentManager().findFragmentByTag(CONJUNTOS_TAB)).popFragment();
+            isPopFragment = ((BaseContainerFragment) getSupportFragmentManager().findFragmentByTag(CONJUNTOS_TAB)).popFragment();
         } else if (currentTabTag.equals(PRENDAS_TAB)) {
-            isPopFragment = ((BaseContainerFragment)getSupportFragmentManager().findFragmentByTag(PRENDAS_TAB)).popFragment();
+            isPopFragment = ((BaseContainerFragment) getSupportFragmentManager().findFragmentByTag(PRENDAS_TAB)).popFragment();
         } else if (currentTabTag.equals(PLANIFICACION_TAB)) {
-            isPopFragment = ((BaseContainerFragment)getSupportFragmentManager().findFragmentByTag(PLANIFICACION_TAB)).popFragment();
+            isPopFragment = ((BaseContainerFragment) getSupportFragmentManager().findFragmentByTag(PLANIFICACION_TAB)).popFragment();
         }
         if (!isPopFragment) {
             finish();
         }
     }
 
-    private void toggleGeneradorTab(){
+    private void toggleGeneradorTab() {
         tabHost.clearAllTabs();
-        if(showGenerador){
-            tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator(getString(R.string.conjunto_sugerido_tab_label)),
+        if (showGenerador) {
+            tabHost.addTab(tabHost.newTabSpec(CONJUNTO_SUG_TAB).setIndicator("", getResources().getDrawable(R.drawable.magic_m)),
                     ConjuntoSugeridoContainerFragment.class, null);
         }
 
-        tabHost.addTab(tabMap.get(PRENDAS_TAB),PrendaContainerFragment.class, null);
+        tabHost.addTab(tabMap.get(PRENDAS_TAB), PrendaContainerFragment.class, null);
         tabHost.addTab(tabMap.get(CONJUNTOS_TAB), ConjuntoContainerFragment.class, null);
         tabHost.addTab(tabMap.get(PLANIFICACION_TAB), PlanificacionContainerFragment.class, null);
+        resizeTabIcons();
     }
 
 

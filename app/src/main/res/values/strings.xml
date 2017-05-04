@@ -25,9 +25,11 @@
     <string name="unassign_conjunto_confirm_title">Desasignar conjunto</string>
     <string name="si">Sí</string>
     <string name="no">No</string>
+    <string name="ok">OK</string>
     <string name="error_location_connection">No se ha podido conectar con el servicio de localización</string>
     <string name="error_location_permission">No se tienen permisos para obtener la localizacion</string>
     <string name="error_weather">No se ha podido obtener la información meteorológica</string>
+    <string name="error_ciudad">No se ha podido obtener la localidad</string>
     <string name="weather_progress">Generando conjunto...</string>
     <string name="regenerar_button">Regenerar</string>
     <string name="usos_spinner_default">Todos los usos</string>
@@ -37,6 +39,7 @@
     <string name="todos">Todos</string>
     <string name="mostrar_sugerir">Mostrar generador de conjuntos</string>
     <string name="no_weather">Tiempo no disponible</string>
+    <string name="no_permission_critical_error">La aplicación no puede ejecutarse sin los permisos necesarios y se cerrará</string>
 
 
     <!-- claves para los bundle -->
