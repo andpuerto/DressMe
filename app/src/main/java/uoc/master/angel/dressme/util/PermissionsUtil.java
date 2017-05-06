@@ -15,9 +15,9 @@ public class PermissionsUtil {
 
     /**
      * Devuelve verdadero si todos los permisos que recibe en el array están concedidos
-     * @param context
-     * @param permissions
-     * @return
+     * @param context contexto
+     * @param permissions los permisos a comprobar
+     * @return true si se tienen los permisos
      */
     public static boolean hasPermissions(Context context, String[] permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {

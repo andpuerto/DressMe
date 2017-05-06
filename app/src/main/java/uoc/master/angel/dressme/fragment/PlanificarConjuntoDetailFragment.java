@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ import uoc.master.angel.dressme.util.ImageUtil;
  */
 
 public class PlanificarConjuntoDetailFragment extends Fragment {
-
     //Lista con las vistas de imagenes
     private List<ImageView> imageViews = new ArrayList<>();
 
@@ -49,16 +47,14 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
     //Boton de guardar la prenda
     private FloatingActionButton guardarButton;
 
+
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
 
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Realizamos las inicializaciones en onCreateView en lugar de onCreate porque
@@ -100,9 +96,7 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
         //Inicializamos los botones
         initializeButtons();
 
-
         return rootView;
-
     }
 
 
@@ -142,8 +136,6 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
      * Inicializa los botones
      */
     private void initializeButtons() {
-
-
         //Listener para el boton de guardar
         guardarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +146,6 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
                 returnToPlanificacion();
             }
         });
-
 
         //Listener para el boton de eliminar
         desasignarButton.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +162,6 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
                 selectConjunto();
             }
         });
-
     }
 
 
@@ -201,6 +191,7 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
 
     }
 
+
     /**
      * Vuelve a la pantalla de planificacion
      */
@@ -211,21 +202,17 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
 
     /**
      * Abre la vista de seleccion de un conjunto para el dia que estamos editando
-     *
      */
     private void selectConjunto() {
         //Creamos el fragmento
         PlanificarConjuntosListFragment cplf = new PlanificarConjuntosListFragment();
-
         //Creamos y llenamos el bundle con los datos del TipoParteConjunto
         Bundle bundle = new Bundle();
         bundle.putSerializable(getString(R.string.dia_bundle_key), dia);
         //Pasamos el bundle al fragment
         cplf.setArguments(bundle);
-
         //Utilizamos el metodo de cambio de fragmento del fragmento padre
         ((BaseContainerFragment) getParentFragment()).replaceFragment(cplf, true);
     }
-
 
 }

@@ -12,7 +12,6 @@ public class ParteConjunto implements Serializable {
     private TipoParteConjunto tipoParteConjunto;
     private Prenda prendaAsignada;
 
-    public ParteConjunto(){}
 
     public ParteConjunto(int id, TipoParteConjunto tipoParteConjunto, Prenda prendaAsignada){
         this.id = id;

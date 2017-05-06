@@ -19,13 +19,16 @@
         <Spinner
             android:id="@+id/uso_sug_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <!--Boton para volver a generar el conjunto-->
-        <Button
-            android:id="@+id/regenerar_sug_button"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/regenerar_button" />
+            android:layout_gravity="center_vertical"/>
+        <!--Boton para volver a generar el conjunto-->
+        <ImageButton
+            android:id="@+id/regenerar_sug_button"
+            android:layout_width="@dimen/regenerar_button_size"
+            android:layout_height="@dimen/regenerar_button_size"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circular_arrow_button"
+            android:background="@null"/>
 
     </LinearLayout>
 
@@ -238,6 +241,6 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             app:backgroundTint="#008000"
-            app:srcCompat="@android:drawable/ic_menu_save" />
+            app:srcCompat="@drawable/floppyw" />
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

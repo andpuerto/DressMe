@@ -23,8 +23,8 @@ public class ImageUtil {
 
     /**
      * Devuelve un array de bytes a partir de un File
-     * @param file
-     * @return
+     * @param file el archivo a transformar
+     * @return byte[]
      */
     public static byte[] toByteArray(File file){
         //Obtenemos el tamaño del fichero
@@ -49,8 +49,8 @@ public class ImageUtil {
 
     /**
      * Devuelve un array de bytes a partir de un path
-     * @param path
-     * @return
+     * @param path el path del archivo
+     * @return byte[]
      */
     public static byte[] toByteArray(String path){
         return ImageUtil.toByteArray(new File(path));
@@ -59,8 +59,8 @@ public class ImageUtil {
 
     /**
      * Devuelve  un array de bytes a partir de un Bitmap
-     * @param bmp
-     * @return
+     * @param bmp el bitmap a transformar
+     * @return byte[]
      */
     public static byte[] toByteArray(Bitmap bmp){
         if(bmp == null){
@@ -75,8 +75,8 @@ public class ImageUtil {
 
     /**
      * Devuelve un bitmap a partir de un array de bytes
-     * @param bytearray
-     * @return
+     * @param bytearray el array de bytes a transformar
+     * @return bitmap
      */
     public static Bitmap toBitmap(byte[] bytearray){
         if(bytearray == null){
@@ -90,15 +90,14 @@ public class ImageUtil {
      * @param src La URL de la imagen
      * @return Bitmap con la imagen
      */
-    public static Bitmap urlToBitmap(String src){
+     static Bitmap urlToBitmap(String src){
         try {
             URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             // Log exception
             return null;

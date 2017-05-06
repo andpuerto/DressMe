@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 
 import uoc.master.angel.dressme.R;
 import uoc.master.angel.dressme.fragment.ConjuntoSugeridoFragment;
-import uoc.master.angel.dressme.fragment.ConjuntosListFragment;
+
 
 /**
  * Created by angel on 06/04/2017.
  */
 
-public class ConjuntoSugeridoContainerFragment extends BaseContainerFragment{
+public class ConjuntoSugeridoContainerFragment extends BaseContainerFragment {
     //Para controlar que solo se inicie la vista una vez
     private boolean mIsViewInited;
 

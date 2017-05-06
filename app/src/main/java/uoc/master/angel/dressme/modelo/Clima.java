@@ -14,7 +14,6 @@ public class Clima implements Serializable{
     private float maxTemp;
     private boolean lluvia;
 
-    public Clima(){}
 
     public Clima(int id, String nombre, float minTemp, float maxTemp, boolean lluvia){
         this.id = id;

@@ -1,7 +1,6 @@
 package uoc.master.angel.dressme.fragment;
 
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import uoc.master.angel.dressme.R;
@@ -68,17 +66,9 @@ public class ConjuntosPrendasListFragment extends Fragment {
     private int climaSeleccionado;
     private int colorSeleccionado;
 
-    //Spinners
-    private Spinner usoSpinner;
-    private Spinner climaSpinner;
-    private Spinner colorSpinner;
-
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         //Obtenemos la lista de usos
         usos = new UsoDA(getContext()).getAllUso();
         //Añadimos un uso con un valor null para hacer referencia a todos los usos
@@ -88,7 +78,7 @@ public class ConjuntosPrendasListFragment extends Fragment {
         //Insertamos un primer elemento en el array con la opcion por defectop
         usosStrings[0] = getString(R.string.todos);
         //Insertamos el resto de elementos en el array
-        for(int i=1; i<usos.size(); i++){
+        for (int i = 1; i < usos.size(); i++) {
             usosStrings[i] = usos.get(i).getNombre();
         }
 
@@ -97,7 +87,7 @@ public class ConjuntosPrendasListFragment extends Fragment {
         climas.add(0, null);
         climasStrings = new String[climas.size()];
         climasStrings[0] = getString(R.string.todos);
-        for(int i=1; i<climas.size(); i++){
+        for (int i = 1; i < climas.size(); i++) {
             climasStrings[i] = climas.get(i).getNombre();
         }
 
@@ -105,54 +95,46 @@ public class ConjuntosPrendasListFragment extends Fragment {
         colores.add(0, null);
         coloresStrings = new String[colores.size()];
         coloresStrings[0] = getString(R.string.todos);
-        for(int i=1; i<colores.size(); i++){
+        for (int i = 1; i < colores.size(); i++) {
             coloresStrings[i] = colores.get(i).getNombre();
         }
-
     }
 
 
-
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Realizamos las inicializaciones en onCreateView en lugar de onCreate porque
         //si no, no se puede acceder a los elementos de la vista.
-        View rootView =  inflater.inflate(R.layout.conjuntos_prendas_list, container, false);
+        View rootView = inflater.inflate(R.layout.conjuntos_prendas_list, container, false);
 
         //Obtenemos los datos del tipoParteConjunto y el conjunto, en caso de tenerlos
         //En principio, siempre se deberia obtener un tipoParteConjunto, pero lo comprobamos
-        if(getArguments() != null){
+        if (getArguments() != null) {
             Bundle bundle = this.getArguments();
             tipoParteConjunto = (TipoParteConjunto) bundle.getSerializable(getString(
                     R.string.tipo_parte_conjunto_bundle_key));
             conjunto = (Conjunto) bundle.getSerializable(getString(R.string.conjunto_bundle_key));
         }
-
         setViews(rootView);
-
         return rootView;
-
     }
 
 
-
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
 
-    //Este metodo establece las vistas iniciales de esta actividad
+    /**
+     * Establece las vistas iniciales del fragmento
+     * @param rootView la vista
+     */
     private void setViews(View rootView) {
-
         //Establecemos el adaptador del recycleView
         recyclerView = (RecyclerView) rootView.findViewById(
                 R.id.conjuntos_prendas_recycle_view);
-        //Obtenemos las prendas
-        //List<Prenda> prendas = new PrendaDA(getContext()).getAllPrendas(null, null, null, tipoParteConjunto, true);
         //Agregamos un elemento null al comienzo de la lista. Esto proporcionara al usuario la opcion
         //de desasignar la prenda o no seleccionar ninguna
         //prendas.add(0, null);
@@ -162,9 +144,9 @@ public class ConjuntosPrendasListFragment extends Fragment {
         updateListView();
 
         //Establecemos los spinners
-        usoSpinner = (Spinner)rootView.findViewById(R.id.conjuntos_prendas_usos_spinner);
-        climaSpinner = (Spinner)rootView.findViewById(R.id.conjuntos_prendas_climas_spinner);
-        colorSpinner = (Spinner)rootView.findViewById(R.id.conjuntos_prendas_colores_spinner);
+        Spinner usoSpinner = (Spinner) rootView.findViewById(R.id.conjuntos_prendas_usos_spinner);
+        Spinner climaSpinner = (Spinner) rootView.findViewById(R.id.conjuntos_prendas_climas_spinner);
+        Spinner colorSpinner = (Spinner) rootView.findViewById(R.id.conjuntos_prendas_colores_spinner);
 
         //Adapter y listener para los spinner
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(),
@@ -178,10 +160,8 @@ public class ConjuntosPrendasListFragment extends Fragment {
                 usoSeleccionado = position;
                 updateListView();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -196,7 +176,6 @@ public class ConjuntosPrendasListFragment extends Fragment {
                 climaSeleccionado = position;
                 updateListView();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -214,17 +193,17 @@ public class ConjuntosPrendasListFragment extends Fragment {
                 colorSeleccionado = position;
                 updateListView();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-
     }
 
-
-    private void updateListView(){
+    /**
+     * Actualiza la lista
+     */
+    private void updateListView() {
         PrendaDA prendaDA = new PrendaDA(getContext());
 
         //Obtenemos la lista de prendas para la parteConjunto correspondiente, considerando
@@ -235,7 +214,7 @@ public class ConjuntosPrendasListFragment extends Fragment {
         //Agregamos un elemento null al comienzo de la lista. Esto proporcionara al usuario la opcion
         //de desasignar la prenda o no seleccionar ninguna
         prendas.add(0, null);
-        ConjuntosPrendasListAdapter adapter = (ConjuntosPrendasListAdapter)recyclerView.getAdapter();
+        ConjuntosPrendasListAdapter adapter = (ConjuntosPrendasListAdapter) recyclerView.getAdapter();
         adapter.setItems(prendas);
         //Notificamos los cambios para que cambie la lista
         adapter.notifyDataSetChanged();
@@ -244,9 +223,10 @@ public class ConjuntosPrendasListFragment extends Fragment {
 
     /**
      * Asigna la prenda al conjunto y vuelve a la pantalla de detalles del conjunto
+     *
      * @param prenda La prenda seleccionada
      */
-    public void asignarPrenda(Prenda prenda){
+    public void asignarPrenda(Prenda prenda) {
 
         //Intentamos obtener la parte conjunto para el tipoParteConjunto que estamos editando
         //Si existe, cambiamos la asignacion de la prenda. Si no, insertamos una parteConjunto nueva
@@ -255,35 +235,24 @@ public class ConjuntosPrendasListFragment extends Fragment {
         //Tambien hay que considerar si la prenda el null. En ese caso, el usuario, ha seleccionado
         //que no quiere ninguna prenda para esa parte.
         //Si la parteConjunto es null y la prenda tambien no la insertamos
-        if(pc == null){
-            if(prenda != null) {
+        if (pc == null) {
+            if (prenda != null) {
                 pc = new ParteConjunto(-1, tipoParteConjunto, prenda);
                 conjunto.getPartesConjunto().put(tipoParteConjunto.getId(), pc);
             }
-        }else{
+        } else {
             //Si ya existe la parteConjunto y la prenda no es null, se la asignamos
-            if(prenda != null) {
+            if (prenda != null) {
                 pc.setPrendaAsignada(prenda);
-            }else{
+            } else {
                 //Si la prenda es null, el usuario quiere desasignarla, asi que la eliminamos
                 conjunto.getPartesConjunto().remove(tipoParteConjunto.getId());
             }
         }
 
-//        //Creamos el fragmento
-//        ConjuntoDetailFragment cd = new ConjuntoDetailFragment();
-//
-//        //Creamos y llenamos el bundle con los datos del conjunto
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable(getString(R.string.conjunto_bundle_key),conjunto);
-//        //Pasamos el bundle al fragment
-//        cd.setArguments(bundle);
-
         //Utilizamos el metodo de cambio de fragmento del fragmento padre
-       // ((BaseContainerFragment)getParentFragment()).replaceFragment(cd, true);
-        ((BaseContainerFragment)getParentFragment()).popFragment();
+        ((BaseContainerFragment) getParentFragment()).popFragment();
     }
-
 
 
     /**
@@ -303,7 +272,7 @@ public class ConjuntosPrendasListFragment extends Fragment {
         }
 
         //Actualizamos la lista con los datos recibidos
-        public void setItems(List<Prenda> items) {
+        void setItems(List<Prenda> items) {
             mValues = items;
 
         }
@@ -335,9 +304,7 @@ public class ConjuntosPrendasListFragment extends Fragment {
             //Tomamos el elemento de la lista usando la posicion recibida como parametro
             //Tomamos la posicion. Podria hacerse directamente usando el parametro position pero da
             //lugar a un warning y el compilador no lo recomienda porque la posicion puede cambiar
-            final int posicion = holder.getAdapterPosition();
             holder.mItem = mValues.get(position);
-
 
             //Establecemos el clickListener para el holder, para que cada elemento responda
             //a los clicks
@@ -352,7 +319,7 @@ public class ConjuntosPrendasListFragment extends Fragment {
 
 
             //Si el elemento es null mostramos solo un texto indicando que no se seleccione la prenda
-            if(holder.mItem == null){
+            if (holder.mItem == null) {
                 holder.mNoPrendaTextView.setVisibility(View.VISIBLE);
                 holder.mContentLayout.setVisibility(View.GONE);
                 return;
@@ -362,15 +329,15 @@ public class ConjuntosPrendasListFragment extends Fragment {
             holder.mImageView.setImageBitmap(ImageUtil.toBitmap(holder.mItem.getFoto()));
             //Establecemos el color del cuadro
             holder.mColorImageView.setBackgroundColor(
-                    Color.parseColor("#"+holder.mItem.getColor().getRgb()));
+                    Color.parseColor("#" + holder.mItem.getColor().getRgb()));
             //Establecemos el nombre del color
             holder.mColorTextView.setText(holder.mItem.getColor().getNombre());
             //Establecemos la lista de climas y de usos como valores separados por comas
             String values = "";
             List<Clima> climas = holder.mItem.getClimasAdecuados();
-            if(climas!=null && climas.size()>0){
+            if (climas != null && climas.size() > 0) {
                 values += climas.get(0).getNombre();
-                for(int i=1; i<climas.size(); i++){
+                for (int i = 1; i < climas.size(); i++) {
                     values += ", " + climas.get(i).getNombre();
                 }
             }
@@ -378,9 +345,9 @@ public class ConjuntosPrendasListFragment extends Fragment {
             //Ahora la de usos
             values = "";
             List<Uso> usos = holder.mItem.getUsosAdecuados();
-            if(usos!=null && usos.size()>0){
+            if (usos != null && usos.size() > 0) {
                 values += usos.get(0).getNombre();
-                for(int i=1; i<usos.size(); i++){
+                for (int i = 1; i < usos.size(); i++) {
                     values += ", " + usos.get(i).getNombre();
                 }
             }
@@ -390,20 +357,16 @@ public class ConjuntosPrendasListFragment extends Fragment {
         }
 
 
-
-
         //Indica si la posicion que recibe es par o impar
         @Override
         public int getItemViewType(int position) {
             return position % 2;
         }
 
-
         @Override
         public int getItemCount() {
             return mValues.size();
         }
-
 
         //ViewHolder
         class ViewHolder extends RecyclerView.ViewHolder {

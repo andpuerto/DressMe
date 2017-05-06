@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,10 +31,8 @@ import uoc.master.angel.dressme.db.ColorPrendaDA;
 import uoc.master.angel.dressme.db.PrendaDA;
 import uoc.master.angel.dressme.db.UsoDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
-import uoc.master.angel.dressme.modelo.Clima;
 import uoc.master.angel.dressme.modelo.ColorPrenda;
 import uoc.master.angel.dressme.modelo.Prenda;
-import uoc.master.angel.dressme.modelo.Uso;
 import uoc.master.angel.dressme.util.ImageUtil;
 
 import static android.app.Activity.RESULT_OK;
@@ -66,30 +65,18 @@ public class PrendaDetailFragment extends Fragment {
     private FloatingActionButton guardarButton;
     //boton de eliminar
     private ImageButton eliminarButton;
-
     //Lista con los colores de prendas posibles
     private List<ColorPrenda> coloresPrenda;
-    //Lista con los usos de prenda posibles
-    private List<Uso> usos;
-    //Lista con los climas posibles
-    private List<Clima> climas;
-
-    //Adaptador para el spinner
-    private ColorPrendaSpinnerAdapter adapter;
-
     //Bitmap temporal para la foto que se haya hecho
     private Bitmap fotoTemp;
 
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
 
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Realizamos las inicializaciones en onCreateView en lugar de onCreate porque
@@ -109,30 +96,24 @@ public class PrendaDetailFragment extends Fragment {
         //Inicializamos el spinner con los colores
         this.initializeColores();
 
-
         //Obtenemos los datos de la prenda, en caso de tenerla
         //Si prenda es null es porque se esta creando una nueva prenda
         if (getArguments() != null) {
             Bundle bundle = this.getArguments();
             prenda = (Prenda) bundle.getSerializable(getString(R.string.prenda_bundle_key));
             showPredaData();
-
-
         } else {
             //Aqui llegariamos si se esta creando una nueva prenda
             prenda = new Prenda();
         }
-
         //Inicializamos los botones
         initializeButtons();
-
         //Inicializamos el boton de la camara
         initializeCameraButton();
 
-
         return rootView;
-
     }
+
 
     /**
      * Muestra la informacion basica de la prenda
@@ -166,7 +147,7 @@ public class PrendaDetailFragment extends Fragment {
             this.coloresPrenda = new ColorPrendaDA(getContext()).getAllColorPrenda();
         }
         //Creamos y establecemos el adaptador
-        adapter = new ColorPrendaSpinnerAdapter(getContext());
+        ColorPrendaSpinnerAdapter adapter = new ColorPrendaSpinnerAdapter(getContext());
         this.colorSpinner.setAdapter(adapter);
     }
 
@@ -175,7 +156,6 @@ public class PrendaDetailFragment extends Fragment {
      * Inicializa los botones
      */
     private void initializeButtons() {
-
         //Listener para el boton de usos
         usoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +163,6 @@ public class PrendaDetailFragment extends Fragment {
                 createUsosSelectionDialog();
             }
         });
-
         //Listener para el boton de climas
         climaButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +170,6 @@ public class PrendaDetailFragment extends Fragment {
                 createClimasSelectionDialog();
             }
         });
-
         //Listener para el boton de guardar
         guardarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,7 +191,6 @@ public class PrendaDetailFragment extends Fragment {
                 new PrendaDA(getContext()).savePrenda(prenda);
                 //Volvemos a la vista de la lista
                 returnToPrendasList();
-
             }
         });
 
@@ -344,13 +321,14 @@ public class PrendaDetailFragment extends Fragment {
 
     }
 
+
     /**
      * Vuelve a la pantalla del listado de prendas
      */
     private void returnToPrendasList() {
-        //PrendasListFragment pl = new PrendasListFragment();
         ((BaseContainerFragment) getParentFragment()).popFragment();
     }
+
 
     /**
      * Inicializa el boton de la camara
@@ -365,17 +343,15 @@ public class PrendaDetailFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
 
     /**
      * Metodo invocado cuando se vuelva de una actividad, principalemnte la de la camara de fotos
      *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode el codigo de peticion
+     * @param resultCode  codigo resultado
+     * @param data        el intent con los datos
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -407,9 +383,9 @@ public class PrendaDetailFragment extends Fragment {
         /**
          * Constructor
          *
-         * @param context
+         * @param context el contexto
          */
-        public ColorPrendaSpinnerAdapter(Context context) {
+        ColorPrendaSpinnerAdapter(Context context) {
             //Llamamos al constructor de la clase base
             super(context, R.layout.color_spiner, coloresPrenda);
             //Obtenemos el inflater para poder crear las vistas
@@ -420,7 +396,7 @@ public class PrendaDetailFragment extends Fragment {
          * Se le llama para la vista de los elementos desplegados
          */
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             //Queremos que los elementos desplegados tengan mas altura para que sea mas facil
             //seleccionarlos con el dedo sin tocar un elemento adyacente por error
             return getCustomView(position, convertView, parent, R.layout.color_spiner_item);
@@ -430,7 +406,8 @@ public class PrendaDetailFragment extends Fragment {
          * Se le llama para la vista del spinner cerrado
          */
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             //Para el spinner cerrado queremos que tenga una altura menor, por eso usaremos
             //un layout ligeramente diferente
             return getCustomView(position, convertView, parent, R.layout.color_spiner);
@@ -439,7 +416,7 @@ public class PrendaDetailFragment extends Fragment {
         /**
          * Se le llama para cada fila
          */
-        public View getCustomView(int position, View convertView, ViewGroup parent, int layoutId) {
+        View getCustomView(int position, View convertView, ViewGroup parent, int layoutId) {
 
             //Para cada elemento se mostrara la vista indicada como parametro
             View row = inflater.inflate(layoutId, parent, false);

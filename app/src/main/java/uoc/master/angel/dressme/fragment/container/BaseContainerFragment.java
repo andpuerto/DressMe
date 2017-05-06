@@ -1,10 +1,9 @@
 package uoc.master.angel.dressme.fragment.container;
 
 
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+
 import uoc.master.angel.dressme.R;
 
 /**
@@ -18,7 +17,6 @@ import uoc.master.angel.dressme.R;
  * al fragmento con contenido real. Estos fragmentos podrán realizar, entoces transacciones
  * sobre container_fragment, recurriendo a los métodos heredados de esta clase, mediante el
  * método getParentFragment()
- *
  */
 public class BaseContainerFragment extends Fragment {
 
@@ -33,7 +31,6 @@ public class BaseContainerFragment extends Fragment {
     }
 
     public boolean popFragment() {
-       // Log.e("test", "pop fragment: " + getChildFragmentManager().getBackStackEntryCount());
         boolean isPop = false;
         if (getChildFragmentManager().getBackStackEntryCount() > 0) {
             isPop = true;

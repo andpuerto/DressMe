@@ -12,7 +12,7 @@ import uoc.master.angel.dressme.fragment.ConjuntosListFragment;
  * Created by angel on 06/04/2017.
  */
 
-public class ConjuntoContainerFragment extends BaseContainerFragment{
+public class ConjuntoContainerFragment extends BaseContainerFragment {
     //Para controlar que solo se inicie la vista una vez
     private boolean mIsViewInited;
 

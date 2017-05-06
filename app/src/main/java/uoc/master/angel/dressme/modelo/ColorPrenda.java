@@ -1,6 +1,5 @@
 package uoc.master.angel.dressme.modelo;
 
-import android.util.SparseArray;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,11 +13,8 @@ public class ColorPrenda implements Serializable{
     private int id;
     private String nombre;
     private String rgb;
-    //Los colores combinados los almacenamos en un sparse array por su id para un acceso mas rapido
-    //private SparseArray<ColorPrenda> coloresCombinados;
+    //Los colores combinados los almacenamos en un hashmap por su id para un acceso mas rapido
     private HashMap<Integer,ColorPrenda> coloresCombinados;
-
-    public ColorPrenda(){}
 
     public ColorPrenda(int id, String nombre, String rgb, HashMap<Integer, ColorPrenda> coloresCombinados){
         this.id = id;

@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.ParteConjunto;
-import uoc.master.angel.dressme.modelo.Prenda;
 import uoc.master.angel.dressme.modelo.TipoParteConjunto;
 import uoc.master.angel.dressme.util.ImageUtil;
 
@@ -38,42 +36,33 @@ public class ConjuntosListFragment extends Fragment {
     private List<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
 
 
-
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         //Obtenemos la lista de TipoParteConjunto de la base de datos
         tiposParteConjunto = new TipoParteConjuntoDA(this.getContext()).getAllTipoParteConjunto();
-
     }
 
 
-
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.conjuntos_list, container, false);
-
     }
 
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.setViews();
     }
 
 
-    //Este metodo establece las vistas iniciales de esta actividad
+    /**
+     * Establece las vistas iniciales del fragmento
+     */
     private void setViews() {
-
-
         //Establecemos el adaptador del recycleView
         RecyclerView recyclerView = (RecyclerView) this.getView().findViewById(R.id.conjuntos_recycle_view);
         ConjuntosListAdapter adapter = new ConjuntosListAdapter(
@@ -99,24 +88,22 @@ public class ConjuntosListFragment extends Fragment {
     }
 
 
-
     /**
      * Muestra los detalles de un conjunto
      */
-    public void mostrarDetalles(Conjunto conjunto){
+    public void mostrarDetalles(Conjunto conjunto) {
         //Creamos el fragmento
         ConjuntoDetailFragment cd = new ConjuntoDetailFragment();
 
         //Creamos y llenamos el bundle con los datos del conjunto
         Bundle bundle = new Bundle();
-        bundle.putSerializable(getString(R.string.conjunto_bundle_key),conjunto);
+        bundle.putSerializable(getString(R.string.conjunto_bundle_key), conjunto);
         //Pasamos el bundle al fragment
         cd.setArguments(bundle);
 
         //Utilizamos el metodo de cambio de fragmento del fragmento padre
-        ((BaseContainerFragment)getParentFragment()).replaceFragment(cd, true);
+        ((BaseContainerFragment) getParentFragment()).replaceFragment(cd, true);
     }
-
 
 
     /**
@@ -134,12 +121,12 @@ public class ConjuntosListFragment extends Fragment {
             mValues = items;
         }
 
-        //Actualizamos la lista con los datos recibidos
-        public void setItems(List<Conjunto> items) {
-            mValues = items;
-
-
-        }
+//        //Actualizamos la lista con los datos recibidos
+//        public void setItems(List<Conjunto> items) {
+//            mValues = items;
+//
+//
+//        }
 
         @Override
         public ConjuntosListFragment.ConjuntosListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -167,13 +154,12 @@ public class ConjuntosListFragment extends Fragment {
             //Tomamos el elemento de la lista usando la posicion recibida como parametro
             //Tomamos la posicion. Podria hacerse directamente usando el parametro position pero da
             //lugar a un warning y el compilador no lo recomienda porque la posicion puede cambiar
-            final int posicion = holder.getAdapterPosition();
             holder.mItem = mValues.get(position);
             //Establecemos las imagenes
             Bitmap[] bms = new Bitmap[tiposParteConjunto.size()];
-            HashMap<Integer,ParteConjunto> pcs = holder.mItem.getPartesConjunto();
-            for(int i=0; i<tiposParteConjunto.size(); i++){
-                bms[i] = pcs.get(i)!=null && pcs.get(i).getPrendaAsignada()!=null ?
+            HashMap<Integer, ParteConjunto> pcs = holder.mItem.getPartesConjunto();
+            for (int i = 0; i < tiposParteConjunto.size(); i++) {
+                bms[i] = pcs.get(i) != null && pcs.get(i).getPrendaAsignada() != null ?
                         ImageUtil.toBitmap(pcs.get(i).getPrendaAsignada().getFoto()) :
                         null;
             }
@@ -195,8 +181,6 @@ public class ConjuntosListFragment extends Fragment {
 
             });
         }
-
-
 
 
         //Indica si la posicion que recibe es par o impar

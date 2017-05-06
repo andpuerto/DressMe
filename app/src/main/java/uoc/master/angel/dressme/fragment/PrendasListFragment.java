@@ -1,7 +1,5 @@
 package uoc.master.angel.dressme.fragment;
 
-
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -37,11 +34,8 @@ import uoc.master.angel.dressme.util.ImageUtil;
  */
 
 public class PrendasListFragment extends Fragment {
-
-
     //Lista con todos los tipos de partes de conjunto
     List<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
-
     //Arrays con los elementos de filtro y arrays con los nombres para los Spinner
     private List<Uso> usos = new ArrayList<>();
     private String[] usosStrings;
@@ -55,17 +49,11 @@ public class PrendasListFragment extends Fragment {
     private int climaSeleccionado;
     private int colorSeleccionado;
 
-    //Spinners
-    private Spinner usoSpinner;
-    private Spinner climaSpinner;
-    private Spinner colorSpinner;
-
     //RecyclerViews
     private List<RecyclerView> recyclerViews;
 
 
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Obtener la lista de TipoParteConjunto de la base de datos
@@ -100,13 +88,13 @@ public class PrendasListFragment extends Fragment {
         for(int i=1; i<colores.size(); i++){
             coloresStrings[i] = colores.get(i).getNombre();
         }
-
       }
 
 
-    //Este metodo establece las vistas iniciales de esta actividad
+    /**
+     * Establece las vistas iniciales del fragmento
+     */
     private void setViews() {
-
         //Nos cercioramos de que haya cuatro tipoParteConjunto
         if(tiposParteConjunto.size() < 4){
             return;
@@ -151,9 +139,9 @@ public class PrendasListFragment extends Fragment {
                 new AddButtonListener(tiposParteConjunto.get(3)));
 
         //Establecemos los spinners
-        usoSpinner = (Spinner)getView().findViewById(R.id.prendas_usos_spinner);
-        climaSpinner = (Spinner)getView().findViewById(R.id.prendas_climas_spinner);
-        colorSpinner = (Spinner)getView().findViewById(R.id.prendas_colores_spinner);
+        Spinner usoSpinner = (Spinner)getView().findViewById(R.id.prendas_usos_spinner);
+        Spinner climaSpinner = (Spinner)getView().findViewById(R.id.prendas_climas_spinner);
+        Spinner colorSpinner = (Spinner)getView().findViewById(R.id.prendas_colores_spinner);
 
         //Adapter y listener para los spinner
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(),
@@ -209,12 +197,12 @@ public class PrendasListFragment extends Fragment {
 
             }
         });
-
-
     }
 
 
-
+    /**
+     * Actualiza las listas de prendas
+     */
     private void updateListViews(){
         PrendaDA prendaDA = new PrendaDA(getContext());
         int i=0;
@@ -233,25 +221,18 @@ public class PrendasListFragment extends Fragment {
 
 
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-
                              Bundle savedInstanceState) {
-
-
         return inflater.inflate(R.layout.prendas_list, container, false);
-
     }
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-
-
-
         this.setViews();
     }
+
 
     /**
      * Clase interna para el adaptador del RecyclerView
@@ -269,7 +250,7 @@ public class PrendasListFragment extends Fragment {
         }
 
         //Actualizamos la lista con los datos recibidos
-        public void setItems(List<Prenda> items) {
+        void setItems(List<Prenda> items) {
             mValues = items;
 
 
@@ -301,11 +282,9 @@ public class PrendasListFragment extends Fragment {
             //Tomamos el elemento de la lista usando la posicion recibida como parametro
             //Tomamos la posicion. Podria hacerse directamente usando el parametro position pero da
             //lugar a un warning y el compilador no lo recomienda porque la posicion puede cambiar
-            final int posicion = holder.getAdapterPosition();
             holder.mItem = mValues.get(position);
             //Establecemos la imagen
             holder.mImageView.setImageBitmap(ImageUtil.toBitmap(mValues.get(position).getFoto()));
-
 
             //Tambien establecemos el clickListener para el holder, para que cada elemento responda
             //a los clicks
@@ -320,20 +299,16 @@ public class PrendasListFragment extends Fragment {
         }
 
 
-
-
         //Indica si la posicion que recibe es par o impar
         @Override
         public int getItemViewType(int position) {
             return position % 2;
         }
 
-
         @Override
         public int getItemCount() {
             return mValues.size();
         }
-
 
         //ViewHolder
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -346,7 +321,6 @@ public class PrendasListFragment extends Fragment {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.prenda_list_image);
- //               mTextView = (TextView) view.findViewById(R.id.prenda_list_text);
             }
 
             @Override
@@ -354,8 +328,8 @@ public class PrendasListFragment extends Fragment {
                 return super.toString() + " '" + mView.getId() + "'";
             }
         }
-
     }
+
 
     /**
      * Muestra los detalles de una prenda
@@ -386,7 +360,7 @@ public class PrendasListFragment extends Fragment {
          * Crea el listener para un tipoParteConjunto concreto
          * @param tpc TipoParteConjunto
          */
-        public AddButtonListener(TipoParteConjunto tpc){
+        AddButtonListener(TipoParteConjunto tpc){
             this.tpc = tpc;
         }
 

@@ -15,10 +15,12 @@ import uoc.master.angel.dressme.modelo.TipoParteConjunto;
 
 public class TipoParteConjuntoDA {
 
-    private  DressMeSQLHelper helper;
+    private DressMeSQLHelper helper;
+
     /**
      * Constructor
-     * @param context
+     *
+     * @param context contexto
      */
     public TipoParteConjuntoDA(Context context) {
         //Obtenemos el helper
@@ -27,12 +29,13 @@ public class TipoParteConjuntoDA {
 
     /**
      * Devuelve una lista con todos los TipoParteConjunto de la base de datos
-     * @return
+     *
+     * @return lista con todos los TipoParteConjunto de la base de datos
      */
-    public List<TipoParteConjunto> getAllTipoParteConjunto(){
+    public List<TipoParteConjunto> getAllTipoParteConjunto() {
         SQLiteDatabase db = helper.getReadableDatabase();
         //Metemos solamente el identificador y la foto
-        String[] campos = new String[] {"id", "nombre"};
+        String[] campos = new String[]{"id", "nombre"};
         Cursor c = db.query("tipo_parte_conjunto", campos, null, null, null, null, null);
 
         ArrayList<TipoParteConjunto> tiposParteConjunto = new ArrayList<>();
@@ -40,8 +43,8 @@ public class TipoParteConjuntoDA {
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                tiposParteConjunto.add(new TipoParteConjunto(c.getInt(0),c.getString(1)));
-            } while(c.moveToNext());
+                tiposParteConjunto.add(new TipoParteConjunto(c.getInt(0), c.getString(1)));
+            } while (c.moveToNext());
         }
         c.close();
         db.close();

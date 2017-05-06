@@ -10,7 +10,6 @@ public class Uso implements Serializable{
     private int id;
     private String nombre;
 
-    public Uso(){}
 
     public Uso(int id, String nombre){
         this.id = id;

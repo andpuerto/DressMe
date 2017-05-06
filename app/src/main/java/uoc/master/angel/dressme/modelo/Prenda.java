@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import uoc.master.angel.dressme.db.UsoDA;
 
 /**
  * Created by angel on 30/03/2017.
@@ -104,8 +103,8 @@ public class Prenda implements Serializable{
 
     /**
      * Devuelve true en caso de que contenga el uso con id idUso en su lista de usos adecuados
-     * @param idUso
-     * @return
+     * @param idUso uso a buscar
+     * @return true si tiene ese uso
      */
     public boolean hasUso(int idUso){
         if(usosAdecuados == null){
@@ -122,8 +121,8 @@ public class Prenda implements Serializable{
 
     /**
      * Devuelve true en caso de que contenga el clima con id idClima en su lista de climas adecuados
-     * @param idClima
-     * @return
+     * @param idClima id del clima a buscar
+     * @return true si tiene es clima
      */
     public boolean hasClima(int idClima){
         if(climasAdecuados == null){
@@ -140,7 +139,7 @@ public class Prenda implements Serializable{
 
     /**
      * Agrega un uso, en caso de no estar ya en la lista
-     * @param uso
+     * @param uso uso a agregar
      */
     public void addUso(Uso uso){
         if(usosAdecuados == null){
@@ -154,7 +153,7 @@ public class Prenda implements Serializable{
 
     /**
      * Elimina un uso adecuado de la lista a partir de su id
-     * @param usoId
+     * @param usoId id del uso a eliminar
      */
     public void removeUso(int usoId){
         if(usosAdecuados != null){
@@ -170,7 +169,7 @@ public class Prenda implements Serializable{
 
     /**
      * Agrega un clima, en caso de no estar ya en la lista
-     * @param clima
+     * @param clima clima a agregar
      */
     public void addClima(Clima clima){
         if(climasAdecuados == null){
@@ -184,7 +183,7 @@ public class Prenda implements Serializable{
 
     /**
      * Elimina un clima adecuado de la lista a partir de su id
-     * @param climaId
+     * @param climaId id del clima a eliminar
      */
     public void removeClima(int climaId){
         if(climasAdecuados != null){
