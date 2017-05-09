@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import uoc.master.angel.dressme.R;
-import uoc.master.angel.dressme.db.DiaDA;
+import uoc.master.angel.dressme.db.da.DiaDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Dia;
 

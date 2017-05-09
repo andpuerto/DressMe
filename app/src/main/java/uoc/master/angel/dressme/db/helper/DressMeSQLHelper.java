@@ -1,4 +1,4 @@
-package uoc.master.angel.dressme.db;
+package uoc.master.angel.dressme.db.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,8 +12,8 @@ import uoc.master.angel.dressme.util.ImageUtil;
  */
 
 public class DressMeSQLHelper extends SQLiteOpenHelper {
-    static String dbName = "DBDressMe";
-    static int dbCurrentVersion = 1;
+    public static String dbName = "DBDressMe";
+    public static int dbCurrentVersion = 1;
 
     public DressMeSQLHelper(Context contexto, String nombre,
                                 CursorFactory factory, int version) {

@@ -26,10 +26,10 @@ import android.widget.Toast;
 import java.util.List;
 
 import uoc.master.angel.dressme.R;
-import uoc.master.angel.dressme.db.ClimaDA;
-import uoc.master.angel.dressme.db.ColorPrendaDA;
-import uoc.master.angel.dressme.db.PrendaDA;
-import uoc.master.angel.dressme.db.UsoDA;
+import uoc.master.angel.dressme.db.da.ClimaDA;
+import uoc.master.angel.dressme.db.da.ColorPrendaDA;
+import uoc.master.angel.dressme.db.da.PrendaDA;
+import uoc.master.angel.dressme.db.da.UsoDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.ColorPrenda;
 import uoc.master.angel.dressme.modelo.Prenda;

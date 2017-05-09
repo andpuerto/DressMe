@@ -2,7 +2,6 @@ package uoc.master.angel.dressme;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -31,7 +30,7 @@ import android.widget.TabWidget;
 import java.util.HashMap;
 import java.util.Map;
 
-import uoc.master.angel.dressme.db.DressMeSQLHelper;
+import uoc.master.angel.dressme.db.helper.DressMeSQLHelper;
 import uoc.master.angel.dressme.fragment.ConjuntosListFragment;
 import uoc.master.angel.dressme.fragment.PlanificacionFragment;
 import uoc.master.angel.dressme.fragment.PrendasListFragment;

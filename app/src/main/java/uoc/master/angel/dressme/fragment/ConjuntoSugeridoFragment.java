@@ -34,11 +34,11 @@ import java.util.Locale;
 import java.util.Random;
 
 import uoc.master.angel.dressme.R;
-import uoc.master.angel.dressme.db.ColorPrendaDA;
-import uoc.master.angel.dressme.db.ConjuntoDA;
-import uoc.master.angel.dressme.db.PrendaDA;
-import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
-import uoc.master.angel.dressme.db.UsoDA;
+import uoc.master.angel.dressme.db.da.ColorPrendaDA;
+import uoc.master.angel.dressme.db.da.ConjuntoDA;
+import uoc.master.angel.dressme.db.da.PrendaDA;
+import uoc.master.angel.dressme.db.da.TipoParteConjuntoDA;
+import uoc.master.angel.dressme.db.da.UsoDA;
 import uoc.master.angel.dressme.modelo.ColorPrenda;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.ParteConjunto;
@@ -431,7 +431,7 @@ public class ConjuntoSugeridoFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getContext());
+            pDialog = new ProgressDialog(getContext(),ProgressDialog.STYLE_SPINNER);
             pDialog.setMessage(getString(R.string.weather_progress));
             pDialog.setCancelable(false);
             pDialog.show();

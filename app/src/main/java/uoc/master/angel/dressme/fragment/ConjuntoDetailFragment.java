@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uoc.master.angel.dressme.R;
-import uoc.master.angel.dressme.db.ConjuntoDA;
-import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
+import uoc.master.angel.dressme.db.da.ConjuntoDA;
+import uoc.master.angel.dressme.db.da.TipoParteConjuntoDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.ParteConjunto;

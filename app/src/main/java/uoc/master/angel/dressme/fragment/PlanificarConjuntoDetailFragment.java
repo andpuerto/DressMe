@@ -17,14 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uoc.master.angel.dressme.R;
-import uoc.master.angel.dressme.db.ConjuntoDA;
-import uoc.master.angel.dressme.db.DiaDA;
-import uoc.master.angel.dressme.db.TipoParteConjuntoDA;
+import uoc.master.angel.dressme.db.da.ConjuntoDA;
+import uoc.master.angel.dressme.db.da.DiaDA;
+import uoc.master.angel.dressme.db.da.TipoParteConjuntoDA;
 import uoc.master.angel.dressme.fragment.container.BaseContainerFragment;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.Dia;
 import uoc.master.angel.dressme.modelo.ParteConjunto;
 import uoc.master.angel.dressme.modelo.TipoParteConjunto;
+import uoc.master.angel.dressme.util.DateUtil;
 import uoc.master.angel.dressme.util.ImageUtil;
 
 /**
@@ -172,7 +173,8 @@ public class PlanificarConjuntoDetailFragment extends Fragment {
         AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getActivity());
         deleteBuilder.setTitle(getString(R.string.unassign_conjunto_confirm_title));
         deleteBuilder.setMessage(String.format(
-                getString(R.string.unassign_conjunto_confirm), dia.getFecha().toString()));
+                getString(R.string.unassign_conjunto_confirm), DateUtil.
+                        dateToPresentableString(dia.getFecha())));
         deleteBuilder.setIcon(android.R.drawable.ic_dialog_alert);
         deleteBuilder.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
             @Override

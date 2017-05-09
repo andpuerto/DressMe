@@ -1,0 +1,30 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="nombre_parte_margin">15dp</dimen>
+    <dimen name="camera_button_size">80dp</dimen>
+    <dimen name="plus_button_size">50dp</dimen>
+    <dimen name="regenerar_button_size">70dp</dimen>
+    <dimen name="prenda_list_foto_size">150dp</dimen>
+    <dimen name="conjunto_list_foto_size">80dp</dimen>
+    <dimen name="prenda_select_list_foto_size">100dp</dimen>
+    <dimen name="prenda_detail_foto_width">400dp</dimen>
+    <dimen name="prenda_detail_foto_height">600dp</dimen>
+    <dimen name="list_item_minimum_size">30dp</dimen>
+    <dimen name="color_square_size">30dp</dimen>
+    <dimen name="view_margin">30dp</dimen>
+    <dimen name="spinner_item_height">30dp</dimen>
+    <dimen name="label_margin">30dp</dimen>
+    <dimen name="element_vertical_separation">20dp</dimen>
+    <dimen name="conjunto_card_margin_v">10dp</dimen>
+    <dimen name="conjunto_card_margin_h">20dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    <dimen name="foto_border">2px</dimen>
+    <dimen name="foto_separation">10dp</dimen>
+    <dimen name="label_separation">10dp</dimen>
+    <dimen name="weather_icon_size">60dp</dimen>
+    <dimen name="tab_icon_size">60dp</dimen>
+    <dimen name="weather_text_padding">10dp</dimen>
+    <item name="foto_conjunto_weight" format="float" type="dimen">1.0</item>
+</resources>

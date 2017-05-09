@@ -51,4 +51,14 @@ public class DateUtil {
         }
         return format.format(date);
     }
+
+    /**
+     * Devuelve una cadena para presentar al usuario a partir de un Date
+     * @param date el objeto con la fecha
+     * @return String con la fecha en formato presentable
+     */
+    public static String dateToPresentableString(Date date){
+        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+        return df.format(date);
+    }
 }

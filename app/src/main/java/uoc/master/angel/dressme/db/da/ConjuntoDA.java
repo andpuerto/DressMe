@@ -1,4 +1,4 @@
-package uoc.master.angel.dressme.db;
+package uoc.master.angel.dressme.db.da;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import uoc.master.angel.dressme.db.helper.DressMeSQLHelper;
 import uoc.master.angel.dressme.modelo.Conjunto;
 import uoc.master.angel.dressme.modelo.ParteConjunto;
 import uoc.master.angel.dressme.modelo.Prenda;
