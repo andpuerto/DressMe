@@ -75,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Pedimos los permisos necesarios al usuario
-        this.askForPermission();
-
+       if(this.askForPermission()){
+        this.initializeTabs();}
 //
 //        //Inicializamos las pestañas
-       this.initializeTabs();
+    //   this.initializeTabs();
 //
 //        //Inicializamos la base de datos
        this.setDatabase();
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void askForPermission() {
+    private boolean askForPermission() {
         //Si no tenemos permisos, los pedimos
 
         // The request code used in ActivityCompat.requestPermissions()
@@ -273,8 +273,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (!PermissionsUtil.hasPermissions(this, permisos)) {
             ActivityCompat.requestPermissions(this, permisos, PERMISSION_ALL);
+            return false;
         }
-
+        return true;
 
 //        if (ContextCompat.checkSelfPermission(this,
 //                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -317,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && todosConcedidos) {
                     externalStoragePermission = true;
                     //Inicializamos las pestañas
+                    this.initializeTabs();
                     this.toggleGeneradorTab();
 
                     //Inicializamos la base de datos

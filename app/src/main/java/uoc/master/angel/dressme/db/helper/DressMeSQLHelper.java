@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteStatement;
+
+import uoc.master.angel.dressme.R;
 import uoc.master.angel.dressme.util.ImageUtil;
 
 /**
@@ -14,10 +16,12 @@ import uoc.master.angel.dressme.util.ImageUtil;
 public class DressMeSQLHelper extends SQLiteOpenHelper {
     public static String dbName = "DBDressMe";
     public static int dbCurrentVersion = 1;
+    private Context context;
 
     public DressMeSQLHelper(Context contexto, String nombre,
                                 CursorFactory factory, int version) {
         super(contexto, nombre, factory, version);
+        this.context = contexto;
     }
 
     @Override
@@ -149,12 +153,15 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
      */
     private void insertarDatosBase(SQLiteDatabase db){
         //Colores
-        db.execSQL("INSERT INTO color VALUES(0,'negro','000000')");
-        db.execSQL("INSERT INTO color VALUES(1,'gris','999999')");
-        db.execSQL("INSERT INTO color VALUES(2,'beige','D0B99A')");
-        db.execSQL("INSERT INTO color VALUES(3,'rojo','770000')");
-        db.execSQL("INSERT INTO color VALUES(4,'verde','007700')");
-        db.execSQL("INSERT INTO color VALUES(5,'azul','000077')");
+        db.execSQL("INSERT INTO color VALUES(0,'"+ context.getString(R.string.negro) +"','000000')");
+        db.execSQL("INSERT INTO color VALUES(1,'"+ context.getString(R.string.gris) +"','999999')");
+        db.execSQL("INSERT INTO color VALUES(2,'"+ context.getString(R.string.blanco) +"','ffffff')");
+        db.execSQL("INSERT INTO color VALUES(3,'"+ context.getString(R.string.marron) +"','8B4513')");
+        db.execSQL("INSERT INTO color VALUES(4,'"+ context.getString(R.string.beige) +"','D0B99A')");
+        db.execSQL("INSERT INTO color VALUES(5,'"+ context.getString(R.string.rojo) +"','770000')");
+        db.execSQL("INSERT INTO color VALUES(6,'"+ context.getString(R.string.verde) +"','007700')");
+        db.execSQL("INSERT INTO color VALUES(7,'"+ context.getString(R.string.azul) +"','000077')");
+        db.execSQL("INSERT INTO color VALUES(8,'"+ context.getString(R.string.rosa) +"','ff4081')");
 
         //Combinaciones de colores
         //Por comodidad a la hora de consultar, se introduciran los colores combinados tomando
@@ -171,28 +178,68 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO color_combina VALUES(0,3)");
         db.execSQL("INSERT INTO color_combina VALUES(0,4)");
         db.execSQL("INSERT INTO color_combina VALUES(0,5)");
+        db.execSQL("INSERT INTO color_combina VALUES(0,6)");
+        db.execSQL("INSERT INTO color_combina VALUES(0,7)");
+        db.execSQL("INSERT INTO color_combina VALUES(0,8)");
+
         db.execSQL("INSERT INTO color_combina VALUES(1,0)");
         db.execSQL("INSERT INTO color_combina VALUES(1,1)");
         db.execSQL("INSERT INTO color_combina VALUES(1,2)");
         db.execSQL("INSERT INTO color_combina VALUES(1,3)");
         db.execSQL("INSERT INTO color_combina VALUES(1,4)");
         db.execSQL("INSERT INTO color_combina VALUES(1,5)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,6)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,7)");
+        db.execSQL("INSERT INTO color_combina VALUES(1,8)");
+
         db.execSQL("INSERT INTO color_combina VALUES(2,0)");
         db.execSQL("INSERT INTO color_combina VALUES(2,1)");
         db.execSQL("INSERT INTO color_combina VALUES(2,2)");
+        db.execSQL("INSERT INTO color_combina VALUES(2,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(2,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(2,6)");
+        db.execSQL("INSERT INTO color_combina VALUES(2,7)");
+
         db.execSQL("INSERT INTO color_combina VALUES(3,0)");
         db.execSQL("INSERT INTO color_combina VALUES(3,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,2)");
         db.execSQL("INSERT INTO color_combina VALUES(3,3)");
         db.execSQL("INSERT INTO color_combina VALUES(3,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,5)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,6)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,7)");
+        db.execSQL("INSERT INTO color_combina VALUES(3,8)");
+
         db.execSQL("INSERT INTO color_combina VALUES(4,0)");
         db.execSQL("INSERT INTO color_combina VALUES(4,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(4,2)");
         db.execSQL("INSERT INTO color_combina VALUES(4,3)");
         db.execSQL("INSERT INTO color_combina VALUES(4,4)");
-        db.execSQL("INSERT INTO color_combina VALUES(4,5)");
+
         db.execSQL("INSERT INTO color_combina VALUES(5,0)");
         db.execSQL("INSERT INTO color_combina VALUES(5,1)");
-        db.execSQL("INSERT INTO color_combina VALUES(5,4)");
+        db.execSQL("INSERT INTO color_combina VALUES(5,3)");
         db.execSQL("INSERT INTO color_combina VALUES(5,5)");
+        db.execSQL("INSERT INTO color_combina VALUES(5,6)");
+
+        db.execSQL("INSERT INTO color_combina VALUES(6,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(6,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(6,2)");
+        db.execSQL("INSERT INTO color_combina VALUES(6,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(6,5)");
+        db.execSQL("INSERT INTO color_combina VALUES(6,6)");
+        db.execSQL("INSERT INTO color_combina VALUES(6,7)");
+
+        db.execSQL("INSERT INTO color_combina VALUES(7,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(7,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(7,2)");
+        db.execSQL("INSERT INTO color_combina VALUES(7,3)");
+        db.execSQL("INSERT INTO color_combina VALUES(7,6)");
+        db.execSQL("INSERT INTO color_combina VALUES(7,7)");
+
+        db.execSQL("INSERT INTO color_combina VALUES(8,0)");
+        db.execSQL("INSERT INTO color_combina VALUES(8,1)");
+        db.execSQL("INSERT INTO color_combina VALUES(8,8)");
 
 
         //Climas
@@ -239,47 +286,48 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         //Primera prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "0");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+//        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig1)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
+        insertStmt.bindString(5, "2");
         insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Segunda prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "1");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig2)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "1");
-        insertStmt.bindString(6, "1");
+        insertStmt.bindString(5, "4");
+        insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Tercera prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "2");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[2]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig3)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "3");
-        insertStmt.bindString(6, "2");
+        insertStmt.bindString(5, "2");
+        insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Cuarta prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "3");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[3]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig4)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "4");
-        insertStmt.bindString(6, "3");
+        insertStmt.bindString(5, "7");
+        insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Quinta prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "4");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig5)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "1");
@@ -289,150 +337,348 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         //Sexta prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "5");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig6)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "0");
-        insertStmt.bindString(6, "1");
+        insertStmt.bindString(5, "8");
+        insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
 
         //Septima prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "6");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr1)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "2");
-        insertStmt.bindString(6, "0");
+        insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
 
         //Octava prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "7");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[3]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr2)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "5");
-        insertStmt.bindString(6, "3");
+        insertStmt.bindString(5, "4");
+        insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
 
         //Novena prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "8");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[1]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr3)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
-        insertStmt.bindString(5, "2");
+        insertStmt.bindString(5, "1");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
 
         //Decima prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "9");
-        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[2]));
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr4)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "1");
+        insertStmt.bindString(6, "1");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "10");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr5)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "1");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "11");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr6)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "1");
+        insertStmt.bindString(6, "1");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "12");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior1)));
         insertStmt.bindString(3, "Zara");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "3");
         insertStmt.bindString(6, "2");
         insertStmt.executeInsert();
 
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (0,'Zara'," +
-//                "'Algodón',1,0)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (1,'Zara'," +
-//                "'Algodón',0,1)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (2,'Zara'," +
-//                "'Algodón',2,2)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (3,'Zara'," +
-//                "'Algodón',0,3)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (4,'Zara'," +
-//                "'Algodón',0,3)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (5,'Zara'," +
-//                "'Algodón',0,3)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (6,'Zara'," +
-//                "'Algodón',0,3)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (7,'Zara'," +
-//                "'Algodón',0,3)");
-//        db.execSQL("INSERT INTO prenda(id,marca,material,color,tipo_parte_conjunto) VALUES (8,'Zara'," +
-//                "'Algodón',0,3)");
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "13");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior2)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "2");
+        insertStmt.bindString(6, "2");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "14");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior3)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "7");
+        insertStmt.bindString(6, "2");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "15");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior4)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "2");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "16");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior5)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "4");
+        insertStmt.bindString(6, "2");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "17");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior6)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "1");
+        insertStmt.bindString(6, "2");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "18");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.calzado1)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "19");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.calzado2)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "3");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "20");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.calzado3)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "0");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "21");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.calzado4)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "1");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
+
+
+        insertStmt.clearBindings();
+        insertStmt.bindString(1, "22");
+        insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.calzado5)));
+        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(5, "3");
+        insertStmt.bindString(6, "3");
+        insertStmt.executeInsert();
 
         db.execSQL("INSERT INTO prenda_clima VALUES(0,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(0,2)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(0,3)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(1,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(1,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(1,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(1,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(2,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(2,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(2,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(2,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(3,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(3,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(3,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(4,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(4,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(4,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(4,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(5,0)");
         db.execSQL("INSERT INTO prenda_clima VALUES(5,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(5,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(5,3)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(6,0)");
+
         db.execSQL("INSERT INTO prenda_clima VALUES(6,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(6,3)");
         db.execSQL("INSERT INTO prenda_clima VALUES(7,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(7,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(7,3)");
         db.execSQL("INSERT INTO prenda_clima VALUES(8,1)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(9,0)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(9,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(8,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(9,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(9,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(10,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(10,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(11,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(11,3)");
+
+        db.execSQL("INSERT INTO prenda_clima VALUES(12,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(12,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(12,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(13,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(13,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(13,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(14,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(14,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(14,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(15,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(15,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(15,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(16,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(16,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(17,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(17,1)");
+
+        db.execSQL("INSERT INTO prenda_clima VALUES(18,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(18,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(18,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(18,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(19,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(19,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(19,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(20,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(20,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(20,3)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(21,0)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(21,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(22,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(22,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(22,3)");
 
 
-        db.execSQL("INSERT INTO uso_prenda VALUES(0,0)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(0,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(0,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(0,4)");
         db.execSQL("INSERT INTO uso_prenda VALUES(1,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(1,1)");
         db.execSQL("INSERT INTO uso_prenda VALUES(1,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(1,4)");
         db.execSQL("INSERT INTO uso_prenda VALUES(2,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(2,1)");
         db.execSQL("INSERT INTO uso_prenda VALUES(2,3)");
         db.execSQL("INSERT INTO uso_prenda VALUES(3,0)");
         db.execSQL("INSERT INTO uso_prenda VALUES(3,4)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(4,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(4,2)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(4,4)");
         db.execSQL("INSERT INTO uso_prenda VALUES(5,0)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(6,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(5,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(5,4)");
+
+        db.execSQL("INSERT INTO uso_prenda VALUES(6,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(6,4)");
         db.execSQL("INSERT INTO uso_prenda VALUES(7,0)");
         db.execSQL("INSERT INTO uso_prenda VALUES(7,4)");
-        db.execSQL("INSERT INTO uso_prenda VALUES(8,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(8,1)");
         db.execSQL("INSERT INTO uso_prenda VALUES(8,3)");
         db.execSQL("INSERT INTO uso_prenda VALUES(9,0)");
         db.execSQL("INSERT INTO uso_prenda VALUES(9,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(9,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(10,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(10,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(10,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(11,2)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(11,4)");
+
+        db.execSQL("INSERT INTO uso_prenda VALUES(12,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(12,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(12,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(13,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(13,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(13,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(14,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(15,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(15,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(15,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(16,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(17,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(17,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(17,4)");
+
+        db.execSQL("INSERT INTO uso_prenda VALUES(18,2)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(18,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(19,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(19,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(20,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(20,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(20,3)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(21,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(21,4)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(22,0)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(22,1)");
+        db.execSQL("INSERT INTO uso_prenda VALUES(22,3)");
 
 
-        db.execSQL("INSERT INTO conjunto VALUES(0)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(0,0,4,0)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(1,1,8,0)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(2,2,9,0)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(3,3,7,0)");
-
-        db.execSQL("INSERT INTO conjunto VALUES(1)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(4,0,0,1)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(5,1,1,1)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(6,2,2,1)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(7,3,3,1)");
-
-        db.execSQL("INSERT INTO conjunto VALUES(2)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(8,1,8,2)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(9,2,2,2)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(10,3,3,2)");
-
-        db.execSQL("INSERT INTO conjunto VALUES(3)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(11,0,0,3)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(12,3,7,3)");
-
-        db.execSQL("INSERT INTO conjunto VALUES(4)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(13,1,8,4)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(14,2,2,4)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(15,3,3,4)");
-
-        db.execSQL("INSERT INTO conjunto VALUES(5)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(16,1,8,5)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(17,2,2,5)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(18,3,3,5)");
-
-        db.execSQL("INSERT INTO conjunto VALUES(6)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(19,1,8,6)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(20,2,2,6)");
-        db.execSQL("INSERT INTO parte_conjunto VALUES(21,3,3,6)");
+//        db.execSQL("INSERT INTO conjunto VALUES(0)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(0,0,4,0)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(1,1,8,0)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(2,2,9,0)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(3,3,7,0)");
+//
+//        db.execSQL("INSERT INTO conjunto VALUES(1)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(4,0,0,1)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(5,1,1,1)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(6,2,2,1)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(7,3,3,1)");
+//
+//        db.execSQL("INSERT INTO conjunto VALUES(2)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(8,1,8,2)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(9,2,2,2)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(10,3,3,2)");
+//
+//        db.execSQL("INSERT INTO conjunto VALUES(3)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(11,0,0,3)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(12,3,7,3)");
+//
+//        db.execSQL("INSERT INTO conjunto VALUES(4)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(13,1,8,4)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(14,2,2,4)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(15,3,3,4)");
+//
+//        db.execSQL("INSERT INTO conjunto VALUES(5)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(16,1,8,5)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(17,2,2,5)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(18,3,3,5)");
+//
+//        db.execSQL("INSERT INTO conjunto VALUES(6)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(19,1,8,6)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(20,2,2,6)");
+//        db.execSQL("INSERT INTO parte_conjunto VALUES(21,3,3,6)");
 
 
     }

@@ -39,6 +39,16 @@
     <string name="no_weather">Tiempo no disponible</string>
     <string name="no_permission_critical_error">La aplicación no puede ejecutarse sin los permisos necesarios y se cerrará</string>
 
+    <!-- colores -->
+    <string name="negro">Negro</string>
+    <string name="gris">Gris</string>
+    <string name="blanco">Blanco</string>
+    <string name="marron">Marrón</string>
+    <string name="beige">Beige</string>
+    <string name="rojo">Rojo</string>
+    <string name="verde">Verde</string>
+    <string name="azul">Azul</string>
+    <string name="rosa">Rosa</string>
 
     <!-- claves para los bundle -->
     <string name="prenda_bundle_key">prenda</string>

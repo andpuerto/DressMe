@@ -73,7 +73,7 @@ public class Conjunto implements Serializable{
         for(int i=0; i<partesConjuntoValues.length && combina; i++){
             Prenda prendaBase = partesConjuntoValues[i].getPrendaAsignada();
             if (combinaciones.get(prendaBase.getColor().getId()).
-                    getColoresCombinados().get(prenda.getId()) == null) {
+                    getColoresCombinados().get(prenda.getColor().getId()) == null) {
                 combina = false;
             }
         }

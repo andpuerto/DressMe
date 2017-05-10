@@ -52,6 +52,9 @@ public class PrendasListFragment extends Fragment {
     //RecyclerViews
     private List<RecyclerView> recyclerViews;
 
+    //Indica si se ha inicializado la vista
+    private boolean vistaInicializada = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,7 +102,9 @@ public class PrendasListFragment extends Fragment {
         if(tiposParteConjunto.size() < 4){
             return;
         }
-
+        //Ponemos a false el boolean de inicializado. Servira para evitar que se ejecuten
+        //los eventos de los spinners al inicializar la vista;
+        vistaInicializada = false;
         //Vamos a establecer los adaptadores a cada RecycleView
         //En esta version, lo hacemos de forma estatica. Para hacerlo generico habria que crea cada
         //recycleview aquí por programa en lugar de tenerlo en el layout
@@ -153,7 +158,9 @@ public class PrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 usoSeleccionado = position;
-                updateListViews();
+                if(vistaInicializada) {
+                    updateListViews();
+                }
             }
 
             @Override
@@ -171,7 +178,9 @@ public class PrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 climaSeleccionado = position;
-                updateListViews();
+                if(vistaInicializada) {
+                    updateListViews();
+                }
             }
 
             @Override
@@ -189,7 +198,9 @@ public class PrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 colorSeleccionado = position;
-                updateListViews();
+                if(vistaInicializada) {
+                    updateListViews();
+                }
             }
 
             @Override

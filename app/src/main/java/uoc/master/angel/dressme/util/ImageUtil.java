@@ -2,6 +2,8 @@ package uoc.master.angel.dressme.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -102,6 +104,19 @@ public class ImageUtil {
             // Log exception
             return null;
         }
+    }
+
+
+    /**
+     * Obtiene un array de bytes a partir de un drawable
+     * @param drawable El Drawable a convertir
+     * @return byte[] con la imagen
+     */
+    public static byte[] drawableToByteArray(Drawable drawable){
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 
 }

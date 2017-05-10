@@ -177,7 +177,7 @@ public class PrendaDA {
         }
         c.close();
         //Cerramos la base de datos
-        db.close();
+        //db.close();
 
     }
 
