@@ -27,7 +27,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //SOLO EN PRUEBAS
-        this.eliminarTablas(db);
+        //this.eliminarTablas(db);
 
         //Se crean las tablas de la base de datos
         this.crearTablas(db);
@@ -271,12 +271,9 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
 
     private void insertarDatosPrueba(SQLiteDatabase db){
+        //Metemos unas prendas con una imagen de prueba asociada. Para ello tenemos unas prendas
+        //en el directorio resources
 
-
-        //Metemos unas prendas con una imagen de prueba asociada. Esto solo va a funcionar en nuestro emulador
-        //puesto que hemos insertado previamente las imagenes
-        String dir = "/sdcard/DCIM/ropa/";
-        String[] paths = {dir+"Camiseta_peq.jpg", dir+"Jersey_peq.jpg", dir+"Pantalon_peq.jpg", dir+"Zapatos_peq.jpg"};
 
         String sql =   "INSERT INTO prenda(id,foto,marca,material,color,tipo_parte_conjunto) VALUES (?,?," +
                 "?,?,?,?)";
@@ -286,9 +283,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         //Primera prenda
         insertStmt.clearBindings();
         insertStmt.bindString(1, "0");
-//        insertStmt.bindBlob(2, ImageUtil.toByteArray(paths[0]));
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig1)));
-        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(3, "Oysho");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "2");
         insertStmt.bindString(6, "0");
@@ -298,7 +294,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "1");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig2)));
-        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(3, "Cold Alaska");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "4");
         insertStmt.bindString(6, "0");
@@ -308,7 +304,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "2");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig3)));
-        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(3, "Benetton");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "2");
         insertStmt.bindString(6, "0");
@@ -318,8 +314,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "3");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig4)));
-        insertStmt.bindString(3, "Zara");
-        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(3, "H&M");
+        insertStmt.bindString(4, "Denim");
         insertStmt.bindString(5, "7");
         insertStmt.bindString(6, "0");
         insertStmt.executeInsert();
@@ -338,7 +334,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "5");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_lig6)));
-        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(3, "Benetton");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "8");
         insertStmt.bindString(6, "0");
@@ -348,8 +344,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "6");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr1)));
-        insertStmt.bindString(3, "Zara");
-        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(3, "Mango");
+        insertStmt.bindString(4, "Lana");
         insertStmt.bindString(5, "2");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
@@ -358,8 +354,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "7");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr2)));
-        insertStmt.bindString(3, "Zara");
-        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(3, "Benetton");
+        insertStmt.bindString(4, "Lana");
         insertStmt.bindString(5, "4");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
@@ -379,7 +375,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.bindString(1, "9");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr4)));
         insertStmt.bindString(3, "Zara");
-        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(4, "Poliester");
         insertStmt.bindString(5, "1");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
@@ -388,8 +384,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "10");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr5)));
-        insertStmt.bindString(3, "Zara");
-        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(3, "H&M");
+        insertStmt.bindString(4, "Lana");
         insertStmt.bindString(5, "0");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
@@ -398,8 +394,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "11");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.superior_abr6)));
-        insertStmt.bindString(3, "Zara");
-        insertStmt.bindString(4, "Algodón");
+        insertStmt.bindString(3, "Mango");
+        insertStmt.bindString(4, "Lana");
         insertStmt.bindString(5, "1");
         insertStmt.bindString(6, "1");
         insertStmt.executeInsert();
@@ -418,7 +414,7 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         insertStmt.clearBindings();
         insertStmt.bindString(1, "13");
         insertStmt.bindBlob(2, ImageUtil.drawableToByteArray(context.getResources().getDrawable(R.drawable.inferior2)));
-        insertStmt.bindString(3, "Zara");
+        insertStmt.bindString(3, "O");
         insertStmt.bindString(4, "Algodón");
         insertStmt.bindString(5, "2");
         insertStmt.bindString(6, "2");
@@ -516,9 +512,9 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO prenda_clima VALUES(0,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(0,2)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(0,3)");
         db.execSQL("INSERT INTO prenda_clima VALUES(1,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(1,2)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(1,3)");
         db.execSQL("INSERT INTO prenda_clima VALUES(2,0)");
         db.execSQL("INSERT INTO prenda_clima VALUES(2,1)");
         db.execSQL("INSERT INTO prenda_clima VALUES(2,2)");
@@ -644,6 +640,8 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO uso_prenda VALUES(22,3)");
 
 
+        //Esto inserta algunos conjuntos de prueba. Lo dejamos comentado. En principio, vamos a
+        //dejar que el usuario cree sus propios conjuntos de cero.
 //        db.execSQL("INSERT INTO conjunto VALUES(0)");
 //        db.execSQL("INSERT INTO parte_conjunto VALUES(0,0,4,0)");
 //        db.execSQL("INSERT INTO parte_conjunto VALUES(1,1,8,0)");
