@@ -562,9 +562,9 @@ public class DressMeSQLHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO prenda_clima VALUES(15,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(15,3)");
         db.execSQL("INSERT INTO prenda_clima VALUES(16,0)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(16,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(16,2)");
         db.execSQL("INSERT INTO prenda_clima VALUES(17,0)");
-        db.execSQL("INSERT INTO prenda_clima VALUES(17,1)");
+        db.execSQL("INSERT INTO prenda_clima VALUES(17,2)");
 
         db.execSQL("INSERT INTO prenda_clima VALUES(18,0)");
         db.execSQL("INSERT INTO prenda_clima VALUES(18,1)");

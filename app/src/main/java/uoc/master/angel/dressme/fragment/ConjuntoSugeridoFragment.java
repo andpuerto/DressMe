@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,9 @@ public class ConjuntoSugeridoFragment extends Fragment {
     //Lista con las vistas de imagenes
     List<ImageView> imageViews = new ArrayList<>();
 
+    private View progressLayout;
+    private View contentLayout;
+    private View controlsLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,6 +150,12 @@ public class ConjuntoSugeridoFragment extends Fragment {
         imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug2));
         imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug3));
         imageViews.add((ImageView) getView().findViewById(R.id.prenda_sug4));
+
+
+        //Obtenemos las referencias al panel del contenido y de progreso
+        contentLayout = getView().findViewById(R.id.sug_content);
+        progressLayout = getView().findViewById(R.id.sug_progress_panel);
+        controlsLayout = getView().findViewById(R.id.sug_controls_panel);
 
         //Establecemos las etiquetas para los nombres de partes de conjuntos
         List<TipoParteConjunto> tpcs = new TipoParteConjuntoDA(getContext()).getAllTipoParteConjunto();
@@ -217,6 +227,7 @@ public class ConjuntoSugeridoFragment extends Fragment {
             //Tambien establecemos la informacion del tiempo
             setWeatherView();
         }
+
     }
 
     /**
@@ -431,10 +442,13 @@ public class ConjuntoSugeridoFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getContext(),ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage(getString(R.string.weather_progress));
-            pDialog.setCancelable(false);
-            pDialog.show();
+//            pDialog = new ProgressDialog(getContext(),ProgressDialog.STYLE_SPINNER);
+//            pDialog.setMessage(getString(R.string.weather_progress));
+//            pDialog.setCancelable(false);
+//            pDialog.show();
+            contentLayout.setVisibility(View.GONE);
+            controlsLayout.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.VISIBLE);
         }
 
         /**
@@ -506,9 +520,14 @@ public class ConjuntoSugeridoFragment extends Fragment {
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
             //Quitamos el cuadro de dialogo del progreso
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
+//            if (pDialog.isShowing()) {
+//                pDialog.dismiss();
+//            }
+            progressLayout.setVisibility(View.GONE);
+            contentLayout.setVisibility(View.VISIBLE);
+            controlsLayout.setVisibility(View.VISIBLE);
+
+
             //Si ha habido algun error, lo mostramos en un toast
             if (result != 0) {
                 Toast.makeText(getContext(), getString(result),

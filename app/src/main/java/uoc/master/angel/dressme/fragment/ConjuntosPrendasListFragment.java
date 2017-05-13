@@ -66,6 +66,11 @@ public class ConjuntosPrendasListFragment extends Fragment {
     private int climaSeleccionado;
     private int colorSeleccionado;
 
+    //Booleans para evitar que los spinneractualicen las vistas al cargarse
+    private boolean climaInicializado = false;
+    private boolean usoInicializado = false;
+    private boolean colorInicializado = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +137,9 @@ public class ConjuntosPrendasListFragment extends Fragment {
      * @param rootView la vista
      */
     private void setViews(View rootView) {
+        //Ponemos a false los boolean de inicializado. Servira para evitar que se ejecuten
+        //los eventos de los spinners al inicializar la vista;
+        climaInicializado = usoInicializado = colorInicializado = false;
         //Establecemos el adaptador del recycleView
         recyclerView = (RecyclerView) rootView.findViewById(
                 R.id.conjuntos_prendas_recycle_view);
@@ -158,7 +166,11 @@ public class ConjuntosPrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 usoSeleccionado = position;
-                updateListView();
+                if(usoInicializado) {
+                    updateListView();
+                } else {
+                    usoInicializado = true;
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -174,7 +186,11 @@ public class ConjuntosPrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 climaSeleccionado = position;
-                updateListView();
+                if(climaInicializado) {
+                    updateListView();
+                } else {
+                    climaInicializado = true;
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -191,7 +207,11 @@ public class ConjuntosPrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 colorSeleccionado = position;
-                updateListView();
+                if(colorInicializado) {
+                    updateListView();
+                } else {
+                    colorInicializado = true;
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

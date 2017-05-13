@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:id="@+id/sug_progress_panel">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+            android:indeterminate="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/weather_progress"/>
+    </LinearLayout>
+
     <!-- Layout para la parte superior, con los controles -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +34,8 @@
         android:orientation="horizontal"
         android:paddingLeft="@dimen/view_margin"
         android:paddingRight="@dimen/view_margin"
-        android:paddingTop="@dimen/view_margin">
+        android:paddingTop="@dimen/view_margin"
+        android:id="@+id/sug_controls_panel">
 
         <!--Spinner de seleccion de uso del conjunto-->
         <Spinner
@@ -31,6 +53,7 @@
             android:background="@null"/>
 
     </LinearLayout>
+
 
     <!--Layout para mostrar el tiempo, si se puede obtener -->
     <LinearLayout
@@ -90,7 +113,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="uoc.master.angel.dressme.MainActivity">
+        tools:context="uoc.master.angel.dressme.MainActivity"
+        android:id="@+id/sug_content">
         <!--Scroll para la vista de imagenes-->
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"

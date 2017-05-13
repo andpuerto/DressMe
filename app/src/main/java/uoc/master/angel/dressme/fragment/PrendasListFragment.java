@@ -52,8 +52,10 @@ public class PrendasListFragment extends Fragment {
     //RecyclerViews
     private List<RecyclerView> recyclerViews;
 
-    //Indica si se ha inicializado la vista
-    private boolean vistaInicializada = false;
+    //Booleans para evitar que los spinneractualicen las vistas al cargarse
+    private boolean climaInicializado = false;
+    private boolean usoInicializado = false;
+    private boolean colorInicializado = false;
 
 
     @Override
@@ -102,9 +104,10 @@ public class PrendasListFragment extends Fragment {
         if(tiposParteConjunto.size() < 4){
             return;
         }
-        //Ponemos a false el boolean de inicializado. Servira para evitar que se ejecuten
+        //Ponemos a false los boolean de inicializado. Servira para evitar que se ejecuten
         //los eventos de los spinners al inicializar la vista;
-        vistaInicializada = false;
+        climaInicializado = usoInicializado = colorInicializado = false;
+
         //Vamos a establecer los adaptadores a cada RecycleView
         //En esta version, lo hacemos de forma estatica. Para hacerlo generico habria que crea cada
         //recycleview aquí por programa en lugar de tenerlo en el layout
@@ -158,8 +161,10 @@ public class PrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 usoSeleccionado = position;
-                if(vistaInicializada) {
+                if(usoInicializado) {
                     updateListViews();
+                }else{
+                    usoInicializado = true;
                 }
             }
 
@@ -178,8 +183,10 @@ public class PrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 climaSeleccionado = position;
-                if(vistaInicializada) {
+                if(climaInicializado) {
                     updateListViews();
+                } else{
+                    climaInicializado = true;
                 }
             }
 
@@ -198,8 +205,10 @@ public class PrendasListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Filtramos los elementos
                 colorSeleccionado = position;
-                if(vistaInicializada) {
+                if(colorInicializado) {
                     updateListViews();
+                } else {
+                    colorInicializado = true;
                 }
             }
 
@@ -208,6 +217,7 @@ public class PrendasListFragment extends Fragment {
 
             }
         });
+
     }
 
 
@@ -242,6 +252,14 @@ public class PrendasListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         this.setViews();
+    }
+
+    @Override
+    public void onDestroyView (){
+        super.onDestroyView();
+        //Al destruir la vista, vaciamos la lista de recyclerViews. Esto deberia hacer que
+        //todos los objetos queden sin referenciar y que el GC  libere la memoria cuando considere
+        recyclerViews.clear();
     }
 
 
